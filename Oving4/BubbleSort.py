@@ -1,4 +1,5 @@
 from sys import stdin
+__author__ = "Henrik Høiness"
 
 
 def BubbleSort(inList):

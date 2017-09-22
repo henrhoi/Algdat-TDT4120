@@ -1,16 +1,35 @@
-#!/usr/bin/python3
-
 from sys import stdin
+__author__ = "Henrik Høiness"
+
+# Finner største intervall fra en liste fra gitte max-, min-verdier, ved hjelp av mergesort og binærsøk
 
 
-def sort_list(inList):
-    if inList == []:
-        return []
-    else:
-        pivot = inList[0]
-        lesser = sort_list([x for x in inList[1:] if x < pivot])
-        greater = sort_list([x for x in inList[1:] if x >= pivot])
-        return lesser + [pivot] + greater
+def mergeSort(alist):
+    if len(alist)>1:
+        mid = len(alist)//2
+        lefthalf = mergeSort(alist[:mid])
+        righthalf = mergeSort(alist[mid:])
+
+        return merge(lefthalf,righthalf)
+    return alist
+
+
+def merge(lefthalf, righthalf):
+    res = []
+    i=0
+    j=0
+    while i < len(lefthalf) and j < len(righthalf):
+        if lefthalf[i] < righthalf[j]:
+            res.append(lefthalf[i])
+            i=i+1
+        else:
+            res.append(righthalf[j])
+            j=j+1
+    if i < len(lefthalf):
+        res += lefthalf[i:]
+    if j < len(righthalf):
+        res += righthalf[j:]
+    return res
 
 
 def find(A, lower, upper):
@@ -21,6 +40,7 @@ def find(A, lower, upper):
 
 def binarysearch(sequence, value, low):
     lo, hi = 0, len(sequence) - 1
+
     while lo <= hi:
         mid = (lo + hi) // 2
         if sequence[mid] < value:
@@ -32,23 +52,20 @@ def binarysearch(sequence, value, low):
     if value < sequence[0]: return sequence[0]
     if value > sequence[-1]: return sequence[-1]
     if low: return sequence[lo-1]
-    return sequence[lo]
 
+    return sequence[lo]
 
 def main():
     input_list = []
     for x in stdin.readline().split():
         input_list.append(int(x))
-
-    sorted_list = sort_list(input_list)
-
+    sorted_list = mergeSort(input_list)
     for line in stdin:
         word = line.split()
         minimum = int(word[0])
         maximum = int(word[1])
         result = find(sorted_list, minimum, maximum)
         print(str(result[0]) + " " + str(result[1]))
-
 
 if __name__ == "__main__":
     main()

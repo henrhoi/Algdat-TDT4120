@@ -1,4 +1,7 @@
 from sys import stdin
+__author__ = "Henrik Høiness"
+
+
 BASE = 26   # Tallsystem (26): 0:a, 1:b ... 25:z
 
 
