@@ -3,8 +3,25 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
 * Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF
 
+# Table of Contents
+1. [Forelesning 1 - *Problem og algoritmer*](#of1)
+2. [Forelesning 2 - *Datastrukturer*](#of2)
+3. [Forelesning 3 - *Splitt og hersk*](#of3)
+4. [Forelesning 4 - *Rangering i lineær tid*](#of4)
+5. [Forelesning 5 - *Rotfaste trestrukturer*](#of5)
+6. [Forelesning 6 - *Dynamisk programmering*](#of6)
+7. [Forelesning 7 - *Grådige algoritmer*](#of7)
+8. [Forelesning 8 - *Traversering av grafer*](#of8)
+9. [Forelesning 9 - *Minimale spenntrær*](#of9)
+10. [Forelesning 10 - *Korteste vei fra én til alle*](#of10)
+11. [Forelesning 11 - *Korteste vei fra alle til alle*](#of11)
+12. [Forelesning 12 - *Maksimal flyt*](#of12)
+13. [Forelesning 13 - *NP-kompletthet*](#of13)
+14. [Forelesning 13 - *NP-komplette problemer*](#of14)
 
-## Forelesning 1 - Problem og algoritmer
+
+
+##Forelesning 1 - Problem og algoritmer <a name="of1"></a>
 
 
 
@@ -16,7 +33,7 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
 **Θ**: øvre og nedre grense.
 
-### Insertion sort
+###Insertion sort
 **Input**: En liste *n*-elementers liste.
 
 **Output**: En sortert permutasjon av *Input*
@@ -41,7 +58,8 @@ def Insertion_sort(A):
  
  
  
-## Forelesning 2 - Datastrukturer
+## Forelesning 2 - Datastrukturer <a name="of2"></a>
+
 
 **LIFO**: **L***ast-***I***n-***F***irst-***O***ut*
 
@@ -58,7 +76,7 @@ Vi vil definere en *load-factor* α til en ikke-tom tabell *T* til å være `α 
 	* Dersom vi skal innsette et element i en full liste, må vi ekspandere listen, ved å lage en ny liste med fler plasser enn den gamle og kopiere over alle de gamle elementene.
 	* Så en gang i blant dersom α = 1 vil innsetting av et element bruke mye lenger tid enn *O(1)*, og dette tar vi med i beregningen med **amortisert analyse**
 
-	```python
+	```sudocode
 	TABLE-INSERT(T,x):
 		if T.size == 0:
 			allocate T.table with 1 slot
@@ -77,6 +95,7 @@ Vi vil definere en *load-factor* α til en ikke-tom tabell *T* til å være `α 
 	
 	
 	```
+	
 
 
 **Dynamisk tabell**: Tabell som blir utvidet dersom alle plassene er tatt eller *load-factor* α = 1
@@ -132,7 +151,8 @@ class Stack:
 
 
 
-## Forelesning 3 - Splitt og hersk
+## Forelesning 3 - Splitt og hersk <a name="of3"></a>
+
 
 **Designmetoden i splitt og hersk**:
 
@@ -145,24 +165,34 @@ Vi deler opp problemet helt til vi kommer til minste mulige instans av problemet
 
 
 
-## Forelesning 4 - Rangering i lineær tid
+## Forelesning 4 - Rangering i lineær tid <a name="of4"></a>
 
-## Forelesning 5 - Rotfaste trestrukturer
 
-## Forelesning 6 - Dynamisk programmering
+## Forelesning 5 - Rotfaste trestrukturer <a name="of5"></a>
 
-## Forelesning 7 - Grådige algoritmer
 
-## Forelesning 8 - Traversering av grafer
+## Forelesning 6 - Dynamisk programmering <a name="of6"></a>
 
-## Forelesning 9 - Minimale spenntrær
 
-## Forelesning 10 - Korteste vei fra én til alle
+## Forelesning 7 - Grådige algoritmer <a name="of7"></a>
 
-## Forelesning 11 - Korteste vei fra alle til alle
 
-## Forelesning 12 - Maksimal flyt
+## Forelesning 8 - Traversering av grafer <a name="of8"></a>
 
-## Forelesning 13 - NP-kompletthet
 
-## Forelesning 14 - NP-komplette problemer
+## Forelesning 9 - Minimale spenntrær <a name="of9"></a>
+
+
+## Forelesning 10 - Korteste vei fra én til alle <a name="of10"></a>
+
+
+## Forelesning 11 - Korteste vei fra alle til alle <a name="of11"></a>
+
+
+## Forelesning 12 - Maksimal flyt <a name="of12"></a>
+
+
+## Forelesning 13 - NP-kompletthet <a name="of13"></a>
+
+
+## Forelesning 14 - NP-komplette problemer <a name="of14"></a>
