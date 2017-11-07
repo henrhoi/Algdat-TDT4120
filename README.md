@@ -1,4 +1,2 @@
-# Algoritmer og datastrukturer
-Repository for øvinger og teori til _Algoritmer og datastrukturer_ - TDT 4120
-
-
+# algdat
+Øvinger til Algoritmer og datastrukturer - TDT 4120
