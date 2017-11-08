@@ -21,7 +21,7 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 * Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF
 
 
-##Forelesning 1 - Problem og algoritmer <a name="of1"></a>
+## Forelesning 1 - Problem og algoritmer <a name="of1"></a>
 
 
 **Induksjon**: Anta at en gitt *løkke-invariant* er sann før en iterasjon, og vis deretter at den er sann etterpå.
@@ -32,7 +32,7 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
 **Θ**: øvre og nedre grense.
 
-###Insertion sort
+### Insertion sort
 **Input**: En liste *n*-elementers liste.
 
 **Output**: En sortert permutasjon av *Input*
@@ -220,7 +220,7 @@ class Stack:
 * **Kombiner** løsningene på subproblemene inn i løsningen på problemet i utgangspunktet
 
 Vi deler opp problemet helt til vi kommer til minste mulige instans av problemet, så sier vi at rekursjonen har ”bottoms out” og vi har kommet til base case og får resultatet når vi kombinerer løsningene.* *Mangler `MAXIMUM-SUBARRAY (kap. 4.1)`*
-###Binærsøk:
+### Binærsøk:
 **Input**: En liste A, pivot-element *p*, slutt-element *r* og elementet *v* som vi søker etter
 
 **Output**: Indeks *i* slik at `A[i] = v`
@@ -423,7 +423,7 @@ def Partition(A,p,r):
  **Bevis**: En valgtre med høyde h og l blader, som gir `n! ≤ l ≤ 2h`. Som gir at `h ≥ lg(n!)` (siden *lg*-funksjonen er monotont stigende). `h = Ω(n lg n)`
  
  
-###Counting Sort
+### Counting Sort
 Counting sort antar at hvert av de n elementene er et tall mellom 0 og *k*. Når *k* er *O(n)*, sorterer algoritmen på Θ(*n*). 
 
 Algoritmen er **stabil**, som betyr at den beholder elementenes relative ordning, hvilket betyr at like elementer kommer i den samme rekkefølgen i output som i input.
@@ -458,7 +458,7 @@ Algoritmen er **stabil**, som betyr at den beholder elementenes relative ordning
  ```
  
  
-###Radix sort
+### Radix sort
 *Radix sort *er algoritmen som brukes i kort-sortering maskiner. Radix sort løser problemet ikke-intuitivt ved å sortere på det *least significant digit* først. 
 
 ```sudocode
@@ -511,7 +511,7 @@ def counting_sort(A,k,d):
 
 Gitt *n* *d*-siffrede tall kan hvert siffer være en av *k* mulige verdier, vil Radix sort sortere disse tallene i `Θ(d (n + k))` tid, hvis den stabile sorteringsalgoritmen bruker `Θ(n + k)` tid. *Viktig* at sorteringsalgoritmen vi velger er **stabil** fordi at elementene med likt tall på siffer *d* ikke mister sin relative rekkefølge og ødelegger for sorteringen på de tidligere sorteringskallene.
 
-###Bucket sort
+### Bucket sort
 Bucket sort antar at instansen er tatt fra en uniform fordeling og har en average-case kjøretid på `O(n)`, og worst-case `O(n^2)`. 
 
 Som *Counting sort* er Bucket sort rask fordi den gjør antagelser på instansen. Bucket sort deler opp intervallet `[0, 1)` inn i n like store intervaller, eller **buckets**.
