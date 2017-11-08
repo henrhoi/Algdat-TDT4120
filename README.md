@@ -1,9 +1,7 @@
 # Algoritmer og datastrukturer
 Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
-* Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF
-
-# Table of Contents
+## Liste over forelesninger
 1. [Forelesning 1 - *Problem og algoritmer*](#of1)
 2. [Forelesning 2 - *Datastrukturer*](#of2)
 3. [Forelesning 3 - *Splitt og hersk*](#of3)
@@ -20,9 +18,10 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 14. [Forelesning 13 - *NP-komplette problemer*](#of14)
 
 
+* Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF
+
 
 ##Forelesning 1 - Problem og algoritmer <a name="of1"></a>
-
 
 
 **Induksjon**: Anta at en gitt *løkke-invariant* er sann før en iterasjon, og vis deretter at den er sann etterpå.
@@ -75,9 +74,9 @@ def insertion_sort(A):
 ## Forelesning 2 - Datastrukturer <a name="of2"></a>
 
 
-**LIFO**: **L***ast-***I***n-***F***irst-***O***ut*
+**LIFO**: *Last-In-First-Out*
 
-**FIFO**: **F***irst-***I***n-***F***irst-***O***ut*
+**FIFO**: *First-In-First-Out*
 
 
 ### Amortisert analyse:
@@ -320,14 +319,262 @@ def merge(lh,rh):
 
 ### Quicksort
 
-Quicksort, som *Merge-sort*, benytter seg av _splitt-og-herk paradigmet. Her er de tre splitt og hersk-stegene for å sortere en subliste `A[p..r]`:
+**Quicksort**, som *Merge-sort*, benytter seg av _splitt-og-herk paradigmet. Her er de tre splitt og hersk-stegene for å sortere en subliste `A[p..r]`:
 
+* **Splitt:** Del opp (omarranger) listen `A[p..r]` til to (mulig tomme) sublister `A[p..q-1]` og `A[q+1..r]`, slik at hvert element i `A[p..q-1]` er mindre eller lik A[q], som igjen er mindre eller lik hvert element i `A[q+1..r]`. Regn ut indeksen q som en del av oppdelings-prosedyren.
+* **Hersk:** Sorter de to listene `A[p..q-1]` og `A[q+1..r]` med rekursive kall til quicksort.
+* **Kombiner:** Fordi sublistene allerede er sortert, trengs det ikke å gjøres noe for å kombinere dem: hele listen `A[p..r] er nå sortert.
+
+
+```python
+def Quicksort(A, p, r):
+    if p < r:
+        q = Partition(A, p, r)
+        Quicksort(A, p, q-1)
+        Quicksort(A, q+1, r)
+
+
+def Partition(A, p, r):
+	# Partition jobber slik
+	# ≤x | ≥x | x
+	
+    x = A[r]
+    i = p-1
+    for j in range(p, r):
+        if A[j] <= x:
+            i += 1
+            A[i], A[j] = A[j], A[i]
+
+    A[i+1], A[r] = A[r], A[i+1]
+    # Listen blir slik slik:
+    # ≤x | x | ≥x
+    return i+1
+    
+```
+
+*Partition* velger alltid et element `x = A[r]` som pivot-element som deler opp listen `A[p..r]`. Når prosedyren kjører, deler den opp listen i fire (mulig tomme) regioner. På starten av hver iterasjon av for-løkken linje 6-9, tilfredsstiller regionene visse egenskaper. Vi kaller disse egenskapene for en *løkke-invariant*:
+
+1.	`If p ≤ k ≤ i, then A[k] ≤ x`
+2. `If	i + 1 ≤ k ≤ j – 1, then A[k] > x`
+3. `If  k ==  r, then A[k] = x`> På begynnelsen av hver iterasjon av **for**-løkken på linje 6-9, for enhver liste indeks *k*
+
+* *Quicksort* er **ikke stabil**, da den ikke beholder den relative rekkefølgen til like elementer under sorteringen av listen.
+
+**Under Partition:**
+
+Listeelementet `A[r]` blir pivot-elementet *x*. Lysegrå elementer er alle i den første partisjonen med verdiermindre enn *x*. De mørkegrå elementene er i den andrepartisjonen og er alle større enn *x*. De ufargede elementene er enda ikke plassert i en partisjon.
+
+**Bevis av løkke-invariant:**
+
+1. **Initialisering:** Før den første iterasjonen av løkken, `i = p – 1` og           `j = p`. Fordi det ikke ligger noen verdier mellom *p* og *i*           og ingen verdier mellom `i + 1` og `j – 1`, de to første           betingelsene på løkke-invarianten er tilfredsstilt.2. **Vedlikehold:** Vi ser på to tilfeller, avhengig på resultatet av testen           på linje *7*. Enten så er `A[ j ] > x` eller `A[ j ] ≤ x`, løkkeinvarianten            er fortsatt tilfredsstilt.3. **Terminering:** Ved terminering, `j == r`. Da er hvert eneste element i            listen i en av de tre betingelsene i løkke-invarianten Og vi har            partisjonert elementene til 3 sett; `A[..] ≤ x`, ` A[..] > x ` og ` A[r] = x`> De to siste linjene i Partition avslutter prosedyren ved å bytte pivot elementet A[r] med A[i+1]
+
+
+**Kjøretid:**
+
+* *Worst-case:* Θ(*n^2*)
+* *Forventet kjøretid:*
+	* Rekursjonstre med dybde Θ(*lg n*) med O(*n*) arbeid på hvert nivå
+	* `T(n) = 2T(n/2) + Θ(n) = Θ(n lg n)` 
+
+	
+> 	Fra *master-teoremet (Th. 4.1) 	
+
+
+### Randomized-Quicksort
+Samme algoritme som *quicksort*, bortsett fra at pivot-elementet byttes ut med et tilfeldig element fra listen. Vil gi færre tilfeller av worst-case-kjøretid. 
+
+```python
+def Randomized_Quicksort(A,p,r):
+    if p < r:
+        q = Randomized_Partition(A,p,r)
+        Randomized_Quicksort(A,p,q-1)
+        Randomized_Partition(A,q+1,r)
+
+
+def Randomized_Partition(A,p,r):
+    i = random.randint(p,r)
+    A[i], A[r] = A[r], A[i]
+
+    return Partition(A,p,r)
+
+
+def Partition(A,p,r):
+    x = A[r]
+    i = p-1
+    for j in range(p, r):
+        if A[j] <= x:
+            i += 1
+            A[i], A[j] = A[j], A[i]
+
+    A[i+1], A[r] = A[r], A[i+1]
+    return i+1
+```
 
 
 
 
 ## Forelesning 4 - Rangering i lineær tid <a name="of4"></a>
 
+### Sammenligningsbasert sortering:
+*Disse algoritmene benytter seg kun av sammenlikning av input-elementene. Slike sorteringsalgoritmer har en øvre grense på Ω(n lg n).*
+ 
+ **Teorem**: Enhver sammenligningsbasert sorteringsalgoritme krever (n lg n) sammenlikninger i worst case.
+ 
+ **Bevis**: En valgtre med høyde h og l blader, som gir `n! ≤ l ≤ 2h`. Som gir at `h ≥ lg(n!)` (siden *lg*-funksjonen er monotont stigende). `h = Ω(n lg n)`
+ 
+ 
+###Counting Sort
+Counting sort antar at hvert av de n elementene er et tall mellom 0 og *k*. Når *k* er *O(n)*, sorterer algoritmen på Θ(*n*). 
+
+Algoritmen er **stabil**, som betyr at den beholder elementenes relative ordning, hvilket betyr at like elementer kommer i den samme rekkefølgen i output som i input.
+
+**Input:** En n-element usortert liste *A*
+
+**Output:** En sortert liste bestående av n-elementer fra *A*
+ ```python
+ def counting_sort(A,k):
+    res = [0]*len(A)
+    count = [0 for _ in range(k+1)]
+
+    for j in range(0,len(A)):
+        count[A[j]] += 1
+
+    # C[i] inneholder nå antall forekomster av element i
+
+    for i in range(1,k+1):
+        count[i] += count[i-1]
+    # Count er nå kumulativ sum
+    # C[i] inneholder nå antall elementer mindre eller lik i
+
+    # Itererer baklengs gjennom A, for at Counting blir stabil. Trekker fra en på count når vi plasserer et element
+    for j in range(len(A)-1,-1,-1):
+        element = A[j]
+
+        res[count[element]-1] = element
+        count[element] -= 1
+
+    return res
+ 
+ ```
+ 
+ 
+###Radix sort
+*Radix sort *er algoritmen som brukes i kort-sortering maskiner. Radix sort løser problemet ikke-intuitivt ved å sortere på det *least significant digit* først. 
+
+```sudocode
+RADIX-SORT(A, d)
+ 	for i = 1 to d
+ 		use a stable sort to sort array A on digit i
+
+```
+
+**Input:** En liste *A* med *n* elementer bestående av *d* siffer
+**Output:** Sortert liste bestående av elementene i *A*
+
+```python
+def radix_sort(A, d):
+    for i in range(d-1,-1,-1):
+        # Bruker vlagfri stabil sorterings algoritme
+        A = counting_sort(A,9,i)
+
+    return A
+
+
+# Sorterer større tall ved å kun se på et siffer.
+# k = støste tall (9), i = sifferindeks
+
+def counting_sort(A,k,d):
+    res = [0]*len(A)
+    count = [0 for _ in range(k+1)]
+
+    for j in range(0,len(A)):
+        element = int(str(A[j])[d])
+        count[element] += 1
+
+    # C[i] inneholder nå antall forekomster av element i
+
+    for i in range(1,k+1):
+        count[i] += count[i-1]
+    # Count er nå kumulativ sum
+    # C[i] inneholder nå antall elementer mindre eller lik i
+
+    # Itererer baklengs gjennom A, for at Counting blir stabil. Trekker fra en på count når vi plasserer et element
+    for j in range(len(A)-1,-1,-1):
+        element = A[j]
+		  
+		 #Plasserer hele elementet i listen selvom jeg sorterer på hensyn på ett siffer
+        res[count[int(str(element)[d])]-1] = element
+        count[int(str(element)[d])] -= 1
+
+    return res
+```
+
+Gitt *n* *d*-siffrede tall kan hvert siffer være en av *k* mulige verdier, vil Radix sort sortere disse tallene i `Θ(d (n + k))` tid, hvis den stabile sorteringsalgoritmen bruker `Θ(n + k)` tid. *Viktig* at sorteringsalgoritmen vi velger er **stabil** fordi at elementene med likt tall på siffer *d* ikke mister sin relative rekkefølge og ødelegger for sorteringen på de tidligere sorteringskallene.
+
+###Bucket sort
+Bucket sort antar at instansen er tatt fra en uniform fordeling og har en average-case kjøretid på `O(n)`, og worst-case `O(n^2)`. 
+
+Som *Counting sort* er Bucket sort rask fordi den gjør antagelser på instansen. Bucket sort deler opp intervallet `[0, 1)` inn i n like store intervaller, eller **buckets**.
+
+```python
+def bucket_sort(A):
+    n = len(A)
+    B = [[] for _ in range(n)]
+
+    for i in range(n):
+        B[int(n*A[i])].insert(-1, A[i])
+
+    for j in range(n):
+        insertion_sort(B[j])
+
+    res = []
+    for i in range(len(B)):
+        res += (B[i])
+
+    return res
+
+```
+
+> Tallet `int(n*A[ i ])` gir hvilken bucket som elementet skal legges i, `n*A[ i ]` rundes ned og blir en verdi i intervallet `[0, 1)` som har *n* buckets
+
+
+
+### Minimum og maksimum
+
+```sudocode
+MINIMUM(A):
+	min = A[1]
+	for i = 2 to A.length:
+		if min > A[i]:
+			min = A[i]
+	return min		
+```
+
+> Finner maksimum ved å ende `min > A[i]` til `min ≤ A[i]`
+
+
+### Randomized-Select
+*Randomized-Select* jobber kun på **én** side av partisjoneringen, og har derfor forventet kjøretid på `O(n)`, og worst-case `O(n^2)`. Algoritmen skal returnere det *i*’te minste elementet i listen `A[p .. r]`.
+
+**Input:** En liste *A* med pivot-element *p*, sluttelement *r* og ønske om å finne *i* ´te minste element i *A*
+
+**Output:** Indeks i A til *i* ´te minste element
+
+```sudocode
+RANDOMIZED-SELECT(A,p,r,i):
+	if p == r:
+		return A[p]
+	q = RANDOMIZED-PARTITION(A,p,r)
+	k = q - p + 1
+	if i == k:		// The pivot value is the answer
+		return a[q] 
+		
+	else if i < k:
+		return RANDOMIZED-SELECT(a,p,q-1,i)
+	else:
+		return RANDOMIZED-SELECT(a,q+1,i-k) 
+```
+* Trykk for [video](https://www.youtube.com/watch?v=AHaaFVmAsvA) for bedre forklaring!
 
 ## Forelesning 5 - Rotfaste trestrukturer <a name="of5"></a>
 
