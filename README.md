@@ -40,10 +40,24 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
 
 ```python
-def Insertion_sort(A):
-  .....
+def insertion_sort(A):
+    for j in range(1,len(A)):
+        key = A[j]
+        
+        # Plasserer A[j] inn i den sorterte sublisten [0..j-1]
+        i = j-1
+        while i>=0 and A[i] > key:
+        
+            # Flytter hvert element en til høyre, så lenge key<A[i]
+            A[i+1] = A[i]
+            i -= 1
+            
+        # Plasserer key på riktig plass
+        A[i+1] = key
 ```
- **Løkke-invariant**: i starten av kvar iterasjon av *for*-loop-en består `A[:j - 1]` av dei originale elementa i `A[:j - 1]`, men i sortert rekkefølge.
+ **Løkke-invariant**: I starten av hver iterasjon av *for*-løkken består `A[:j - 1]` av de originale elementene i `A[:j - 1]`, i sortert rekkefølge
+ 
+>  Kommentar til selv: Les i boken
 
 **Kjøretid**: 
 
@@ -92,8 +106,6 @@ Vi vil definere en *load-factor* α til en ikke-tom tabell *T* til å være `α 
 		insert x into T.table
 		T.num = T.num + 1
 	
-	
-	
 	```
 	
 
@@ -106,6 +118,54 @@ Vi vil definere en *load-factor* α til en ikke-tom tabell *T* til å være `α 
 	* *Enkle* lenkede lister
 	* *Doble* lenkede lister
 	* *Sykliske* lenkede lister
+
+
+```python
+class LinkedList:
+	def __init__(self):
+   		self.head = None
+       def isEmpty(self):
+    	return self.head == None
+   def add(self,item):
+    	temp = Node(item)
+    	temp.setNext(self.head)
+   	 	self.head = temp
+   	 
+ 	def search(self,item):
+   		current = self.head
+    	found = False
+    	while current != None and not found:
+        	if current.getData() == item:
+            	found = True
+        	else:
+            	current = current.getNext()
+
+    	return found
+    	
+    def remove(self,item):
+    	current = self.head
+    	previous = None
+    	found = False
+    	while not found:
+        	if current.getData() == item:
+            	found = True
+        	else:
+            	previous = current
+            	current = current.getNext()
+
+    	if previous == None:
+        	self.head = current.getNext()
+    	else:
+        	previous.setNext(current.getNext())
+
+```
+* **Kjøretider** *(antar enkel lenket liste)*:
+	*  Innsetting i starten: *O(1)*
+	*  Innsetting i slutten: *O(n)*
+	*  Oppslag: *O(n)*
+	*  Slette element: *Oppslagstid* + *O(1)* = *O(n)*
+
+	
 
 ### Queue
 * *FIFO-struktur*
@@ -162,6 +222,107 @@ class Stack:
 
 Vi deler opp problemet helt til vi kommer til minste mulige instans av problemet, så sier vi at rekursjonen har ”bottoms out” og vi har kommet til base case og får resultatet når vi kombinerer løsningene.* *Mangler `MAXIMUM-SUBARRAY (kap. 4.1)`*
 ###Binærsøk:
+**Input**: En liste A, pivot-element *p*, slutt-element *r* og elementet *v* som vi søker etter
+
+**Output**: Indeks *i* slik at `A[i] = v`
+
+*Rekursiv løsning:*
+
+```python
+def Recursive_binary_search(A, p, r, v):
+    i = p
+    if p < r:
+        mid = (p+r)//2
+        if v <= A[mid]:
+            i = Recursive_binary_search(A,p,mid,v)
+
+        else:
+            i = Recursive_binary_search(A,mid+1,r,v)
+    return i
+
+
+```
+
+*Iterativ løsning:*
+
+```python
+def Iterative_binary_search(A, p, r, v):
+    while p < r:
+        mid = (p+r)//2
+
+        if v <= A[mid]:
+            r = mid
+
+        else:
+            p = mid + 1
+
+    return p
+
+```
+
+> Dersom det finnes flere forekomster av *v* i A vil Bisect returnere indeksen til forekomsten lengst til venstre, altså den **laveste** indeksen
+
+**Kjøretid**:
+
+* Θ(*lg n*)
+
+
+### Merge sort
+
+**Input**: Liste A usortert
+
+**Output**: Liste bestående av elementer fra `A[p..r]` i sortert rekkefølge
+> Sammenligningsbasert sorteringsalgoritme
+
+Algortimen foregår slik:
+
+1. **Splitt:** Del opp-steget regner kun ut midten av listen, som tar konstant tid. Da blir `D(n) = Θ(1)`.
+2. **Hersk:** Vi løser rekursivt to delproblemer, hver på størrelse n/2, som bidrar med `2*T(n/2)` kjøretid på algoritmen.
+3. **Kombiner:** Merge-prosedyren bruker Θ(n) tid på en n-element liste, så derfor blir `C(n) = Θ(n)`Når vi adderer funksjonene D(n) og C(n) for merge-sort analysen, vil summen av (n) og  (1), bli (n). Når vi summerer det igjen sammen med 2T(n/2)-delen fra ”hersk”-seget gir rekurrensen for verste kjøretiden T(n) for merge-sort:
+
+`T(n) = 2T(n/2) + Θ(n)     if  n > 1, else O(1)`
+
+> Dersom vi bruker master-teoremet (**Kap. 4**) så kan vi vise at `T(n) = (n lg n)`.
+
+
+```python
+def merge_sort(A):
+    if len(A)>1:
+        q = len(A)//2
+        lh = merge_sort(A[:q])
+        rh = merge_sort(A[q:])
+        return merge(lh,rh)
+
+    return A
+
+
+def merge(lh,rh):
+    res = []
+    i = 0
+    j = 0
+
+    while i<len(lh) and j<len(rh):
+        if lh[i] < rh[j]:
+            res.append(lh[i])
+            i+=1
+
+        else:
+            res.append(rh[j])
+            j+=1
+
+    if i<len(lh): res.extend(lh[i:])
+    if j<len(rh): res.extend(rh[j:])
+    
+    return res
+
+```
+
+
+### Quicksort
+
+Quicksort, som *Merge-sort*, benytter seg av _splitt-og-herk paradigmet. Her er de tre splitt og hersk-stegene for å sortere en subliste `A[p..r]`:
+
+
 
 
 
