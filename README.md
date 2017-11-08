@@ -21,7 +21,7 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 * Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF (last ned dokumentet fra GitHub først)
 
 
-## Forelesning 1 - Problem og algoritmer <a name="of1"></a>
+##<a name="of1"></a>Forelesning 1 - Problem og algoritmer 
 
 
 **Induksjon**: Anta at en gitt *løkke-invariant* er sann før en iterasjon, og vis deretter at den er sann etterpå.
@@ -71,7 +71,7 @@ def insertion_sort(A):
  
  
  
-## Forelesning 2 - Datastrukturer <a name="of2"></a>
+##<a name="of2"></a>Forelesning 2 - Datastrukturer 
 
 
 **LIFO**: *Last-In-First-Out*
@@ -89,23 +89,23 @@ Vi vil definere en *load-factor* α til en ikke-tom tabell *T* til å være `α 
 	* Dersom vi skal innsette et element i en full liste, må vi ekspandere listen, ved å lage en ny liste med fler plasser enn den gamle og kopiere over alle de gamle elementene.
 	* Så en gang i blant dersom α = 1 vil innsetting av et element bruke mye lenger tid enn *O(1)*, og dette tar vi med i beregningen med **amortisert analyse**
 
-	```sudocode
-	TABLE-INSERT(T,x):
-		if T.size == 0:
-			allocate T.table with 1 slot
-			T.size = 1
-			
-		if T.num == T.size:
-			allocate new-table with 2 * T.size slots
-			insert all items in T.table into new-table
-			free T.table
-			T.table = new-table
-			T.size = 2 * T.size
-			
-		insert x into T.table
-		T.num = T.num + 1
+```sudocode
+TABLE-INSERT(T,x):
+1 	 if T.size == 0:
+2		 allocate T.table with 1 slot
+3		 T.size = 1
+4		
+5	 if T.num == T.size:
+6		 allocate new-table with 2 * T.size slots
+7		 insert all items in T.table into new-table
+8		 free T.table
+9		 T.table = new-table
+10		 T.size = 2 * T.size
+11		
+12	 insert x into T.table
+13	 T.num = T.num + 1
 	
-	```
+```
 	
 
 
@@ -544,11 +544,11 @@ def bucket_sort(A):
 
 ```sudocode
 MINIMUM(A):
-	min = A[1]
-	for i = 2 to A.length:
-		if min > A[i]:
-			min = A[i]
-	return min		
+1	 min = A[1]
+2	 for i = 2 to A.length:
+3		 if min > A[i]:
+4			 min = A[i]
+5	 return min		
 ```
 
 > Finner maksimum ved å ende `min > A[i]` til `min ≤ A[i]`
@@ -563,17 +563,17 @@ MINIMUM(A):
 
 ```sudocode
 RANDOMIZED-SELECT(A,p,r,i):
-	if p == r:
-		return A[p]
-	q = RANDOMIZED-PARTITION(A,p,r)
-	k = q - p + 1
-	if i == k:		// The pivot value is the answer
-		return a[q] 
-		
-	else if i < k:
-		return RANDOMIZED-SELECT(a,p,q-1,i)
-	else:
-		return RANDOMIZED-SELECT(a,q+1,i-k) 
+1	 if p == r:
+2		 return A[p]
+3	 q = RANDOMIZED-PARTITION(A,p,r)
+4	 k = q - p + 1
+5	 if i == k:		// The pivot value is the answer
+6		 return a[q] 
+7		
+8	 else if i < k:
+9		 return RANDOMIZED-SELECT(a,p,q-1,i)
+10	 else:
+11		 return RANDOMIZED-SELECT(a,q+1,i-k) 
 ```
 * Trykk for [video](https://www.youtube.com/watch?v=AHaaFVmAsvA) for bedre forklaring!
 
@@ -599,6 +599,203 @@ RANDOMIZED-SELECT(A,p,r,i):
 
 
 ## Forelesning 12 - Maksimal flyt <a name="of12"></a>
+
+**Flytnettverk:** Rettet graf `G = (V,E)`
+
+* Kapasiteter c(*u*,*v*) ≥ 0
+* Kilde og sluk *s*,*t* ∈ *V*
+* *v* ∈ *V*   ⟹  *s* → *v* → *t*
+* Ingen løkker (*self-loops)
+	* Merk: Vi *kan* ha sykler!
+* Tillater ikke antiparallelle kanter
+	* (*u*,*v*) ∈ *E* ⟹ (*v*,*u*) ∉ *E*
+* Kanter som ikke finnes har ingen kapasitet
+	* (*u*,*v*) ∉ *E* ⟹ c(*u*,*v*) = 0
+
+
+**Flyt**: En funksjon: `f : V x V ⟶ ℝ`
+
+* `0 ≤ f(u, v) ≤ c(u, v)`
+* `u ≠ s, t ⟹ ∑ f(v, u) = ∑ f(u, v) `
+	* *Flyt* inn = *flyt ut*
+
+	
+**Flytverdi:**  `|f| = ∑ f(s, v) - ∑ f(v, s)`
+
+
+**Input:** Et flytnettverk *G*.
+
+**Output:** En flyt *f* for *G* med maks | *f* |.
+
+> *Antiparalelle kanter:* Splitt den ene med en node
+
+> *Flere kilder og sluk:* Legg til super-kilde og super-sluk
+
+
+**Restnettverk:**
+
+* Engelsk: *Residual netword*
+* Fremoverkant ved ledig kapasitet
+* Bakoverkant ved flyt
+
+**Forøkende sti:**
+
+* Engelsk: *Augmenting path*
+* En sti fra kilde *s* og sluk *t* i restnettverket
+* Langs fremoverkanter: *Flyten kan økes*
+* Langs bakoverkanter: *Flyten kan omdirigeres*
+	* Altså: En sti der den totale flyten kan økes
+
+**Flytoppheving:**
+
+* Vi kan "sende" flyt baklengs langs kanter der det allerede går flyt
+* Vi opphever da flyten, så den kan omdirigeres til et annet sted.
+* Det er dette bakoverkantene i restnettverket representerer.
+
+ 						c(u, v) - f(u, v)	   , if (u,v) ∈ E
+		c_f(u, v) = 	f(v, u) 				   , if (v,u) ∈ E
+						0						   , ellers
+						
+
+### Ford-Fulkerson
+
+* Finn økende stier så lenge det går
+* Deretter er flyten maksimal
+* Generell metode, ikke en algoritme
+* Om vi bruker [BFS](#of8): *"Edmonds-Karp"*
+
+**Normal implementasjon:**
+
+* Finn økende sti først
+* Finn så flaskehalsen i stien
+* Oppdater flyt langs stien med denne verdien
+
+```sudocode
+FORD-FULKERSON-METHOD(G,s,t):
+1	 initialize flow f to 0
+2	 while there is an augmenting path p in G_f
+3		 augmenting flow f along p
+4	 return f
+
+```
+
+En litt mer detaljert beskrivelse av flyt-oppdateringen:
+	
+```sudocode
+
+FORD-FULKERSON(G,s,t)
+1	 for each edge (u,v) ∈ G.E
+2	 	 (u, v).f = 0
+3	 while there is a path p from s to t in G_f
+4	 	 c_f(p) = min{c_f(u, v) : (u, v) is in p}
+5		 for each edge (u, v) in p
+6		 	 if (u,v) ∈ E
+7		 	 	 (u, v).f = u(u, v).f + c_f(p)
+8		 	 else
+9		 	 	 (v, u).f = u(v, u).f - c_f(p)
+```
+
+**Alternativt:** *"Flett inn"*  [BFS](#of8) 
+
+* Finn flaskehalser underveis!
+* Hold styr på hvor mye flyt vi får frem til hver node
+* Traverser bare noder vi ikke har nådd frem til ennå
+* Denne "implementasjonen" står ikke i boka
+
+
+**Kjøretid:**
+
+* Operasjon: *Finn forøkende sti*
+	* Antall: O(| *f* *|)
+	* Kjøretid på operasjon: *O(E)* 
+
+* **Totalt:** O(*E* | *f* *|)
+
+> **Eksponentielt! Bruk BFS!**
+
+
+
+### Edmonds-Karp
+
+**Mulig økning**(*augmentation*): `v.a`
+
+> Bruker BFS for å finne forøkende sti. _Atskillig_ mer detaljert...
+
+```sudocode
+EDMONDS-KARP(G,s,t)
+1	  for each edge (u, v) ∈ G.E
+2	  (u, v).f = 0
+3	  repeat > until t.a == 0
+4		 for each vertex u ∈ G.V
+5			 u.a = 0    //Reaching u in G_f
+6			 u.π = NIL
+7		 s.a = ∞
+8		 Q = ∅ 
+9		 ENQUEUE(Q, s)
+10		 while t.a == 0 and Q ≠ ∅ 
+11			 u = DEQUEUE(Q)
+12			 for all edges (u, v), (v, u) ∈ G.E
+13			 if (u, v) ∈  G.E
+14					 c_f(u, v) = c(u, v) - (u, v).f
+15				 else c_f(u, v) = (v, u).f
+16				 if c_f(u, v) > 0 and v.a == 0
+17					 v.a = min(u.a, c_f(u, v))
+18					 v.π = u
+19					 ENQUEUE(Q, v) 
+20		 u, v = t.π, t    // Nå er t.a = c_f(p)
+21		 while u ≠ NIL
+22			 if (u, v) ∈ G.E
+23				 (u, v).f = (u, v).f + t.a
+24			 else
+25				 (v, u).f = (v, u).f - t.a
+26			 u, v = u.π, u
+27	 until t.a == 0 
+	
+
+```
+**Kjøretid:**
+
+* Operasjon: *Finn forøkende sti*
+	* Antall: O(*VE*) 
+	* Kjøretid på operasjon: O(*E*)
+
+* **Totalt:** O(*VE^2*)
+
+> Med bredde-først-søk i restnettverk
+
+**Hvorfor har vi O(VE) iterasjoner?**
+
+* Avstander *synker ikke* i residualnettverket
+* En kant (u, v) kan være flaskehals maks annenhver iterasjon
+* Vi velger korteste økende stier
+	* Dermed må *v*  først være 1 kan lenger unna enn *u*
+	* Så, idet (u, v) dukker opp igjen, må u være 1 lenger unna enn v
+	* Når (u, v) så er kritisk igjen, har altså avstanden til *u* økt med minst *2*
+
+* Dermed kan vi maks ha *O(VE)* iterasjoner
+
+### Minimalt snitt 
+
+**Snitt i flytnettverk:** Partisjon (*S*, *T*) av *V*. `s ∈ S and t ∈ T`
+
+* *Nettoflyt:*
+
+![nettoflyt](https://i.imgur.com/WhZBpU2.png)
+
+* *Kapasitet:*
+
+![kapasitet](https://i.imgur.com/MnCfFug.png)
+
+**Lemma 26.5:** `f(S, T) = | f |`
+
+### Matching
+
+
+
+
+
+
+
 
 
 ## Forelesning 13 - NP-kompletthet <a name="of13"></a>
