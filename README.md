@@ -18,7 +18,7 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 14. [Forelesning 13 - *NP-komplette problemer*](#of14)
 
 
-* Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF
+* Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF (last ned dokumentet fra GitHub først)
 
 
 ## Forelesning 1 - Problem og algoritmer <a name="of1"></a>
@@ -26,11 +26,11 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
 **Induksjon**: Anta at en gitt *løkke-invariant* er sann før en iterasjon, og vis deretter at den er sann etterpå.
 
-**O**: øvre grense.
+**O**: Øvre grense
 
-**Ω**: nedre grense.
+**Ω**: Nedre grense
 
-**Θ**: øvre og nedre grense.
+**Θ**: Øvre og nedre grense
 
 ### Insertion sort
 **Input**: En liste *n*-elementers liste.
@@ -47,7 +47,7 @@ def insertion_sort(A):
         i = j-1
         while i>=0 and A[i] > key:
         
-            # Flytter hvert element en til høyre, så lenge key<A[i]
+            # Flytter hvert element en til høyre, så lenge key < A[i]
             A[i+1] = A[i]
             i -= 1
             
@@ -469,6 +469,7 @@ RADIX-SORT(A, d)
 ```
 
 **Input:** En liste *A* med *n* elementer bestående av *d* siffer
+
 **Output:** Sortert liste bestående av elementene i *A*
 
 ```python
