@@ -21,7 +21,7 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 * Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF (last ned dokumentet fra GitHub først)
 
 
-##<a name="of1"></a>Forelesning 1 - Problem og algoritmer 
+## Forelesning 1 - Problem og algoritmer <a name="of1"></a>
 
 
 **Induksjon**: Anta at en gitt *løkke-invariant* er sann før en iterasjon, og vis deretter at den er sann etterpå.
@@ -71,7 +71,7 @@ def insertion_sort(A):
  
  
  
-##<a name="of2"></a>Forelesning 2 - Datastrukturer 
+## Forelesning 2 - Datastrukturer <a name="of2"></a>
 
 
 **LIFO**: *Last-In-First-Out*
