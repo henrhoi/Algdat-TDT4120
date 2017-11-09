@@ -20,8 +20,8 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
 * Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF (last ned dokumentet fra GitHub først)
 
-
-## Forelesning 1 - Problem og algoritmer <a name="of1"></a>
+<a name="of1"></a>
+## Forelesning 1 - Problem og algoritmer
 
 
 **Induksjon**: Anta at en gitt *løkke-invariant* er sann før en iterasjon, og vis deretter at den er sann etterpå.
@@ -31,6 +31,8 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 **Ω**: Nedre grense
 
 **Θ**: Øvre og nedre grense
+
+<a name="insertionsort"></a>
 
 ### Insertion sort
 **Input**: En liste *n*-elementers liste.
@@ -70,8 +72,8 @@ def insertion_sort(A):
  
  
  
- 
-## Forelesning 2 - Datastrukturer <a name="of2"></a>
+<a name="of2"></a>
+## Forelesning 2 - Datastrukturer 
 
 
 **LIFO**: *Last-In-First-Out*
@@ -209,8 +211,8 @@ class Stack:
  * Operasjonene bruker *O(1)* tid 
 
 
-
-## Forelesning 3 - Splitt og hersk <a name="of3"></a>
+<a name="of3"></a>
+## Forelesning 3 - Splitt og hersk 
 
 
 **Designmetoden i splitt og hersk**:
@@ -277,7 +279,10 @@ Algortimen foregår slik:
 
 1. **Splitt:** Del opp-steget regner kun ut midten av listen, som tar konstant tid. Da blir `D(n) = Θ(1)`.
 2. **Hersk:** Vi løser rekursivt to delproblemer, hver på størrelse n/2, som bidrar med `2*T(n/2)` kjøretid på algoritmen.
-3. **Kombiner:** Merge-prosedyren bruker Θ(n) tid på en n-element liste, så derfor blir `C(n) = Θ(n)`Når vi adderer funksjonene D(n) og C(n) for merge-sort analysen, vil summen av (n) og  (1), bli (n). Når vi summerer det igjen sammen med 2T(n/2)-delen fra ”hersk”-seget gir rekurrensen for verste kjøretiden T(n) for merge-sort:
+3. **Kombiner:** Merge-prosedyren bruker Θ(n) tid på en n-element liste, så derfor blir `C(n) = Θ(n)`
+
+
+<img src="https://i.imgur.com/6WTzfcy.png" alt="Drawing" style=" width: 400px;"/>Når vi adderer funksjonene D(n) og C(n) for merge-sort analysen, vil summen av (n) og  (1), bli (n). Når vi summerer det igjen sammen med 2T(n/2)-delen fra ”hersk”-seget gir rekurrensen for verste kjøretiden T(n) for merge-sort:
 
 `T(n) = 2T(n/2) + Θ(n)     if  n > 1, else O(1)`
 
@@ -317,13 +322,14 @@ def merge(lh,rh):
 ```
 
 
+
 ### Quicksort
 
-**Quicksort**, som *Merge-sort*, benytter seg av _splitt-og-herk paradigmet. Her er de tre splitt og hersk-stegene for å sortere en subliste `A[p..r]`:
+**Quicksort**, som *Merge-sort*, benytter seg av splitt-og-herk paradigmet. Her er de tre splitt og hersk-stegene for å sortere en subliste `A[p..r]`:
 
 * **Splitt:** Del opp (omarranger) listen `A[p..r]` til to (mulig tomme) sublister `A[p..q-1]` og `A[q+1..r]`, slik at hvert element i `A[p..q-1]` er mindre eller lik A[q], som igjen er mindre eller lik hvert element i `A[q+1..r]`. Regn ut indeksen q som en del av oppdelings-prosedyren.
 * **Hersk:** Sorter de to listene `A[p..q-1]` og `A[q+1..r]` med rekursive kall til quicksort.
-* **Kombiner:** Fordi sublistene allerede er sortert, trengs det ikke å gjøres noe for å kombinere dem: hele listen `A[p..r] er nå sortert.
+* **Kombiner:** Fordi sublistene allerede er sortert, trengs det ikke å gjøres noe for å kombinere dem: hele listen `A[p..r] er nå sortert. <a name="Partition"></a> 
 
 
 ```python
@@ -371,7 +377,7 @@ Listeelementet `A[r]` blir pivot-elementet *x*. Lysegrå elementer er alle i de
 
 **Kjøretid:**
 
-* *Worst-case:* Θ(*n^2*)
+* *Worst-case:* Θ(*n<sup>2</sup>*)
 * *Forventet kjøretid:*
 	* Rekursjonstre med dybde Θ(*lg n*) med O(*n*) arbeid på hvert nivå
 	* `T(n) = 2T(n/2) + Θ(n) = Θ(n lg n)` 
@@ -412,8 +418,8 @@ def Partition(A,p,r):
 
 
 
-
-## Forelesning 4 - Rangering i lineær tid <a name="of4"></a>
+<a name="of4"></a>
+## Forelesning 4 - Rangering i lineær tid 
 
 ### Sammenligningsbasert sortering:
 *Disse algoritmene benytter seg kun av sammenlikning av input-elementene. Slike sorteringsalgoritmer har en øvre grense på Ω(n lg n).*
@@ -457,6 +463,8 @@ Algoritmen er **stabil**, som betyr at den beholder elementenes relative ordning
  
  ```
  
+ <img src="https://i.imgur.com/z31XkwZ.png" alt="Counting" style=" width: 450px;"/>
+ 
  
 ### Radix sort
 *Radix sort *er algoritmen som brukes i kort-sortering maskiner. Radix sort løser problemet ikke-intuitivt ved å sortere på det *least significant digit* først. 
@@ -471,6 +479,9 @@ RADIX-SORT(A, d)
 **Input:** En liste *A* med *n* elementer bestående av *d* siffer
 
 **Output:** Sortert liste bestående av elementene i *A*
+
+
+<img src="https://i.imgur.com/7BnOt2o.png" alt="radix" style=" width: 300px;"/>
 
 ```python
 def radix_sort(A, d):
@@ -510,7 +521,9 @@ def counting_sort(A,k,d):
     return res
 ```
 
-Gitt *n* *d*-siffrede tall kan hvert siffer være en av *k* mulige verdier, vil Radix sort sortere disse tallene i `Θ(d (n + k))` tid, hvis den stabile sorteringsalgoritmen bruker `Θ(n + k)` tid. *Viktig* at sorteringsalgoritmen vi velger er **stabil** fordi at elementene med likt tall på siffer *d* ikke mister sin relative rekkefølge og ødelegger for sorteringen på de tidligere sorteringskallene.
+Gitt *n* *d*-siffrede tall kan hvert siffer være en av *k* mulige verdier, vil Radix sort sortere disse tallene i `Θ(d (n + k))` tid, hvis den stabile sorteringsalgoritmen bruker `Θ(n + k)` tid. *Viktig* at sorteringsalgoritmen vi velger er **stabil** fordi at elementene med likt tall på siffer *d* ikke mister sin relative rekkefølge og ødelegger for sorteringen på de tidligere sorteringskallene.
+
+
 
 ### Bucket sort
 Bucket sort antar at instansen er tatt fra en uniform fordeling og har en average-case kjøretid på `O(n)`, og worst-case `O(n^2)`. 
@@ -539,13 +552,20 @@ def bucket_sort(A):
 > Tallet `int(n*A[ i ])` gir hvilken bucket som elementet skal legges i, `n*A[ i ]` rundes ned og blir en verdi i intervallet `[0, 1)` som har *n* buckets
 
 
+<img src="https://i.imgur.com/8lIZeyZ.png" alt="bucket" style=" width: 400px;"/>
+
+**Kjøretid:**
+
+* Average-case: *O(n)*
+* Worst-case: *O(n<sup>2</sup>)*
+
 
 ### Minimum og maksimum
 
-```sudocode
+```python
 MINIMUM(A):
-1	 min = A[1]
-2	 for i = 2 to A.length:
+1	 min = A[0]
+2	 for i in range(1,len(A))
 3		 if min > A[i]:
 4			 min = A[i]
 5	 return min		
@@ -561,44 +581,68 @@ MINIMUM(A):
 
 **Output:** Indeks i A til *i* ´te minste element
 
-```sudocode
+```python
 RANDOMIZED-SELECT(A,p,r,i):
-1	 if p == r:
-2		 return A[p]
-3	 q = RANDOMIZED-PARTITION(A,p,r)
-4	 k = q - p + 1
-5	 if i == k:		// The pivot value is the answer
-6		 return a[q] 
-7		
-8	 else if i < k:
-9		 return RANDOMIZED-SELECT(a,p,q-1,i)
-10	 else:
-11		 return RANDOMIZED-SELECT(a,q+1,i-k) 
+def randomized_select(A,p,r,i):
+    if p == r:
+        return A[p]
+    q = randomized_partition(A,p,r)
+    
+    # k er antall tall til venstre for q, dvs. at det finnes nøyaktig k tall mindre enn A[q]
+    k = q - p + 1
+    if k == i:
+        return A[q]
+    elif i < k:
+        return randomized_select(A,p,q-1,i)
+    else:
+        return randomized_select(A,q+1,r,i-k)
+
 ```
-* Trykk for [video](https://www.youtube.com/watch?v=AHaaFVmAsvA) for bedre forklaring!
+* Trykk for [video](https://www.youtube.com/watch?v=AHaaFVmAsvA) for bedre forklaring!
 
-## Forelesning 5 - Rotfaste trestrukturer <a name="of5"></a>
+**Kjøretid:**
 
+* Expected-case: *Θ(n)*
+* Worst-case: *Θ(n <sup>2</sup>)*
 
-## Forelesning 6 - Dynamisk programmering <a name="of6"></a>
+### Select
 
+Som *Randomized-Select*, finner *Select* et ønsket element gjennom rekursiv partisjonering av input. I motsetning til Randomized-Select, kan vi *garantere* en god split under partisjoneringen. *Select* bruker den deterministiske part. algoritmen [*Partition*](#Partition), med modifisert til å ta inn hvilket element som partisjoneringen skal skje rundt.
 
-## Forelesning 7 - Grådige algoritmer <a name="of7"></a>
+*Select*-algortimen returnerer det *i* 'te minste elementet i input med n > 1 distinkte elementer ved å gjennomføre følgende steg. Dersom n = 1, returnerer den bare input.
 
-
-## Forelesning 8 - Traversering av grafer <a name="of8"></a>
-
-
-## Forelesning 9 - Minimale spenntrær <a name="of9"></a>
-
-
-## Forelesning 10 - Korteste vei fra én til alle <a name="of10"></a>
+1. Del opp de *n* elementene i input til &lfloor; <sup>*n*</sup>&frasl;<sub>5</sub> &rfloor;  grupper med 5 elementer hver, og på det meste en gruppe bestående av de gjenstående *n* mod 5 elementene.
 
 
-## Forelesning 11 - Korteste vei fra alle til alle <a name="of11"></a>
+2. Finn medianen til hver av de &lceil; <sup>*n*</sup>&frasl;<sub>5</sub> &rceil;  gruppene ved å sortere elementene (≤ 5) med [Insertion-sort](#insertionsort), og velg deretter median.
+3. Bruk *Select* rekursivt for å finne medianen *x* av de &lceil; <sup>*n*</sup>&frasl;<sub>5</sub> &rceil; medianene i steg 2. Hvis det er partalls medianer blir *x* den mindre medianen.
+4. Partisjoner input rundt median av medianer *x* ved å bruke den modifirserte versjonen av *Partition*. La *k* være en større en antall elementer på venstre side av partisjoneringen, slik at *x* er det *k* 'te minste elementet og det der *n* - *k* elementer på høyre side.
+5. Dersom `i == k`, returner *x*. Hvi sikke bruk *Select* rekursivt for å finne det *i* 'te minste elementet på venstre side `if i < k` eller det (*i* - *k*)'te minste elementet på høyre side `if i > k`.
+
+<a name="of5"></a>
+## Forelesning 5 - Rotfaste trestrukturer 
+
+<a name="of6"></a>
+## Forelesning 6 - Dynamisk programmering 
 
 
-## Forelesning 12 - Maksimal flyt <a name="of12"></a>
+<a name="of7"></a>
+## Forelesning 7 - Grådige algoritmer 
+
+<a name="of8"></a>
+## Forelesning 8 - Traversering av grafer 
+
+<a name="of9"></a>
+## Forelesning 9 - Minimale spenntrær 
+
+<a name="of10"></a>
+## Forelesning 10 - Korteste vei fra én til alle 
+
+<a name="of11"></a>
+## Forelesning 11 - Korteste vei fra alle til alle 
+
+<a name="of12"></a>
+## Forelesning 12 - Maksimal flyt 
 
 **Flytnettverk:** Rettet graf `G = (V,E)`
 
@@ -682,7 +726,6 @@ FORD-FULKERSON-METHOD(G,s,t):
 En litt mer detaljert beskrivelse av flyt-oppdateringen:
 	
 ```sudocode
-
 FORD-FULKERSON(G,s,t)
 1	 for each edge (u,v) ∈ G.E
 2	 	 (u, v).f = 0
@@ -780,11 +823,14 @@ EDMONDS-KARP(G,s,t)
 
 * *Nettoflyt:*
 
-![nettoflyt](https://i.imgur.com/WhZBpU2.png)
+<img src="https://i.imgur.com/WhZBpU2.png" alt="Drawing" style=" width: 400px;"/>
 
 * *Kapasitet:*
 
-![kapasitet](https://i.imgur.com/MnCfFug.png)
+<img src="https://i.imgur.com/MnCfFug.png" alt="Drawing" style=" width: 400px;"/>
+
+
+
 
 **Lemma 26.5:** `f(S, T) = | f |`
 
