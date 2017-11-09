@@ -1,10 +1,10 @@
 <meta name="author" content="Henrik Høiness">
-# Algoritmer og datastrukturer
+#Algoritmer og datastrukturer
 Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
-##Liste over øvinger:
+## Liste over øvinger:
 
-- [x] Finish my changes
+- [x] [Øving 1 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving1)
 
 ## Liste over forelesninger
 1. [Forelesning 1 - *Problem og algoritmer*](#of1)
