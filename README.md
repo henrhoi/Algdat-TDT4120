@@ -1,5 +1,10 @@
+<meta name="author" content="Henrik Høiness">
 # Algoritmer og datastrukturer
 Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
+
+##Liste over øvinger:
+
+- [x] Finish my changes
 
 ## Liste over forelesninger
 1. [Forelesning 1 - *Problem og algoritmer*](#of1)
@@ -869,3 +874,12 @@ EDMONDS-KARP(G,s,t)
 
 
 ## Forelesning 14 - NP-komplette problemer <a name="of14"></a>
+
+
+
+
+
+
+
+
+Skrevet av Henrik Høiness
