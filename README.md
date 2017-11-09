@@ -618,7 +618,28 @@ Som *Randomized-Select*, finner *Select* et ønsket element gjennom rekursiv par
 3. Bruk *Select* rekursivt for å finne medianen *x* av de &lceil; <sup>*n*</sup>&frasl;<sub>5</sub> &rceil; medianene i steg 2. Hvis det er partalls medianer blir *x* den mindre medianen.
 4. Partisjoner input rundt median av medianer *x* ved å bruke den modifirserte versjonen av *Partition*. La *k* være en større en antall elementer på venstre side av partisjoneringen, slik at *x* er det *k* 'te minste elementet og det der *n* - *k* elementer på høyre side.
 5. Dersom `i == k`, returner *x*. Hvi sikke bruk *Select* rekursivt for å finne det *i* 'te minste elementet på venstre side `if i < k` eller det (*i* - *k*)'te minste elementet på høyre side `if i > k`.
-
+
+```sudocode
+
+SELECT(A,i)
+	if A.length = 1
+		return A[0]
+	if A.length ≤ 5
+	    INSERTION-SORT(A)
+	    return A[i]
+	Partition L into the subsets S[i] with five elements each
+	    # There will be n/5 ± 1 subsets total.
+	for i = 1 to n/5
+	    x[i] = select(S[i],3)
+	M = select({x[i]}, n/10)
+	Partition A into L[..] < A[M] and R[..] > A[M]
+	
+	if k <= length(L)
+	    return select(L,k)
+	elif k > length(L)
+	    return select(R,i-len(L))
+	else return A[M]
+```
 <a name="of5"></a>
 ## Forelesning 5 - Rotfaste trestrukturer 
 
