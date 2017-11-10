@@ -1,5 +1,6 @@
 <meta name="author" content="Henrik Høiness">
 # Algoritmer og datastrukturer
+
 Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
 Under står notater fra både forelesninger, kompendium og Introduction to Algorithms (Cormen, Thomas), basert på pensumheftet.
