@@ -2,28 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7074074d-45ef-4bc8-8843-900e3317706e" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Algoritmer i pensum/Lineær sortering/Bucket_sort.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Algoritmer i pensum/Lineær sortering/Counting_sort.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Algoritmer i pensum/Lineær sortering/Radix_sort.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Algoritmer i pensum/Lineær sortering/test.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Oving9/Teori øving 9 – Algdat.docx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Oving9/test.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Algoritmer i pensum/Binærsøk.py" afterPath="$PROJECT_DIR$/Algoritmer i pensum/Binærsøk.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Algoritmer i pensum/Bubble_sort.py" afterPath="$PROJECT_DIR$/Algoritmer i pensum/Bubble_sort.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Algoritmer i pensum/Insertion_sort.py" afterPath="$PROJECT_DIR$/Algoritmer i pensum/Insertion_sort.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Algoritmer i pensum/Merge_sort.py" afterPath="$PROJECT_DIR$/Algoritmer i pensum/Merge_sort.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Algoritmer i pensum/Merge_sort_fra_boka.py" afterPath="$PROJECT_DIR$/Algoritmer i pensum/Merge_sort_fra_boka.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Algoritmer i pensum/Quicksort.py" afterPath="$PROJECT_DIR$/Algoritmer i pensum/Quicksort.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Algoritmer i pensum/Randomized-Quicksort.py" afterPath="$PROJECT_DIR$/Algoritmer i pensum/Randomized-Quicksort.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving2/kortstokker.py" afterPath="$PROJECT_DIR$/Oving2/kortstokker.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving3/Pipelining.py" afterPath="$PROJECT_DIR$/Oving3/Pipelining.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving5/ordbok.py" afterPath="$PROJECT_DIR$/Oving5/ordbok.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving5/ordbok_tweak.py" afterPath="$PROJECT_DIR$/Oving5/ordbok_tweak.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving6/seddeltrykkeriet.py" afterPath="$PROJECT_DIR$/Oving6/seddeltrykkeriet.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving7/Seddelveksling.py" afterPath="$PROJECT_DIR$/Oving7/Seddelveksling.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving9/veibygging_prim.py" afterPath="$PROJECT_DIR$/Oving9/veibygging_prim.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Oving10/input.txt" afterPath="$PROJECT_DIR$/Oving 10/input.txt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Oving10/mumien.py" afterPath="$PROJECT_DIR$/Oving 10/mumien.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -95,7 +75,7 @@
         </entry>
       </file>
       <file leaf-file-name="input.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Oving10/input.txt">
+        <entry file="file://$PROJECT_DIR$/Oving 10/input.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -105,7 +85,7 @@
         </entry>
       </file>
       <file leaf-file-name="mumien.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Oving10/mumien.py">
+        <entry file="file://$PROJECT_DIR$/Oving 10/mumien.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="45">
               <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
@@ -490,7 +470,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Oving10/input.txt">
+    <entry file="file://$PROJECT_DIR$/Oving 10/input.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -498,7 +478,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Oving10/mumien.py">
+    <entry file="file://$PROJECT_DIR$/Oving 10/mumien.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
