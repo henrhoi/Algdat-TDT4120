@@ -1,4 +1,4 @@
-
+__author__ = "Henrik Høiness"
 
 # A = usortert liste, B = sortert output (først tom), k = største tall i A, C = Counter
 def counting_sort(A,k):
@@ -21,7 +21,6 @@ def counting_sort(A,k):
 
         res[count[element]-1] = element
         count[element] -= 1
-
 
     return res
 

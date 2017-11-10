@@ -1,4 +1,4 @@
-
+__author__ = "Henrik Høiness"
 
 # Skal finne i som gir at A[i] == v
 

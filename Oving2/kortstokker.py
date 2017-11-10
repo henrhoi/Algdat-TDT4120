@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 from sys import stdin
 from itertools import repeat
 __author__ = "Henrik Høiness"

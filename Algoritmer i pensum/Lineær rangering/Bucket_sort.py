@@ -1,12 +1,11 @@
-
+__author__ = "Henrik Høiness"
 
 def bucket_sort(A):
     n = len(A)
     B = [[] for _ in range(n)]
 
     for i in range(n):
-        B[int(n*A[i])].insert(-1,A[i])
-
+        B[int(n*A[i])].insert(-1, A[i])
 
     for j in range(n):
         insertion_sort(B[j])
@@ -35,9 +34,12 @@ def insertion_sort(A):
 
 
 def main():
-    unsorted_list = [0.732,0.552,0.246,0.733,0.734]
+    unsorted_list = [0.103,0.552,0.246,0.733,0.942]
     sorted_list = bucket_sort(unsorted_list)
     print(sorted_list)
+
+
+
 
 
 main()

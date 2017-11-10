@@ -1,5 +1,7 @@
 import random
 
+__author__ = "Henrik Høiness"
+
 
 def Randomized_Quicksort(A,p,r):
     if p < r:

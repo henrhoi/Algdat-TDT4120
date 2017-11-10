@@ -1,4 +1,4 @@
-
+__author__ = "Henrik Høiness"
 
 def bubble_sort(A):
     for i in range(0,len(A)):

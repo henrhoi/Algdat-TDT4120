@@ -1,4 +1,6 @@
 from sys import stdin
+__author__ = "Henrik Høiness"
+
 
 class Node:
     def __init__(self):

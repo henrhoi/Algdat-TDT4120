@@ -1,5 +1,7 @@
 import math
 
+__author__ = "Henrik Høiness"
+
 # skjønner idéen men får feil
 
 def Merge_sort(A,p,r):

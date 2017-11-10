@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 from sys import stdin
 __author__ = "Henrik Høiness"
 

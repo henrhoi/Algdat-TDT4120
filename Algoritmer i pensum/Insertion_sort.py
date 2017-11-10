@@ -1,4 +1,4 @@
-
+__author__ = "Henrik Høiness"
 
 # Løkke-invariant: A[0..j-1] er sortert
 

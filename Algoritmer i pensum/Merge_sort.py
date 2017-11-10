@@ -1,4 +1,4 @@
-
+__author__ = "Henrik Høiness"
 
 
 def merge_sort(A):

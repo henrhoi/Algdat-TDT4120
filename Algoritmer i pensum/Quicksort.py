@@ -1,4 +1,4 @@
-
+__author__ = "Henrik Høiness"
 
 
 def Quicksort(A, p, r):

@@ -1,5 +1,7 @@
 from sys import stdin
 
+__author__ = "Henrik Høiness"
+
 stdin=open("input.txt")
 
 Inf = float(1e3000)

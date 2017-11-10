@@ -5,6 +5,17 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 ## Liste over øvinger:
 
 - [x] [Øving 1 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving1)
+- [x] [Øving 2 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving2)
+- [x] [Øving 3 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving3)
+- [x] [Øving 4 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving4)
+- [x] [Øving 5 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving5)
+- [x] [Øving 6 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving6)
+- [x] [Øving 7 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving7)
+- [x] [Øving 8 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving8)
+- [x] [Øving 9 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving9)
+- [x] [Øving 10 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving10)
+- [x] [Øving 11 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving11)
+- [x] [Øving 12 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving12)
 
 ## Liste over forelesninger
 1. [Forelesning 1 - *Problem og algoritmer*](#of1)

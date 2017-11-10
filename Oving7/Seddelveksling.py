@@ -1,5 +1,7 @@
 from sys import stdin
 
+__author__ = "Henrik Høiness"
+
 #Velger så mange av den største mynten, så nest størst osv
 def min_coins_greedy(coins, value):
     min_coins = 0

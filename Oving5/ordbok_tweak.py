@@ -1,5 +1,7 @@
 from sys import stdin
 
+__author__ = "Henrik Høiness"
+
 def posisjoner(ord, indeks, node,lengde):
     character = ord[indeks]
 

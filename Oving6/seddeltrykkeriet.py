@@ -1,4 +1,5 @@
 from sys import stdin
+
 __author__ = "Henrik Høiness"
 
 def max_value(widths, heights, values, paper_width, paper_height, part_solutions):
