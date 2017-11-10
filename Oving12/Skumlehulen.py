@@ -33,7 +33,7 @@ def isolated_path_count(capacities, start_rooms, exits):
             F[sti[i]][sti[i+1]] += 1
             F[sti[i+1]][sti[i]] -= 1
         antallStier += 1
-
+ 
         if antallStier == len(start_rooms):
             return "%d" % antallStier
 
