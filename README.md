@@ -1,21 +1,8 @@
 <meta name="author" content="Henrik Høiness">
-#Algoritmer og datastrukturer
+# Algoritmer og datastrukturer
 Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
-## Liste over øvinger:
-
-- [x] [Øving 1 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving1)
-- [x] [Øving 2 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving2)
-- [x] [Øving 3 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving3)
-- [x] [Øving 4 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving4)
-- [x] [Øving 5 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving5)
-- [x] [Øving 6 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving6)
-- [x] [Øving 7 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving7)
-- [x] [Øving 8 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving8)
-- [x] [Øving 9 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving9)
-- [x] [Øving 10 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving10)
-- [x] [Øving 11 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving11)
-- [x] [Øving 12 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving12)
+Under står notater fra både forelesninger, kompendium og Introduction to Algorithms (Cormen, Thomas), basert på pensumheftet.
 
 ## Liste over forelesninger
 1. [Forelesning 1 - *Problem og algoritmer*](#of1)
@@ -35,6 +22,24 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
 
 * Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF (last ned dokumentet fra GitHub først)
+
+
+## Liste over øvinger:
+
+- [x] [Øving 1 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving1) &rarr; (se [Traversering](#ov1))
+- [x] [Øving 2 - Kortstokker](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving2) &rarr; (se [Merging](#ov2))
+- [x] [Øving 3 - Pipesortering](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving3) &rarr; (se [Sortering](#of3))
+- [x] [Øving 4 - Flexradix](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving4) &rarr; (se [Lineær sortering](#of4))
+- [x] [Øving 5 - Kobra lærer å stave](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving5) &rarr; (se [Trebygging](#of5))
+- [x] [Øving 6 - Seddeltrykkeriet](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving6) &rarr; (se [DP](#of6))
+- [x] [Øving 7 - Pengeveksling (Grådighet)](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving7) &rarr; (se [Grådighet](#of7))
+- [x] [Øving 8 - Redd Ratatosk](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving8) &rarr; (se [Traversering](#of8))
+- [x] [Øving 9 - Veibygging](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving9) &rarr; (se [MST](#of9))
+- [x] [Øving 10 - Mumien](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving10) &rarr; (se [Korteste vei en til alle](#of10)
+- [x] [Øving 11 - Alle til alle](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving11) &rarr; (se [Floyd Warshall](#of11))
+- [x] [Øving 12 - Skumlehulen](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving12) &rarr; (se [Maksimal flyt](#of12)
+
+
 
 <a name="of1"></a>
 ## Forelesning 1 - Problem og algoritmer
@@ -129,7 +134,7 @@ TABLE-INSERT(T,x):
 
 **Dynamisk tabell**: Tabell som blir utvidet dersom alle plassene er tatt eller *load-factor* α = 1
 
-
+<a name="ov1"></a>
 ### Lenket liste
 * Finnes
 	* *Enkle* lenkede lister
@@ -283,7 +288,7 @@ def Iterative_binary_search(A, p, r, v):
 
 * Θ(*lg n*)
 
-
+<a name="ov2"></a>
 ### Merge sort
 
 **Input**: Liste A usortert
