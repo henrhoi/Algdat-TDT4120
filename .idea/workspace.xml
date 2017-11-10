@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7074074d-45ef-4bc8-8843-900e3317706e" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Oving 10/input.txt" afterPath="$PROJECT_DIR$/Oving10/input.txt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Oving 10/mumien.py" afterPath="$PROJECT_DIR$/Oving10/mumien.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving1/Sprengstoff.py" afterPath="$PROJECT_DIR$/Oving1/Sprengstoff.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving12/Skumlehulen.py" afterPath="$PROJECT_DIR$/Oving12/Skumlehulen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving2/kortstokker.py" afterPath="$PROJECT_DIR$/Oving2/kortstokker.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving3/Pipelining.py" afterPath="$PROJECT_DIR$/Oving3/Pipelining.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving4/Heapsort.py" afterPath="$PROJECT_DIR$/Oving4/Heapsort.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oving8/ratatosk_tweak.py" afterPath="$PROJECT_DIR$/Oving8/ratatosk_tweak.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,16 +13,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Heapsort.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Oving4/Heapsort.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ordbok.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Oving5/ordbok.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -100,11 +83,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Skumlehulen.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Skumlehulen.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Oving12/Skumlehulen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="35" column="1" lean-forward="false" selection-start-line="35" selection-start-column="1" selection-end-line="35" selection-end-column="1" />
+            <state relative-caret-position="-552">
+              <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -115,6 +98,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="45">
               <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Sprengstoff.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Oving1/Sprengstoff.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -472,14 +465,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Oving1/Sprengstoff.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Oving2/kortstokker.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -530,14 +515,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Oving10/mumien.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Oving8/ratatosk_tweak.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -554,14 +531,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Oving11/Alletilalle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="29" lean-forward="false" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -570,10 +539,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Oving11/Alletilalle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="29" lean-forward="false" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Oving12/Skumlehulen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="35" column="1" lean-forward="false" selection-start-line="35" selection-start-column="1" selection-end-line="35" selection-end-column="1" />
+        <state relative-caret-position="-552">
+          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Oving10/mumien.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Oving1/Sprengstoff.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
           <folding />
         </state>
       </provider>
