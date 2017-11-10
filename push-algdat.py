@@ -1,6 +1,5 @@
 from subprocess import call
 
-c
 stdin = input()
 
 with cd("~/Library"):

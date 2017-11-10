@@ -1,21 +1,9 @@
 from subprocess import call
 
-call('echo From which repository:', shell=True)
-repo = input()
+#Kall denne i terminalen for å slippe 
 
-call('echo Message: ',shell=True)
-
-message = input()
-
-
-
-call('cd Documents/GitHub/'+str(repo), shell=True)
 call('git add .', shell=True)
+call('git commit -m ".."',shell=True)
 
-if message == "":
-    call('git commit -m ".."',shell=True)
 
-else:
-    call('git commit -m '+message,shell=True)
-
-call('git push')
+call('git push', shell=True)
