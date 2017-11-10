@@ -1,5 +1,5 @@
-<meta name="author" content="Henrik Høiness">
 # Algoritmer og datastrukturer
+<meta name="author" content="Henrik Høiness">
 
 Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
