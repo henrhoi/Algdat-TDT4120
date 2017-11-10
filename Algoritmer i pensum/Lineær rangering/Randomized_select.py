@@ -3,8 +3,6 @@ import random
 # Forventet kjøretid: O(n)
 # Worst case: O(n^2)
 
-__author__ = "Henrik Høiness"
-
 
 def randomized_select(A,p,r,i):
     if p == r:

@@ -1,4 +1,3 @@
-__author__ = "Henrik Høiness"
 
 # A = usortert liste, d = antall siffer i elemenetene
 

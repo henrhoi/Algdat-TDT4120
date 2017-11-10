@@ -1,36 +1,34 @@
 # Kjøretiden er O(n) i worst-case
-# FUNGERER FOR NOEN TALLSEKVENSER OG I
 
 __author__ = "Henrik Høiness"
-
-
-def select(A,k):
+def select(A, i):
     if len(A) == 1: return A[0]
+
     elif len(A) <= 5: # if length is 5 or less, sort it and return the kth smallest element
         insertion_sort(A)
-        return A[k-1]
+        return A[i - 1]
 
     S = []
-    for i in range(0,len(A),5):
-        B = A[i:i+5]
+    for j in range(0,len(A),5):
+        B = A[j:j+5]
         insertion_sort(B)
-        S.append(B)
+        S.append(B[len(B)//2])
 
-    x = []
-    for i in range(len(S)):
-        x.append(select(S[i],3))
+    M = select(S,len(S)//2)
 
-    M = select(x,len(A)//10)
+    L, R = partition_modified(A,M)
 
-    L1, L3 = partition_modified(A,M)
 
-    if k <= len(L1):
-        return select(L1,k)
+    if i == len(L) + 1:
+        return M
 
-    elif k > len(L1)+1:
-        return select(L3,k-len(L1))
-    else:
-        return A[M]
+
+    elif i < len(L) + 1:
+        return select(L, i)
+
+
+    elif i > len(L)+1:
+        return select(R, i - (len(L)+1))
 
 
 
@@ -40,10 +38,10 @@ def partition_modified(A,p):
     lo = [] # hi[i] < p
 
     for i in range(len(A)):       # walk through all the elements in the Array A.
-        if A[i] < A[p]:
-            lo = lo + [A[i]]
-        else:
-            hi = hi + [A[i]]
+        if A[i] < p:
+            lo.append(A[i])
+        elif A[i] > p:
+            hi.append(A[i])
 
     return lo,hi
 
@@ -62,11 +60,9 @@ def insertion_sort(A):
 
 
 def main():
-    A = [1,5,4,2,6,7,33,25,76,176,464,243,752,863,65,24,75,86,72,45]
-    B = [1,5,4,2,6,7,33,25,76,176,464,243,752,863,65,24,75,86, 72, 45]
-    i = 11
-
-    n = len(A)
+    A = list(range(25))
+    B = list(range(25))
+    i = 21
 
     insertion_sort(B)
     print("Det "+str(i)+"'te tallet i A er: " + str(B[i-1]))

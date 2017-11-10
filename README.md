@@ -35,10 +35,10 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 - [x] [Øving 4 - Flexradix](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%204%20-%20Flexradix) &rarr; (se [Lineær sortering](#of4))
 - [x] [Øving 5 - Kobra lærer å stave](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%205%20-%20Kobra%20l%C3%A6rer%20%C3%A5%20stave) &rarr; (se [Trebygging](#of5))
 - [x] [Øving 6 - Seddeltrykkeriet](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving6) &rarr; (se [DP](#of6))
-- [x] [Øving 7 - Pengeveksling (https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%207%20-%20Pengeveksling) &rarr; (se [Grådighet](#of7))
+- [x] [Øving 7 - Pengeveksling] (https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%207%20-%20Pengeveksling) &rarr; (se [Grådighet](#of7))
 - [x] [Øving 8 - Redd Ratatosk](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%208%20-%20Redd%20Ratatosk) &rarr; (se [Traversering](#of8))
 - [x] [Øving 9 - Veibygging](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%209%20-%20Veibygging) &rarr; (se [MST](#of9))
-- [x] [Øving 10 - Mumien](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving10%20-%20Mumien) &rarr; (se [Korteste vei en til alle](#of10)
+- [x] [Øving 10 - Mumien](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving10%20-%20Mumien) &rarr; (se [Korteste vei en til alle](#of10))
 - [x] [Øving 11 - Alle til alle](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving11%20-%20Alle%20til%20alle) &rarr; (se [Floyd Warshall](#of11))
 - [x] [Øving 12 - Skumlehulen](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving12%20-%20Skumlehulen) &rarr; (se [Maksimal flyt](#of12)
 
@@ -233,6 +233,11 @@ class Stack:
 
 ```
  * Operasjonene bruker *O(1)* tid 
+
+ 
+### Hash-tabeller
+ 
+**Mangler**!!!!!!
 
 
 <a name="of3"></a>
@@ -663,9 +668,101 @@ SELECT(A,i)
 	elif k > length(L)
 	    return select(R,i-len(L))
 	else return A[M]
-```
+```
+
+* *Select* kodet i Python ligger [**her**](https://github.com/henrhoi/Algdat-TDT4120/blob/master/Algoritmer%20i%20pensum/Line%C3%A6r%20rangering/Select.py)
+
 <a name="of5"></a>
 ## Forelesning 5 - Rotfaste trestrukturer 
+
+Den **binære heap** datastrukturen er en liste  som vi kan se på som et nesten komplett binærtre. Hver node i treet korresponederer til et element til listen. Treet er helt fyllt i alle nivående med unntak av mulig det laveste, som er fylt fra venstre mot høyre.
+
+Roten til treet er A[0] og gitt en index i til en node, kan vi lett finne indeksen til dets forgjenger, venstre barne eller høyre barn
+
+<img src="https://i.imgur.com/kCFYIi0.png" alt="Drawing" style=" width: 200px;"/>
+
+
+```python
+def parent(i):
+	return ⌊i/2⌋
+	
+def left(i):
+	return 2i
+	
+def right(i):
+	return 2i + 1
+```
+
+Det finnes to typer binære heaps.
+I begge typene tilfredsstiller verdiene i nodene en heap-egenskap, som avhenger av typen heap:
+
+* **Max-heap egenskapen**:
+	*  For hver node *i* &ne; 0 er `A[parent(i)] ≥ A[i]`
+	*  En nodes verdi er på det meste sin forgjengers verdi - dvs største element ligger i roten.
+* **Min-heaps egenskapen**:
+	* For hver node *i* &ne; 0 er `A[parent(i)] ≥ A[i]` 
+	* En nodes verdi er på det minste sin forgjengers verdi - dvs. minste element ligger i roten.
+
+Dersom vi ser på en heap som et tree, definerer vi *høyden* til en node i treet til å den lengste enkle veien fra noden til en løvnode, og vi definer *høyden* til treet til å være høyden til roten.
+
+> Siden en heap av *n* elementer er basert på et komplett binært tre, er dens høyde &theta;(lg *n*), so vi ser igjen på tradisjonelle heap-prosedyrer.
+
+### Max-Heapify
+
+For å kunne vedlikeholde *max-heap egenskapen*, kaller vi på prosedyren *Max-Heapify*. Når den kalles antar algoritmen at binærtreet med røtter i `left(i)` og `right(i)` er max_heaps, men at A[*i* ] kanskje er mindre enn sine barn, som bryter med heap-egenskapen. *Max-Heapify* lar verdien til A[*i* ] "*flyte ned*" i max-heapen slik at subtreet med rot på index *i* holder heap-egenskapen.
+
+**Problem:** Gjøre at input holder *heap-egenskapen*
+
+```sudocode
+MAX-HEAPIFY(A, i)
+1	l = left(i)
+2	r = right(i)
+3	if l ≤ A.heap-size and A[l] >A[i]
+4		largest = l
+5	else largest = i
+6	if r ≤ A.heap-size and A[r] > A[largest]
+7		largest = r
+8	if largest ≠ i
+9		exchange A[i] with A[largest]
+10		MAX-HEAPIFY(A,largest)
+```
+
+
+<img src="https://i.imgur.com/TJcLYI7.png" alt="Drawing" style=" width: 200px;"/>
+
+Kjøring av *Max-Heapify* :
+
+* På hvert steg velges det sterste elementet av A[i], A[left(i)] og A[right(i)], og dets indeks blir lagret som *largest*. Dersom A[*i* ] er størst vil subtreet på node *i* allerede være en max-heap og prosedyren terminerer.
+* Hvis ikke er en av de to barna det største elementet, og bytter vi plass på A[*i* ] og A[*largest* ], som gjør at node *i* og dets barn tilfredstiller max-heap egenskapen.
+* Noden med indeks *largest* har nå den orginale verdien til A[*i* ], og derfor kan det hende at subtreet med rot *largest* muligens bryter med max-heap egenskapen. Derfor kaller vi *Max-Heapify* rekursivt på subtreet.
+
+**Kjøretid:**
+
+* `T(n) ≤ T(2n/3) + θ(1)`, som med *master teoremet* gir
+	* `T(n) = O(lg n)`
+* Alternativt kan vi karakterisere kjøretiden på en node med høyde *h* som `O(h)`
+
+
+### Bygging av heaps
+
+Vi kan bruke *Max-Heapify* på en bottom-up må for å convertere en liste A[0..n-1], hvor `n = A.length`, til en max-heap. Elementene i listen `A[(⌊n/2⌋ + 1)..n]` er alle blader i treet, og alle er til å begynne med en 1-element heap. 
+
+Prosedyren *Build-Max-Heap* går igjennom de resterende nodene av treet og kjører *Max-Heapify* på hver node.
+
+```sudocode
+BUILD-MAX-HEAP(A)
+1	A.heap-size = A.length
+2	for i = ⌊A.length/2⌋ - 1 downto 0
+3		MAX-HEAPIFY(A, i)
+```
+
+**Løkke-invariant:** På starten av hver iterasjon av **for**-løkken på linje 2-3, er hver node i+1,i+2,...,*n* roten til en max-heap.
+
+
+
+
+
+
 
 <a name="of6"></a>
 ## Forelesning 6 - Dynamisk programmering 
@@ -868,11 +965,11 @@ EDMONDS-KARP(G,s,t)
 
 * *Nettoflyt:*
 
-<img src="https://i.imgur.com/WhZBpU2.png" alt="Drawing" style=" width: 400px;"/>
+<img src="https://i.imgur.com/WhZBpU2.png" alt="Drawing" style=" width: 200px;"/>
 
 * *Kapasitet:*
 
-<img src="https://i.imgur.com/MnCfFug.png" alt="Drawing" style=" width: 400px;"/>
+<img src="https://i.imgur.com/MnCfFug.png" alt="Drawing" style=" width: 200px;"/>
 
 
 

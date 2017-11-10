@@ -1,4 +1,4 @@
-__author__ = "Henrik Høiness"
+
 
 def bucket_sort(A):
     n = len(A)
