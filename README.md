@@ -3,7 +3,7 @@
 
 Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
-Under står notater fra både forelesninger, kompendium og Introduction to Algorithms (Cormen, Thomas), basert på pensumheftet.
+**Under står notater fra både forelesninger, kompendium og Introduction to Algorithms (Cormen, Thomas), basert på pensumheftet.**
 
 ## Liste over forelesninger
 1. [Forelesning 1 - *Problem og algoritmer*](#of1)
@@ -24,21 +24,23 @@ Under står notater fra både forelesninger, kompendium og Introduction to Algor
 
 * Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF (last ned dokumentet fra GitHub først)
 
+* [Her](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Algoritmer%20i%20pensum) ligger de fleste av algoritmene som er pensum skrevet i *Python*
+
 
 ## Liste over øvinger:
 
 - [x] [Øving 1 - Sprengstoff](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving1) &rarr; (se [Traversering](#ov1))
-- [x] [Øving 2 - Kortstokker](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving2) &rarr; (se [Merging](#ov2))
-- [x] [Øving 3 - Pipesortering](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving3) &rarr; (se [Sortering](#of3))
-- [x] [Øving 4 - Flexradix](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving4) &rarr; (se [Lineær sortering](#of4))
-- [x] [Øving 5 - Kobra lærer å stave](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving5) &rarr; (se [Trebygging](#of5))
+- [x] [Øving 2 - Kortstokker](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%202%20-%20Kortstokker) &rarr; (se [Merging](#ov2))
+- [x] [Øving 3 - Pipesortering](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%203%20-%20Pipesortering) &rarr; (se [Sortering](#of3))
+- [x] [Øving 4 - Flexradix](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%204%20-%20Flexradix) &rarr; (se [Lineær sortering](#of4))
+- [x] [Øving 5 - Kobra lærer å stave](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%205%20-%20Kobra%20l%C3%A6rer%20%C3%A5%20stave) &rarr; (se [Trebygging](#of5))
 - [x] [Øving 6 - Seddeltrykkeriet](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving6) &rarr; (se [DP](#of6))
-- [x] [Øving 7 - Pengeveksling (Grådighet)](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving7) &rarr; (se [Grådighet](#of7))
-- [x] [Øving 8 - Redd Ratatosk](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving8) &rarr; (se [Traversering](#of8))
-- [x] [Øving 9 - Veibygging](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving9) &rarr; (se [MST](#of9))
-- [x] [Øving 10 - Mumien](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving10) &rarr; (se [Korteste vei en til alle](#of10)
-- [x] [Øving 11 - Alle til alle](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving11) &rarr; (se [Floyd Warshall](#of11))
-- [x] [Øving 12 - Skumlehulen](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving12) &rarr; (se [Maksimal flyt](#of12)
+- [x] [Øving 7 - Pengeveksling (https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%207%20-%20Pengeveksling) &rarr; (se [Grådighet](#of7))
+- [x] [Øving 8 - Redd Ratatosk](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%208%20-%20Redd%20Ratatosk) &rarr; (se [Traversering](#of8))
+- [x] [Øving 9 - Veibygging](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%209%20-%20Veibygging) &rarr; (se [MST](#of9))
+- [x] [Øving 10 - Mumien](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving10%20-%20Mumien) &rarr; (se [Korteste vei en til alle](#of10)
+- [x] [Øving 11 - Alle til alle](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving11%20-%20Alle%20til%20alle) &rarr; (se [Floyd Warshall](#of11))
+- [x] [Øving 12 - Skumlehulen](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving12%20-%20Skumlehulen) &rarr; (se [Maksimal flyt](#of12)
 
 
 
