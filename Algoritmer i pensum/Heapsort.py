@@ -1,3 +1,5 @@
+__author__ = "Henrik Høiness"
+
 
 def heapsort(A):
     build_max_heap(A)

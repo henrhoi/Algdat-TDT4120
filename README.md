@@ -35,7 +35,7 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 - [x] [Øving 4 - Flexradix](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%204%20-%20Flexradix) &rarr; (se [Lineær sortering](#of4))
 - [x] [Øving 5 - Kobra lærer å stave](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%205%20-%20Kobra%20l%C3%A6rer%20%C3%A5%20stave) &rarr; (se [Trebygging](#of5))
 - [x] [Øving 6 - Seddeltrykkeriet](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving6) &rarr; (se [DP](#of6))
-- [x] [Øving 7 - Pengeveksling] (https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%207%20-%20Pengeveksling) &rarr; (se [Grådighet](#of7))
+- [x] [Øving 7 - Pengeveksling](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%207%20-%20Pengeveksling) &rarr; (se [Grådighet](#of7))
 - [x] [Øving 8 - Redd Ratatosk](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%208%20-%20Redd%20Ratatosk) &rarr; (se [Traversering](#of8))
 - [x] [Øving 9 - Veibygging](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving%209%20-%20Veibygging) &rarr; (se [MST](#of9))
 - [x] [Øving 10 - Mumien](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Oving10%20-%20Mumien) &rarr; (se [Korteste vei en til alle](#of10))
@@ -945,6 +945,7 @@ INORDER-TREE-WALK(x)
 > Det tar &theta;(*n*) tid å gå igjennom et *n*-node binært søketre.
 
 
+
 **Søking:**
 Vi bruker følgende prosedyre for å søke etter en node med en gitt nøkkel i et binært søketre. Gitt en peker til roten og en nøkkel *k*, returnerer *Tree-Search* en peker til noden med key *k*, hvis den eksisterer, hvis ikke returnerer den NIL.
 
@@ -1029,10 +1030,67 @@ TREE-SUCCESSOR(x)
 2. Dersom høyre subtre til node *x* er tomt, og x har en forgjenger *y*, da er **etterkommeren** det første elementet som er større enn *x* som algoritmen finner.
 
 
-**Kjøretid:** `O(h) = `
+**Kjøretid:** `O(h) = O(lg n)`
+
+
+```sudocode
+TREE-PREDECESSOR(x)
+1	if x.left ≠ NIL
+2		return TREE-MAXIMUM(x.left)
+3	y = x.p
+4	while y ≠ NIL and x == y.left
+5		x = y
+6		y = y.p
+7	return y
+```
+**Kjøretid:** `O(h) = O(lg n)`
+
+
+### Innsetting og sletting
+
+**Innsetting:** For å sette inn en ny verdi *v* inn i et binært søketre *T*, bruker vi prosedyren *Tree-Insert*. Prosedyren tar en node *z* der `z.key = v`, `z.left = NIL` og `z.right = NIL`. Den modifiserer *T* og noen av attributtene til *z* slik blir satt inn i treet på en passende posisjon.
+
+```sudocode
+TREE-INSERT(T,z)
+1	 y = NIL
+2	 x = T.root
+3	 while x ≠ NIL
+4	 	 y = x
+5	 	 if z.key < x.key
+6		 	 x = x.left
+7	 	 else x = x.right
+8	 z.p = y
+9	 if y == NIL
+10 		 T.root = z		//Tree was empty
+11	 elif z.key < y.key
+12		 y.left = z
+13	 else y.right = z
+```
+
+* **Kjøretid:** Som alle andre primitive operasjoner på søketrær bruker prosedyren `O(h) = O(lg n)` tid på en tre med høyde *h*.
+
+
+**Sletting:** Strategien som brukes for å slette en node *z* har tre generelle tilfeller, men som kan være litt kompliserte.
+
+* Dersom *z* ikke har noen barn, kan vi simpelten fjerne noden ved å modifisere forelderen ved å erstatte *z* med NIL som dens barn: `z.p.child = NIL`
+
+* Dersom *z* kun har ett barn kan vi bare la barnet overta *z* 's posisjon i treet, ved å modifisere *z* 's forelder til å erstatte *z* med *z* 's barn, og endre *z* 's barn forelder-attributt.
+
+* Dersom *z* har to barn, da finner vi *z* 's etterkomm *y* - som må være i *z* 's høyre subtre. REsten av *z* 's høyre subtre blir *y* 's nye høyre subtre, og *z* 's venstre subtre blir *y* 's nye venstre subtre. 
+	* Dette tilfellet er litt mer komplekst enn de andre, og det avhenger av om *y* er *z* 's høyre barn.
 
 
 
+**ER PÅ TOPPEN AV SIDE 296**
+
+
+### Forventet høyde på binomisk søketre
+
+Ved hjelp av et bevis i Cormen på side 300, kan man se at forventet høyde *h* på et tilfeldig bygd binomisk søketre med n distiskte elementer er *O*(lg *n*). Dvs.
+
+`O(h) = O(lg n)`
+
+> Det finnes søketrær som har garantert høyde h = &theta;(lg *n*) - et eksempel på et slikt tre er red-black tree.
 
 
 
@@ -1042,6 +1100,7 @@ TREE-SUCCESSOR(x)
 
 <a name="of7"></a>
 ## Forelesning 7 - Grådige algoritmer 
+Er alle grådige algoritmer O(n)?? NEI, SE HUFFMANN
 
 <a name="of8"></a>
 ## Forelesning 8 - Traversering av grafer 

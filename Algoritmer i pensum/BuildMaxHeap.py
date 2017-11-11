@@ -1,4 +1,4 @@
-
+__author__ = "Henrik Høiness"
 
 
 def build_max_heap(A):
