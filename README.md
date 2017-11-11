@@ -192,6 +192,7 @@ class LinkedList:
 
 	
 
+
 ### Queue
 * *FIFO-struktur*
 
@@ -756,7 +757,22 @@ BUILD-MAX-HEAP(A)
 3		MAX-HEAPIFY(A, i)
 ```
 
-**Løkke-invariant:** På starten av hver iterasjon av **for**-løkken på linje 2-3, er hver node i+1,i+2,...,*n* roten til en max-heap.
+**Løkke-invariant:** På starten av hver iterasjon av **for**-løkken på linje 2-3, er hver node i+1, i+2,..., *n* roten til en max-heap.
+
+Vi må vise at denne invarianten er sann før den første løkke-iterasjonen, at hver iterasjon av løkken beholder invarianten, og at invarianten gir en brukbar egenskap for å vise korrekthet når løkken terminerer.
+
+
+* **Initialisering:** Før den første iterasjonen av løkken, i = &lfloor; n/2 &rfloor;. Hver node &lfloor; n/2 &rfloor;+1, &lfloor; n/2 &rfloor;+2,..., n er løvnoder og en rot til en triviell max-heap.
+* **Vedlikeholdelse:** For å se at hver iterasjon vedlikeholder løkke-invarianten, ovserver at barna til node *i* er nummerert høyere enn *i*. Av løkke-invarianten er de både begge røtter til en max-heap. Derfor må vi kalle på *Max-Heapify(A, i)* for at node *i* skal være en max-heap rot. Følgende sørger *Max-Heapify* for at nodene *i*+1, *i*+2,.., n alle er røtter til max-heaps. Ved å minske *i* gjenskaper løkke-invarianten for neste iterasjon.
+* *Terminering:** Ved terminering, i = 0. Av løkke-invarianten, er nå hver node 1,2,..,n en rot til en max-heap. Spesielt, er node 1. 
+
+Vi kan regne ut en øvre grense for kjøretiden til *Build-Max-Heap* som følgende:
+
+* Hvert kall på *Max-Heapify* koster `O(lg n)`, og *Build-Max-Heap* gjør `O(n)` slike kall.
+* Derfor blir **kjøretiden** `O(n lg n)`, Det er en øvre grense, men ikke asymptotisk tett.
+
+
+
 
 
 
