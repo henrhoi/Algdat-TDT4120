@@ -56,6 +56,14 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
 **Θ**: Øvre og nedre grense
 
+```
+ω > Θ(f(n)) (Lille Omega)
+Ω ≧ Θ(f(n)) (Store Omega)
+Θ = Θ(f(n)) (Store Theta)
+O ≦ Θ(f(n)) (Store O)
+o < Θ(f(n)) (Lille o)
+```
+
 <a name="insertionsort"></a>
 
 ### Insertion sort
@@ -635,6 +643,9 @@ def randomized_select(A,p,r,i):
 * Expected-case: *Θ(n)*
 * Worst-case: *Θ(n <sup>2</sup>)*
 
+
+
+
 ### Select
 
 Som *Randomized-Select*, finner *Select* et ønsket element gjennom rekursiv partisjonering av input. I motsetning til Randomized-Select, kan vi *garantere* en god split under partisjoneringen. *Select* bruker den deterministiske part. algoritmen [*Partition*](#Partition), med modifisert til å ta inn hvilket element som partisjoneringen skal skje rundt.
@@ -672,11 +683,11 @@ SELECT(A,i)
 ```
 
 * *Select* kodet i Python ligger [**her**](https://github.com/henrhoi/Algdat-TDT4120/blob/master/Algoritmer%20i%20pensum/Line%C3%A6r%20rangering/Select.py)
-
+
 <a name="of5"></a>
 ## Forelesning 5 - Rotfaste trestrukturer 
 
-Den **binære heap** datastrukturen er en liste  som vi kan se på som et nesten komplett binærtre. Hver node i treet korresponederer til et element til listen. Treet er helt fyllt i alle nivående med unntak av mulig det laveste, som er fylt fra venstre mot høyre.
+Den **binære heap** datastrukturen er en liste  som vi kan se på som et nesten komplett binærtre. Hver node i treet korresponederer til et element til listen. Treet er helt fylt i alle nivående med unntak av mulig det laveste, som er fylt fra venstre mot høyre.
 
 Roten til treet er A[0] og gitt en index i til en node, kan vi lett finne indeksen til dets forgjenger, venstre barne eller høyre barn
 
@@ -707,6 +718,10 @@ I begge typene tilfredsstiller verdiene i nodene en heap-egenskap, som avhenger 
 Dersom vi ser på en heap som et tree, definerer vi *høyden* til en node i treet til å den lengste enkle veien fra noden til en løvnode, og vi definer *høyden* til treet til å være høyden til roten.
 
 > Siden en heap av *n* elementer er basert på et komplett binært tre, er dens høyde &theta;(lg *n*), so vi ser igjen på tradisjonelle heap-prosedyrer.
+
+
+
+
 
 ### Max-Heapify
 
@@ -744,16 +759,18 @@ Kjøring av *Max-Heapify* :
 * Alternativt kan vi karakterisere kjøretiden på en node med høyde *h* som `O(h)`
 
 
+
+
 ### Bygging av heaps
 
 Vi kan bruke *Max-Heapify* på en bottom-up må for å convertere en liste A[0..n-1], hvor `n = A.length`, til en max-heap. Elementene i listen `A[(⌊n/2⌋ + 1)..n]` er alle blader i treet, og alle er til å begynne med en 1-element heap. 
 
-Prosedyren *Build-Max-Heap* går igjennom de resterende nodene av treet og kjører *Max-Heapify* på hver node.
+Prosedyren *Build-Max-Heap* går igjennom de **resterende** nodene av treet og kjører *Max-Heapify* på hver node.
 
 ```sudocode
 BUILD-MAX-HEAP(A)
 1	A.heap-size = A.length
-2	for i = ⌊A.length/2⌋ - 1 downto 0
+2	for i = ⌊A.length/2⌋ downto 1
 3		MAX-HEAPIFY(A, i)
 ```
 
@@ -771,9 +788,248 @@ Vi kan regne ut en øvre grense for kjøretiden til *Build-Max-Heap* som følgen
 * Hvert kall på *Max-Heapify* koster `O(lg n)`, og *Build-Max-Heap* gjør `O(n)` slike kall.
 * Derfor blir **kjøretiden** `O(n lg n)`, Det er en øvre grense, men ikke asymptotisk tett.
 
+* Vi kan sette en grense på **kjøretiden** til *Build-Max-Heap* som `O(n)` da vi ser på høyden til nodene kaller *Max-Heapify* på
 
 
 
+### Heapsort
+Heapsort-algoritmen starter med å bygge en max-heap av input `A[1..n]`. Siden det største elementet nå ligger som roten *A[1]*, kan v putte den i sin endelige posisjon ved å bytte den med *A[n]*. Hvis vi nå ser bort fra node *n* i heapen, så kan vi enkelt deinkrementere A.heap-size.
+
+
+```sudocode
+HEAPSORT(A)
+1	BUILD-MAX-HEAP(A)
+2	for i = A.length - 1 downto 1
+3		exchange A[0] with A[i]
+4		A.heapsize -= 1
+5		MAX-HEAPIFY(A,0)
+```
+
+**Kjøretid:**
+
+* **Heapsort** prosedyren bruker **`O(n lg n)`** tid siden kallet på *Build-Max-Heap* tar O(*n*) tid og hvert av de *n - 1* allee til *Max-Heapify* tar O(lg *n*) tid.
+
+
+<img src="https://i.imgur.com/95uXdIT.png" alt="Drawing" style=" width: 200px;"/>
+
+<br> </br>
+
+### Prioritetskø
+
+Tar utgangspunkt i en max-heap for å implementere max-prioritetskøer. For å lage min-prioritetskøer er det bare å endre litt på prosedyrene.
+
+**Prioritetskø:** En prioritetskø er en datastruktur å opprettholde et sett S med elementer, hver assosiert med en verdi kalt *key*. En *max-prioritetskø* støtter følgende operasjoner
+
+* `INSERT(S, x)` setter inn et element *x* inn i settet *S* som er operasjonen `S = S ∪ {x}` 
+* `MAXIMUM(S)` returnerer elementet i *S* med størst *key*
+* `EXTRACT-MAX(S)` fjerner og returnerer elementet i *S* med størst *key*
+* `INCREASE-KEY(S,x,k)` øker verdien tl elementet *x* ´s *key* til den nye verdien *k*, som antas å være større enn *x* 's nåværende *nøkkelverdi*
+
+> Alternativt støtter en min-prioritetskø operasjonene: `INSERT(S, x)`, `MINIMUM(S)`, `EXTRACT-MIN(S)` og `DECREASE-KEY(S,x,k)`.
+
+```sudocode
+HEAP-MAXIMUM(A)
+1	return A[0]
+```
+
+* *Kjøretid:* **`θ(1)`**
+
+```sudocode
+HEAP-EXTRACT-MAX(A)
+1	if A.heap-size < 1
+2		error "heap underflow"
+3	max = A[0]
+4	A[0] = A[A.heapsize]
+5	A.heapsize -= 1
+6	MAX-HEAPIFY(A,1)
+7	return max
+```
+
+* *Kjøretid:* **`O*(lg n)`** siden den gjør konstant arbeid på toppen av *O*(lg *n*) tiden for *Max-Heapify*
+
+
+```sudocode
+HEAP-INCREASE-KEY(A,i,key)
+1	if key < A[i]
+2		error "new key is smaller than current key"
+3	A[i] = key
+4	while i > 1 and A[PARENT(i)] < A[i]
+5		exchange A[i] with A[PARENT(i)]
+6		i = PARENT(i)
+```
+
+* *Kjøretid:* **`O(lg n)`** siden veien fra noden oppdatert i linje 3 til roten har lengde *O*(lg *n*).
+
+
+```sudocode
+MAX-HEAP-INSERT(A, key)
+1	A.heap-size += 1
+2	A[A.heap-size] = -∞
+3	HEAP-INCREASE-KEY(A, A.heap-size, key)
+```
+
+* *Kjøretid:* **`O(lg n)`** siden den kun gjør O(1) arbeid over *Heap-Increase-Key*.
+
+
+**Oppsummering:** En heap støtter enhver prioritetskø-operasjon på et sett av størrelse *n* på **`O(lg n)`** tid!
+
+
+### Rotfestede trær
+
+**Problem:** Hvordan represetere rotfestede trær ved hjelp av lenket datastruktur.
+
+**Binære trær:** Figuren under viser hvordan vi kan bruke attributtene *p*, *left* og *right* til å lagre pekere til forelder, venstre barn og høyre barn til hver node i binærtreet T. 
+
+* Dersom *x*.*p* = NIL, da er *x* roten. 
+* Dersom *x* ikke har noen venstre barn, da er *x*.*left* = NIL, og likt for høyre barn.
+* Roten til treet T peker til å være attributten T.*root*. Dersom T.*root* = NIL, da er treet tomt.
+
+
+<img src="https://i.imgur.com/Xpretz3.png" alt="Drawing" style=" width: 200px;"/>
+
+
+**Rotfestede trær med ubundet forgrening:**  Vi kan utvide representasjonen av et binært tre til en klasse av trær der antall barn til hver node er på det meste en kostant *k*; vi bytter *left* og *right* attributtene til *child_1*, *child_2*,.., *child_k*. 
+
+Vi kan bruke *O(n)* minne for en vilkårlig *n* 'te rotfestet tre
+
+* For å finne oss frem i treet har hver node *x* kun to pekere:
+	* *x*.*left-child* peker til det barnet mest til venstre for *x*
+	* *x*.*right-sibling* peker til den søskenen rett til høyre for *x*
+
+	
+> Dersom node *x* ikke har noen barn, da er *x*.*left-child* = NIL, og hvis *x* er det barnet helt til høyre for sin forelder, da er *x*.*right-sibling* = NIL.
+
+
+
+### Binære søketrær
+
+Denne søketre datastrukturen støtter mange dynamisk-sett operasjoner inkludert
+
+<pre>
+<b>Operasjoner</b>          <b>Kjøretid</b>
+<i>Inorder-Tree-Walk</i>  Θ(n)
+<i>Tree-Search</i>        O(h)
+<i>Tree-Minimum</i>       O(h)
+<i>Tree-Successor</i>     O(h)
+<i>Tree-Insert</i>        O(h)
+<i>Tree-Delete</i>        O(h)
+</pre>
+
+
+**Binært søketre:** Et binært søketre er organisert i et binærttre som vist under. Vi kan representere et slikt tre som en lenket datastruktur der hver node er et objekt. I tilegg til en *key* og et sett med data, har hver node attributtene *left*, *right*, *p* som peker til nodene korrespondere til sitt venstre barn, høyre barn og forelder, respektivt. Dersom et barn eller forelder mangler er den gjeldende attributtens verdi NIL. Rotnoden er den eneste noden i treet som har forelder lik NIL.
+
+<img src="https://i.imgur.com/cYxNhpz.png" alt="Drawing" style=" width: 200px;"/>
+
+```python
+class Node:
+	def __init__(self, key):
+		self.key = key
+		self.p = None
+		self.left = None
+		self.right = None
+```
+
+* *Binærsøketre-egenskapen*:
+	* La *x* være en node i ett binært søketre:
+		* Hvis *y* er en node i det venstre subtreet til *x*, da er `y.key ≤ x.key`.
+		* Hvis *y* er en node i det høyre subtreet til *x*, da er `y.key ≥ x.key`.
+
+**Inorder tree walk:** Simpel rekursiv algoritme som printer ut alle nøklene i treet i rekkefølge.
+
+```sudocode
+INORDER-TREE-WALK(x)
+1	INORDER-TREE-WALK(x.left)
+2	print x.key
+3	INORDER-TREE-WALK(x.right)
+```
+> Det tar &theta;(*n*) tid å gå igjennom et *n*-node binært søketre.
+
+
+**Søking:**
+Vi bruker følgende prosedyre for å søke etter en node med en gitt nøkkel i et binært søketre. Gitt en peker til roten og en nøkkel *k*, returnerer *Tree-Search* en peker til noden med key *k*, hvis den eksisterer, hvis ikke returnerer den NIL.
+
+```sudocode
+TREE-SEARCH(x, k)
+1	if x == NIL or k == x.key
+2		return x
+3	if k < x.key
+4		return TREE-SEARCH(x.left, k)
+5	else
+6		return TREE-SEARCH(x.right, k)	
+```
+**Kjøretid:** `O(h) = O(lg n)`
+
+> Starter ved å søke ved roten, og traversere seg nedover, enten i venstre eller høyre subtre, til den finner den noden som den leter etter. 
+
+Vi kan også skrive om denne algoritmen til å være *iterativ* ved å bytte ut rekursjonen til en **while**-løkke.
+
+```sudocode
+ITERATIVE-TREE-SEARCH(x, k)
+1	while x ≠ NIL and k ≠ x.key
+2		if k < x.key
+3			x = x.left
+4		else x = x.right
+5	return x
+```
+
+> På de fleste PC-er er en iterativ versjon mer effektiv
+
+
+**Minimum og maximum:**
+
+* *Binærsøketre-egenskapen* garanterer oss at *Tree-Minimum* og *Tree-Maximum* er korrekte. 
+
+
+```sudocode
+TREE-MINIMUM(x)
+1	while x.left ≠ NIL
+2		x = x.left
+3	return x
+```
+> For å finne minimum traverserer man seg bare nedover mot venstre i treet til det ikke lenger går.
+
+
+```sudocode
+TREE-MAXIMUM(x)
+1	while x.right ≠ NIL
+2		x = x.right
+3	return x
+```
+> For å finne maksimum traverserer man seg bare nedover mot venstre i treet til det ikke lenger går.
+
+**Kjøretid:** Begge prosedyrene kjører på `O(h) = O(lg n)` tid
+
+
+
+### Etterkommer og forgjenger
+
+
+**Etterkommer** (*eng. Successor*): 	Etterkommeren til en gitt node *x* er den noden med minst nøkkelverdi, større enn *x.key*
+
+**Forgjenger:** (*eng. Predecessor*): Forgjengeren til en gitt node *x* er den noden med størst nøkkelverdi, mindre enn *x.key*
+
+
+Gitt en node i et binært søketre, trenger vi noenganger å finne etterkommeren dens i sortert rekkefølge bestemt av en *inorder tree walk*. Dersom alle nøkler er distinkte er etterkommeren til en node *x* den noden med minst. 
+
+
+```sudocode
+TREE-SUCCESSOR(x)
+1	if x.right ≠ NIL
+2		return TREE-MINIMUM(x.right)
+3	y = x.p
+4	while y ≠ NIL and x == y.right
+5		x = y
+6		y = y.p
+7	return y
+```
+
+
+1. Dersom høyre subtre til node *x* er ikke-tomt, da er etterkommeren til *x* noden helt til venstre i *x* 's høyre subtre. Etterkommeren finner vi med *Tree-Minimum* på linje 2.
+
+2. Dersom høyre subtre til node *x* er tomt, og x har en forgjenger *y*, da er **etterkommeren** det første elementet som er større enn *x* som algoritmen finner.
+
+
+**Kjøretid:** `O(h) = `
 
 
 
@@ -858,7 +1114,6 @@ Vi kan regne ut en øvre grense for kjøretiden til *Build-Max-Heap* som følgen
 		c_f(u, v) = 	f(v, u) 				   , if (v,u) ∈ E
 						0						   , ellers
 						
-
 ### Ford-Fulkerson
 
 * Finn økende stier så lenge det går
@@ -913,7 +1168,6 @@ FORD-FULKERSON(G,s,t)
 * **Totalt:** O(*E* | *f* *|)
 
 > **Eksponentielt! Bruk BFS!**
-
 
 
 ### Edmonds-Karp
@@ -975,6 +1229,7 @@ EDMONDS-KARP(G,s,t)
 
 * Dermed kan vi maks ha *O(VE)* iterasjoner
 
+
 ### Minimalt snitt 
 
 **Snitt i flytnettverk:** Partisjon (*S*, *T*) av *V*. `s ∈ S and t ∈ T`
@@ -991,6 +1246,7 @@ EDMONDS-KARP(G,s,t)
 
 
 **Lemma 26.5:** `f(S, T) = | f |`
+
 
 ### Matching
 
