@@ -1,6 +1,5 @@
 from sys import stdin
 
-__author__ = "Henrik Høiness"
 
 
 # Fjern før kok
