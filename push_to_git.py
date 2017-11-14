@@ -1,6 +1,9 @@
 from subprocess import call
 
-# Kall denne i terminalen for å slippe å skrive git add, commit og push hver gang:
+# Kjør denne filen i enten PyCharm, Idle eller Terminal for å pushe git-repositoriet.
+# Slipper å skrive git add, commit og push hver gang.
+
+# Dersom i Terminal, kall:
 # python push_to_git.py
 
 call('git add .', shell=True)

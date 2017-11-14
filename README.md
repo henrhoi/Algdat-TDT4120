@@ -888,7 +888,7 @@ MAX-HEAP-INSERT(A, key)
 <img src="https://i.imgur.com/Xpretz3.png" alt="Drawing" style=" width: 200px;"/>
 
 
-**Rotfestede trær med ubundet forgrening:**  Vi kan utvide representasjonen av et binært tre til en klasse av trær der antall barn til hver node er på det meste en kostant *k*; vi bytter *left* og *right* attributtene til *child_1*, *child_2*,.., *child_k*. 
+**Rotfestede trær med ubundet forgrening:**  Vi kan utvide representasjonen av et binært tre til en klasse av trær der antall barn til hver node er på det meste en konstant *k* - vi bytter *left* og *right* attributtene til *child<sub>1</sub>*, *child<sub>2</sub>*,.., *child<sub>k</sub>*. 
 
 Vi kan bruke *O(n)* minne for en vilkårlig *n* 'te rotfestet tre
 
@@ -1048,7 +1048,8 @@ TREE-PREDECESSOR(x)
 
 ### Innsetting og sletting
 
-**Innsetting:** For å sette inn en ny verdi *v* inn i et binært søketre *T*, bruker vi prosedyren *Tree-Insert*. Prosedyren tar en node *z* der `z.key = v`, `z.left = NIL` og `z.right = NIL`. Den modifiserer *T* og noen av attributtene til *z* slik blir satt inn i treet på en passende posisjon.
+#### Sletting
+For å sette inn en ny verdi *v* inn i et binært søketre *T*, bruker vi prosedyren *Tree-Insert*. Prosedyren tar en node *z* der `z.key = v`, `z.left = NIL` og `z.right = NIL`. Den modifiserer *T* og noen av attributtene til *z* slik blir satt inn i treet på en passende posisjon.
 
 ```sudocode
 TREE-INSERT(T,z)
@@ -1070,18 +1071,69 @@ TREE-INSERT(T,z)
 * **Kjøretid:** Som alle andre primitive operasjoner på søketrær bruker prosedyren `O(h) = O(lg n)` tid på en tre med høyde *h*.
 
 
-**Sletting:** Strategien som brukes for å slette en node *z* har tre generelle tilfeller, men som kan være litt kompliserte.
+#### Sletting:
+Strategien som brukes for å slette en node *z* har tre generelle tilfeller, men som kan være litt kompliserte.
 
 * Dersom *z* ikke har noen barn, kan vi simpelten fjerne noden ved å modifisere forelderen ved å erstatte *z* med NIL som dens barn: `z.p.child = NIL`
 
 * Dersom *z* kun har ett barn kan vi bare la barnet overta *z* 's posisjon i treet, ved å modifisere *z* 's forelder til å erstatte *z* med *z* 's barn, og endre *z* 's barn forelder-attributt.
 
-* Dersom *z* har to barn, da finner vi *z* 's etterkomm *y* - som må være i *z* 's høyre subtre. REsten av *z* 's høyre subtre blir *y* 's nye høyre subtre, og *z* 's venstre subtre blir *y* 's nye venstre subtre. 
+* Dersom *z* har to barn, da finner vi *z* 's etterkommer *y* - som må være i *z* 's høyre subtre. Resten av *z* 's høyre subtre blir *y* 's nye høyre subtre, og *z* 's venstre subtre blir *y* 's nye venstre subtre. 
 	* Dette tilfellet er litt mer komplekst enn de andre, og det avhenger av om *y* er *z* 's høyre barn.
 
 
 
-**ER PÅ TOPPEN AV SIDE 296**
+
+For å kunne bevege på subtrær rundt in i et binært søketre, definerer vi en subrutine *Transplant*, som erstatter et subtre som et barn til sin forelder med et annet subtre. Når *Transplant* ersstatter subtreet med rot *u* med subtreet med rot *v*, bytter de foreldre.
+
+<img src="https://i.imgur.com/ewpKS8g.png" name=deletion width=350px></img>
+
+
+``` python
+def Transplant(T, u, v):
+	if u.p == None:
+		T.root = v
+	elif u == u.p.left
+		u.p.left = v
+	else:
+		u.p.right = v
+	if v ≠ None:
+		v.p = u.p
+```
+> *Transplant* oppdaterer ikke *v.left* og v*right*, om det blir gjort eller ikke er opp til den som kaller på prosedyren
+
+
+
+```python
+def Tree-Delete(T, z):
+	if z.left == None:
+		Transplant(T, z, z.right)
+		
+	elif z.right == None:
+		Transplant(T, z, z.left)
+		
+	else:
+		y = Tree-Minimum(z.right)
+		if y.p ≠ z:
+			Transplat(T, y, y.right)
+			y.right = z.right
+			
+		Transplant(T, z, y)
+		y.left = z.left
+		y.left.p = y
+```
+
+Prosedyren for å slette en gitt node *z* tar inn en pekere til *T* og *z*.
+
+- Dersom *z* ikke har noen venstre barn (*del (a) av figuren under*) da erstatter vi *z* med dets høyre barn som kan være NIL. Når *z* 's høyre barn er NIL løser vi dette problemet som situasjonen der *z* ikke har noen barn. Når *z* 's høyre barn er ikke-NIL, har vi en situasjon er *z* kun har ett barn, nemlig dens høyre.
+
+- Dersom *z* kun har ett barn, som er dens høyre barn (*del (b)*), da erstatter vi *z* med sitt venstre barn.
+
+- Hvis ikke har *z* både ett høyre og en venstre barn. Da finner vi *z* 's etterkommer *y*, som ligger i *z* 's subtre, og har ingen venstre barn. Vi ønsker å klippe *y* ut av sin nåværende posisjon  og erstatte *z* i treet.
+	- Dersom *y* er *z* 's høyre barn (*del (c)*), da erstatter vi *z* med *y*, og lar *y* 's høyre barn være i fred.
+	- Hvis ikke ligger *y* i *z* 's høyre subtre, men er ikke dets høyre barn (*del (d)*). Dersom dette er tilfellet erstatter vi *y* med sitt høyre barn, og erstatter *z* med *y*.
+
+**Kjøretid:** Hver linje i *Tree-Delete*, inkludert kallet på *Transplant*, tar konstant tid, untatt kallet på *Tree-Minimum*. Dermed har *Tree-Delete* en kjøretid på `O(h)`, på et tree med høyde *h*
 
 
 ### Forventet høyde på binomisk søketre
@@ -1093,9 +1145,286 @@ Ved hjelp av et bevis i Cormen på side 300, kan man se at forventet høyde *h* 
 > Det finnes søketrær som har garantert høyde h = &theta;(lg *n*) - et eksempel på et slikt tre er red-black tree.
 
 
-
+<br></br>
 <a name="of6"></a>
 ## Forelesning 6 - Dynamisk programmering 
+
+*Dynamisk programmering*, som splitt og hersk, løser problemer ved å kombinerer løsninger på delproblemer. Vi bruker dynamisk programmering når delproblemene *overlapper*, og det er når delproblemer deler deldelproblemer. I denne konteksten gjør splitt og hersk mer arbeid enn nødvendig, og løser samme delproblemer flere ganger. En dynamisk programmerings algoritme løser hvert deldelproblem kun en gang, og **lagrer** resultatet i en liste, for at den skal slippe å regne gjennom samme problem flere ganger.
+
+Vi bruker gjerne dynamisk programmering ved *optimaliseringsproblemer*. Slike problemer kan ha mange mulige løsninger, og hver løsning har en verdi og vi ønsker å finner den løsningen med optimal verdi. Det kaller vi en optimal løsning på problemet.
+
+Når vi skriver en dynamisk programmerings algoritme følger vi følgende steg:
+
+1. Karaktiser strukturen på den en optimal løsning
+2. Rekursivt definer verdien til en optimal løsning
+3. Regn ut verdien til en optimal løsning, typisk på en *bottom-up* måte
+4. Finn en optimal løsning fra utregnet informasjon.
+
+> Steg 1 - 3 utgjør grunnlaget for en dynamisk programmering-løsning til en problem.
+
+
+### Delproblemgraf
+
+Når vi tenker på dynamisk programmerings problem, bør vi forstå settet med delproblemer som involvert, og hvordan de avhenger av hverandre.
+
+*Delproblemgrafen* for et problem gjengir nettopp dene informasjonen. Det er en rettet graf, med en node for hvert distinkt delproblem. Delproblemgrafen har en rettet kant fra noden for delproblemet *x* til noden for delproblemet *y*, dersom en optimal løsning for *x* avhenger av en optimal løsning av delproblemet *y*.
+
+<img src="https://i.imgur.com/BDNKjem.png" name="delproblemgraf" width= 150px; />
+
+Størrelsen på en delproblemgraf `G = (V, E)` kan hjelpe oss til å forstå **kjøretiden** til en algoritme med dynamisk programmering. Siden hvert vi må løse hvert delproblem kun en gang, er kjøretiden summen av antall ganger vi må løse et delproblem. 
+
+* Typisk er kjøretiden for å finne en løsning på et delproblem proposjonal med antall *utgående* kanter i delproblemgrafen
+
+
+
+
+###Stavkutting
+
+
+**Problem:** Gitt en stav med lengde *n* tommer og en liste med priser *p<sub>i</sub>* for *i* = 1,2,...,n for å finne maximum inntekt *r<sub>n</sub>* ved å kutte staven opp i deler og selge de.
+
+Vi kan kutte en stav på lengde *n* på 2<sup>n-1</sup> forskjellige måter.
+
+Dersom en optimal løsning kutter opp staven i *k* deler, for en `1 ≤ k ≤ n`, da er en optimal dekomposisjon *n* = *i<sub>1</sub>* + *i<sub>2</sub>* +...+ *i<sub>k</sub>*, og gir maximum avkastning på *r<sub>n</sub>* = *p<sub>i<sub>1</sub></sub>* + *p<sub>i<sub>2</sub></sub>* +...+ *p<sub>i<sub>k</sub></sub>*.
+
+
+#### Rekursiv *top-down* implementasjon **(Ikke dynamisk programmering)**:
+
+**Input:** En liste *p*[1...*n*] av priser og et tall *n*.
+
+**Output:** Maksimum avkastning 
+
+
+
+```python
+def Cut-Rod(p,n):
+	if n == 0
+		return 0
+	q = -∞
+	for i in range(n):
+		q = max(q, p[i] + Cut-Rod(p,n-i)
+	return q
+```
+> Kjøretiden blir her *O(2<sup>n</sup>)* , og er derfor en **ekstremt dårlig algoritme**.
+
+#### *Top-down* implementasjon med memoisering (!):
+
+**Memoisering:** Lagre en verdi som vi kan se på igjen senere
+
+```python
+def Memoized-Cut-Rod(p, n):
+	r = [-∞ for _ in range(n)]
+	return Memoized-Cut-Rod-Aux(p, n, r)
+	
+def Memoized-Cut-Rod-Aux(p, n, r)
+	if r[n] ≥ 0:
+		return r[n]
+	if n == 0:
+		q = 0
+	else:
+		q = -∞
+		for i in range(n):
+			q = max(q, p[i] + Memoized-Cut-Rod-Aux(p, n - i, r))
+	r[n] = q
+	return q
+```
+Hovedprosedyren i *Memoized-Cut-Rod* er å initialisere en hjelpelite r[0..n] med hver verdi lik -∞ (betyr *"ukjent"* verdi), så kaller den på hjelperutinen *Memoized-Cut-Rod-Aux* som skjekker i linje 1 om vi allerede vet verdien vi ser etter. Hvis ikke regner den ut den ønskede verdien q på den vanlige måten, lagrer den i *r[n]* og returnerer den.
+
+**Iterasjoner:** Algoritmen kjører **for**-løkken *n* ganger og gir en aritmetisk rekke med *&theta;(n<sup>2</sup>)* iterasjoner
+
+
+#### *Bottom-up* implementasjon med memoisering:
+
+> *Enda enklere enn top-down implementasjonen*
+
+```python
+def Bottom-Up-Cut-Rod(p, n)
+    r = [-∞ for _ in range(n+1)]
+    r[0] = 0
+
+    for j in range(1,n+1):
+        q = -∞
+
+        for i in range(1,j+1):
+            q = max(q, p[i] + r[j-(i+1)])
+
+        r[j] = q
+    return r[n]
+```
+> Denne metoden definerer at et problem av størrelse *i* er *mindre* enn et problem av størrelse *j* dersom i < j
+**Iterasjoner:** *&theta;(n<sup>2</sup>)*
+
+
+
+### Rekonstruere en løsning fra lagrede beslutninger
+
+Ser igjen på *stavkutting-problemet*De tidligere løsningene av stavkuttings-problemet har kun returnert verdien av de optimale løsningen, men ikke den faktiske løsningen: en liste med stykker av staven. Vi kan utvide den dynamiske programmeringen til å lagre den **optimale verdien** for hvert subproblem men også et **valg** som ledet den til den optimale verdien.
+
+
+```python
+def Extended-Bottom-Up-Cut-Rod(p, n):
+	r = [-∞ for _ in range(n+1)]
+	r[0] = 0
+	
+	for j in range(1,n+1):
+		q = -∞
+		
+		for i in range(1, j+1):
+			if q < p[i] + r[j - (i+1)]:
+				q = p[i] + r[j - (i+1)]
+				s[j] = i
+				
+		r[j] = q
+		
+	return r, s
+```	
+
+#### **Utskrift av løsning:**
+
+```python
+def Print-Cut-Rod-Solution(p,n)
+	r,s = Extenden-Bottom-Up-Cut-Rod(p, n)
+	while n > 0:
+		print(s[n])
+		n = n - s[n]
+```
+
+
+### Optimal delstruktur:
+
+"Det første steget i å løse et optimaliserings problem med dynamisk programmering er å karakterisere strukturen til en optimal løsning". Et problem må ha **optimal substruktur** dersom en optimal løsning skal inneholde optimale løsninger på delproblemer.
+
+Med andre ord - *En optimal løsning bygger på optimale løsninger på delproblemer*.
+
+*Finne optimale delstrukturer:*
+
+1. Vise at en løsning til et problem består av et valg, slik som å velge et start-kutt i en stav.  Å ta dette valget gir en eller flere delproblemer å løse.
+2. Gitt et problem, får man gitt et valg som leder til en optimal løsning. Ikke tenk på hvordan man kan ta dette valget, bare anta det man har fått.
+3. Gitt et valg, må man velge hvilke delproblemer som følger og hvordan man best karakteriserer "rommet" av delproblemene.
+4. Viser at løsningen til delproblemene brukt i en optimal løsning til en problem også selv må være optimale. 
+
+
+### Overlappende delproblemer
+
+Det andre som må være til stede for å kunne bruke dynamisk progammering er at "rommet" til delprolemene må være "lite" på den måten at en rekursiv algoritme av problemet løser de samme delproblemene igjen og igjen - i steden for å alltid lage nye delproblemer.
+
+Når en rekursiv algoritme møter på samme problem gjentatte gngaer, sier vi at optimaliseringsproblemet har **overlappende problemer**.
+
+> Typisk er antallet av distinkte delproblemer er polinomisk i input størrelsen.
+
+
+
+### Lengste felles subsekvens
+
+#### Subsekvens:
+
+Gitt en sekvens *X* = ⟨*x<sub>1</sub>*, *x<sub>2</sub>*,...,*x<sub>m</sub>*⟩ og en annen sekvens *Z* = ⟨*z<sub>1</sub>*, *z<sub>2</sub>*,...,*z<sub>k</sub>*⟩, er en **subsekvens** av *X* dersom det eksisterer en sterkt stigende sekvens ⟨*i<sub>1</sub>*, *i<sub>2</sub>*,...,*i<sub>k</sub>*⟩ av indekser i *X* slik at for alle *j* = 1,2,..,*k*, har vi at **x<sub>i<sub>j</sub></sub> = z<sub>j</sub>**.
+
+
+#### Felles subsekvens - LCS:
+
+Gitt to sekvenser *X* og *Y*, sier vi at sekvensen *Z* er en felles subsekvens til *X* og *Y* dersom *Z* er en subsekvens i både *X* og *Y*.
+
+*F.eks.* dersom *X* = ⟨A, B, C, B, D, A, B⟩ og *Y* = ⟨B, D, C, A, B, A⟩, er sekvens ⟨B, C, A⟩ en felles subsekvens til *X* og *Y*.  Sekvensen ⟨B, C, A⟩ er derimot ikke den *lengste* felles subsekvensen (*LCS* ) til *X* og *Y*. Da det finnes en lengre subsekvens som f.eks. ⟨B, D, A, B⟩. 
+
+
+**Lengste subsekvens-problemet:** Vi blir gitt to sekvenser *X* = ⟨*x<sub>1</sub>*, *x<sub>2</sub>*,...,*x<sub>m</sub>*⟩ og *Y* = ⟨*y<sub>1</sub>*, *y<sub>2</sub>*,...,*y<sub>n</sub>*⟩, og ønsker å finne den aller lengste felles subsekvensen til *X* og *Y*. Dette kan løses med *dynamisk programmering*:
+
+
+1.  **Karakterisere en lengste felles subsekvens:**
+	* Delproblemene korresponderer til par av "prefixer" av de to input-sekvensene. Så gitt en sekvens *X* = ⟨*x<sub>1</sub>*, *x<sub>2</sub>*,...,*x<sub>m</sub>*⟩, definerer vi den *i* 'te *prefixen* til *X*, for *i* = 1,2,...,*m*, til å være *X<sub>i</sub>* = ⟨*x<sub>1</sub>*, *x<sub>2</sub>*,...,*x<sub>i</sub>*⟩ 
+	* Optimal substruktur til LCS *(Theorem 15.1)*:	
+		1. 	Dersom *x<sub>m</sub>* = *y<sub>n</sub>*, da er *z<sub>k</sub>* = *x<sub>m</sub>* = *y<sub>n</sub>* og *Z*<sub>*k* - 1</sub> er en LCS til *X*<sub>*m* - 1</sub> og *Y*<sub>*n* - 1</sub>.
+		2. Dersom *x<sub>m</sub>* ≠ *y<sub>n</sub>*, da impliserer *z<sub>k</sub>* ≠ *x<sub>m</sub>* til at *Z* er en LCS til *X*<sub>*m* - 1</sub> og *Y*.
+		3. Dersom *x<sub>m</sub>* ≠ *y<sub>n</sub>*, da impliserer *z<sub>k</sub>* ≠ *y<sub>n</sub>* til at *Z* er en LCS til *X* og *Y*<sub>*n* - 1</sub>.
+
+		
+2. **En rekursiv løsning:**
+	* Fra *Theorem 15.1* over må undersøke enten en eller to delproblemer når vi skal vinne *LCS* til *X* = ⟨*x<sub>1</sub>*, *x<sub>2</sub>*,...,*x<sub>m</sub>*⟩ og *Y* = ⟨*y<sub>1</sub>*, *y<sub>2</sub>*,...,*y<sub>n</sub>*⟩. 
+		* Dersom *x<sub>m</sub>* = *y<sub>n</sub>* må vi finne LCS til *X*<sub>*m* - 1</sub> og *Y*<sub>*n* - 1</sub>, og videre som det står nevt over. 
+
+	* Den optimale substrukturen til LCS-problemet gir da den rekursive funksjonen:
+
+	
+		<img src="https://i.imgur.com/K4ei8KV.png" alt="Drawing" width= 350px;/>
+
+
+
+3. **Regne ut lengden på en LCS:**
+	* Basert på ligning over kan vi lett skrive en eksponentiell rekursiv algoritme for å regne ut lengden til en LCS til to sekvenser. Til tross for dette kan vi bruke *dynamisk programmering* til å løse problemet. 
+	* Prosedyren *LCS-Length* tar inn to sekvenser *X* og *Y* som input, og lagrer verdiene i en matrise *c* [0..*m*,0..*n* ], og fyller ut plassene i **row-major** orden (dvs. fylle rad 1, så rad 2 osv). 
+	* Prosedyren lager også matrise *b* [1..*m*,1..*n* ] for å hjelpe oss med å konstruere en optimal løsning. Intuitivt peker *b*[*i* ][*j* ] til en element korresponderende til en optimal delproblem-løsning av *c*[ *i*, *j* ].
+	* Prosedyren returnerer matrisene *b* og *c* og **c[*m*, *n* ]** inneholder lengden til en LCS til *X* og *Y*
+
+	
+	```python
+	def LCS-Length(X, Y):
+	   m = len(X)
+	   n = len(Y)
+	   b = [[0]*n for row in range(m)]
+	   c = [[0]*(n+1) for row in range(m+1)]
+		
+		for i in range(1,m+1):
+			for j in range(1,n+1)
+				if X[i-1] == Y[j-1]:
+					c[i][j] = c[i-1][j-1] + 1
+					b[i-1][j-1] = '↖'
+					
+				elif c[i-1][j] ≥ c[i][j-1]:
+					c[i][j] = c[i-1][j]
+					b[i-1][j-1] = '↑'
+					
+				else:
+					c[i][j] = c[i][j-1]
+					b[i-1][j-1] = '←'
+			
+		return c, b
+	```
+
+**Kjøretid:** Kjøretiden på denne prosedyren er **&theta;( *mn* )**, siden hvert matriselement tar &theta;(1) å regne ut.
+
+
+4. **Konstruere en LCS:**
+	* Tabellen *b* returnert av *LCS-Length* lar oss let konstruere en LCS til sekvensene *X* og *Y*. VI begynner simpelten på *b* [*m* ][*n* ] og følger pilene. For hver gang vi støter på en '↖' betyr det at *x<sub>i</sub>* = *y<sub>j</sub>* er et element av LCS-en som *LCS-Length* har funnet. Med denne metoden finner vi elementene i LCS i baklengs rekkefølge. Følgende prosedyre printer ut LCS til *X* og *Y* i riktig rekkefølge:
+
+	
+	```python
+	def Print-LCS(b, X, i, j):
+		if i == 0 or j == 0:
+			return
+			
+		if b[i][j] == '↖':
+			Print-LCS(b, X, i-1, j-1)
+			print(X[i])
+			
+		elif b[i][j] == '↑':
+			Print-LCS(b, X, i-1, j)
+		
+		else:
+			Print-LCS(b, X, i, j-1)
+	```
+	
+
+	
+**Kjøretid:** Denne prosdyren bruker ***O(m + n)*** tid, siden den dekrementerer minst en av *i* og *j* for hvert rekursive kall.
+
+
+
+
+
+
+
+
+### Kjøretid
+
+Kjøretiden til en algoritme i *dynamisk programmering* avhenger av et produkt av to faktorer: **Antall delproblemer** og hvor mange **valg** vi har i hvert delproblem. 
+
+* I stavkuttingen hadde vi *&theta;(n)* delproblemer, og max *n* valg i hvert delproblem, altså fikk vi kjøretid *Ο(n<sup>2</sup>)*
+
+
+
+
+
 
 
 <a name="of7"></a>
