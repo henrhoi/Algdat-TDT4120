@@ -26,12 +26,12 @@ def LCS_Length(X, Y):
 
 
 def print_LCS(b, X, i, j):
-    if i == 0 or j == 0:
+    if i == -1 or j == -1:
         return
 
     if b[i][j] == '↖':
         print_LCS(b, X, i-1, j-1)
-        print(X[i])
+        print(X[i],end="")
 
     elif b[i][j] == '↑':
         print_LCS(b, X, i-1, j)
@@ -41,14 +41,25 @@ def print_LCS(b, X, i, j):
 
 
 def main():
-    X = ['A','B','C','B','D','A','B']
-    Y = ['B','D','C','A', 'B', 'A']
+    X = list("HLELNLRILK")
+    Y = list("HENRIK")
 
     i = len(X)-1
     j = len(Y)-1
 
     c, b = LCS_Length(X, Y)
 
+    # Liste med piler
+    #for line in b:
+    #    print(line)
+
+    #Liste av lengder på LCS
+    #for line in c:
+    #    print(line)
+
+    #Printer ut LCS:
+
+    print("LCS er: ")
     print_LCS(b,X,i,j)
 
 main()

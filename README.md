@@ -26,6 +26,8 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 
 * [Her](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Algoritmer%20i%20pensum) ligger de fleste av algoritmene som er pensum skrevet i *Python*
 
+* Python-kode 0-indekseres for å kunne kjøres, og pseudokoder 1-indekseres.
+
 
 ## Liste over øvinger:
 
@@ -770,7 +772,7 @@ Prosedyren *Build-Max-Heap* går igjennom de **resterende** nodene av treet og k
 ```sudocode
 BUILD-MAX-HEAP(A)
 1	A.heap-size = A.length
-2	for i = ⌊A.length/2⌋ downto 1
+2	for i = ⌊A.heapsize/2⌋ downto 1
 3		MAX-HEAPIFY(A, i)
 ```
 
@@ -841,7 +843,7 @@ HEAP-EXTRACT-MAX(A)
 3	max = A[0]
 4	A[0] = A[A.heapsize]
 5	A.heapsize -= 1
-6	MAX-HEAPIFY(A,1)
+6	MAX-HEAPIFY(A,0)
 7	return max
 ```
 
@@ -1390,7 +1392,7 @@ Gitt to sekvenser *X* og *Y*, sier vi at sekvensen *Z* er en felles subsekvens t
 	
 	```python
 	def Print-LCS(b, X, i, j):
-		if i == 0 or j == 0:
+		if i == -1 or j == -1:
 			return
 			
 		if b[i][j] == '↖':
@@ -1411,10 +1413,6 @@ Gitt to sekvenser *X* og *Y*, sier vi at sekvensen *Z* er en felles subsekvens t
 
 
 
-
-
-
-
 ### Kjøretid
 
 Kjøretiden til en algoritme i *dynamisk programmering* avhenger av et produkt av to faktorer: **Antall delproblemer** og hvor mange **valg** vi har i hvert delproblem. 
@@ -1422,20 +1420,773 @@ Kjøretiden til en algoritme i *dynamisk programmering* avhenger av et produkt a
 * I stavkuttingen hadde vi *&theta;(n)* delproblemer, og max *n* valg i hvert delproblem, altså fikk vi kjøretid *Ο(n<sup>2</sup>)*
 
 
+### 0-1 Knapsack
+
+Det såkalte *ryggsekkproblemet* kommer i flere varianter. Den *fraksjonelle varianten er letter å løse: Man tar bare med seg så mye som mulig av den dyreste gjenstanden, og fortsetter nedover på lista, sortert etter kilopris. I 0-1-varianten, derimot, blir ting litt vanskeligere - her må man ta med en hel gjenstand eller la den ligge.
+
+Løsningen er beskrevet på side 426 i boken, og er beskrevet veldig skissepreget.
+
+Akkurat som i f.eks. `Floyd-Warshall` *(Forelesning 11)* baserer dekomponeringen seg på et *ja-nei-spørsmål*, i dette tilfelle «Skal vi ta med gjenstand*i* ?». For hver av de to mulighetene sitter vi igjen med et delproblem som vi løser rekursivt. Som vanlig tenker vi oss at dette er siste trinn og antar at vi har gjentstander 1,...,*i* tilgjengelige. Da har vi to muligheter:
+
+1. **Ja**, vi tar med gjenstand *i* Vi løser så problemet for gjenstander 1,...,*i-1* men der kapasiteten er redusert med *w<sub>i</sub>*. Vi legger så til *v<sub>i</sub>* til slutt.
+2. **Nei**, vi tar ikke med gjenstand *i*. VI løser så problemet for gjenstander 1,..,*i-1*, men kan fortsatt bruke hele kapasiteten. Til gjengjeld får vi ikke legge til *v<sub>i</sub>* til slutt.
+
+Situasjonen er illustrert i figuren under, der hver rute representerer en delløsning (en celle i løsningstabellen, f.eks) og pilene er avhengigheter, som vanlig. Vi kan sette opp en rekursiv løsning slik:
+
+<img src="https://i.imgur.com/CZ3uIa9.png" alt="Drawing" style=" width: 350px;>
 
 
+```pseudocode
+KNAPSACK(n, W)
+1	if n == 0
+2		return 0
+3	x = KNAPSACK(n-1, W)
+4	if W < w_n
+5		return x
+6	else y = KNAPSACK(n-1, W - w_n) + v_n
+7		return max(x, y)
+``` 
+
+> Denne prosedyren vil naturligvis ha eksponentiell kjøretid.
+
+#### Dette er ikke polynomisk! 
+*0-1-knapsack* er et såkalt NP-hardt problem, og det er ingen som har funnet noen polynomsk løsning på det.
+
+Kjøretiden til *Knapsack* er *&theta;(nW)*, siden det er *nW* delproblemer og vi utfører en konstant mengde arbeid per delproblem. I forbindelse med NP-kompletthet holder vi oss til *antall bits* i input, i en rimelig encoding. Størrelsen blir da *&theta;(n + lg W)*, siden vi bare trenger &theta;(lg *W*) bits for å lagre parameteren W.
+
+Poenget er altså at *W* vokser eksponentielt som funksjon av lg *W*, og kjøretiden er, teknisk sett, eksponentiell. Vi lar *m* være antall bits i *W*, og kan skrive kjøretiden som: <pre>T(n, m) = θ(n2<sup>m</sup>) </pre>
+
+Da er det tydelig at dette ikke er en polynomsik kjøretid. Kjøretider som er polynomisk hvis vi lar et tall fra input være med som parameter til kjøretiden (slik som &theta;(*nW*), der W er et tall fra input, og ikke direkte en del av problemstørrelsen) kaller vi *pseudopolynomiske*. (Se på, ofte lureoppgave på eksamen)
 
 
 
 <a name="of7"></a>
 ## Forelesning 7 - Grådige algoritmer 
-Er alle grådige algoritmer O(n)?? NEI, SE HUFFMANN
+
+En **grådig algoritme** tar altid et valg som ser best ut der og da. Som betyr, den tar en *lokalt optimalt valg* i håp om at det vil lede til den *globale optimale løsningen*.
+
+### Aktivitetutvelgelse
+
+La oss anta et set *S* = {*a*<sub>1</sub>, *a*<sub>2</sub>,...,*a*<sub>*n*</sub>} av *n* foreslåtte aktiviteter som ønsker å for eksempel bruke en gymhall, som kun kan brukes til en aktivitet av gangen. Hver aktivitet *a*<sub>*i*</sub> har en **start-tid** *s<sub>i</sub>* og en **slutt-tid** *f<sub>i</sub>*, hvor 0 ≤ *s<sub>i</sub>* ≤ *f<sub>i</sub>* < ∞. Dersom en aktivitet *a*<sub>*i*</sub> er valgt i intervallet [*s<sub>i</sub>*, *f<sub>i</sub>* ), er aktivetetene *a*<sub>*i*</sub> og *a*<sub>*j*</sub> **kompatible** dersom intervallene [*s<sub>i</sub>*, *f<sub>i</sub>* ) og [*s<sub>j</sub>*, *f<sub>j</sub>* ) ikke overlapper. 
+
+I aktivitetutvalg-problemet ønsker vi å velge max-størrelse subset av kompatible aktiviteter. Vi antar at aktivitetene er sortert i stigende rekkefølge etter *slutt-tid*:
+
+
+**Den optimal delstrukturen:** Vi kan lett verifisere at aktivitetutvalg-problemet har optimal substruktur. (Se side 416 i Cormen)
+
+#### Det grådige valget:
+Hva om vi kunne velge en aktivitet og legge det til i den optimale løsningen uten å først åtte løse alle delproblemene. Faktisk, for aktivitetutvalg-problemet, trenger vi kun å se på ett valg: **det grådige valget**. 
+
+Vi må velge den aktiviteten i *S* med tidligst *slutt-tid*, siden det lar det være mer tid igjen til de andre aktivitetene. 
+
+Dersom vi tar det grådige valget, har vi kun ett delproblem å løse: Finne en aktivitet som starter etter *a<sub>1</sub>* slutter. Vi må finne en aktivitet som slutter etter aktivitet *a<sub>1</sub>*
+
+#### En rekursiv grådig algortime
+
+Prosedyren *Recursive-Activity-Selector* tar aktivitetene *A*[*a*<sub>1</sub>,..*a<sub>n</sub>*] og start- og slutt-tiden til aktivitetene representert som listene *s* og *f*, indeksen *k* som definerer subproblemet *S<sub>k</sub>* og størrelsen *n* til det originale problemet. Antar A som global variabel med aktiviteter og henter derfra.
+
+
+```pseudocode
+RECURSIVE-ACTIVITY-SELECTOR(s, f, k, n)
+1	 m = k + 1
+2	 while m ≤ n and s[m] < f[k]
+3		 m = m + 1
+4	 if m ≤ n
+5		 return {A[m] ∪ RECURSIVE-ACTIVITY-SELECTOR(s,f,m,n)}
+6	 else return ∅
+```
+
+Vi kan også konvertere den rekursive prosedyren til en iterativ en. Prosedyren *Greedy-Activity-Selector* er en iterativ versjon av prosedyren over. Den antar forøvrig at input-aktivitetene er sortert i stigende rekkefølge etter slutt-tid. Antar fortsatt A som global variabel med aktiviteter og henter derfra.
+
+```pseudocode
+GREEDY-ACTIVITY-SELECTOR(s, f)
+1	 n = s.length
+2	 c = [A[1]]
+3	 k = 1
+4	 for m = 2 to n
+5	 	 if s[m] ≥ f[k]
+6	 	 	 res += A[m]
+7	 		 k = m
+8	 return c
+```
+
+**Kjøretid:** Begge algoritmen planlegger *n* aktiviteter på &theta;(*n*) tid.
+
+
+#### Elementer ved den grådige strategien
+
+En grådig algoritme finner en optimal løsning på et problem ved å ta en rekke valg. På hvert valgpunkt, må algoritmen gjøre et valg der og da. Denne hierarkiske strategien produserer ikke alltid en optimal løsning, men som vi så i *aktivitetsutvalg-problemet* gjør den noen ganger det. 
+
+I dette avsnittet skal vi diskutere generelle egenskaper ved grådige metoder. Vi designer gråde algoritmer i henhold til følgende punkter:
+
+1. Gitt et optimaliseringsproblem skal vi ta et valg og står igjen med ett subproblem å løse.
+2. Vis at det alltid er en optimal løsning på det originale problemet som tar grådige valget, slik at det grådige valget alltid er trygt.
+3. Demonstrer den optimale substrukturen, ved å vise at dersom vi tar det grådige valget, gjenstår det et delproblem som har den egenskapen at hvis vi kombinerer en optimal løsning på subproblemet og det grådige valget vi tok, kommer vi frem til en optimal løsning på det originale problemet. 
+
+#### Grådighetsegenskapen
+
+Den viktigste egenskapen er **grådighetsegenskapen**, som sier at: Vi kan finne en global optimal løsning ved å ta lokale optimale (grådige) valg. Med andre ord, når vi ser på et valg vi må ta, ser vi kun på hva som ser best ut i det gjeldende problemet.
+
+Det er her forskjellen mellom grådige algoritmer og *dynamisk programmering* ligger. I dynamisk programmering tar vi valg på hvert steg, men som vanligvis avhenger av løsningen på delproblemene. Og i motsetning til dynamisk programmering tar grådige algoritmer sitt første valg, før den løser noen av delproblemene.
+
+
+#### Optimal substruktur
+
+Et problem viser **optimal substruktur**dersom en optimal løsning til problemet bygger på sine optimale løsninger på delproblemer. Denne egenskapen er en nøkkelingrediens i både *DP* og grådige algoritmer. 
+
+Vi kan bevise optimal substruktur ved å bruke induksjon på delproblemene til å vise at det å ta det grådige valget i hvert steg produserer en optimal løsning.
+
+
+### Fractional knapsack problem
+
+
+Samme oppsett som i *0-1-knapsack*, men man kan ta med seg deler (*fractions*) av elementer (*items*), istedet for å måtte ta et binært (0-1) valg for hvert element. Begge ryggsekkproblemene utviser optimal substruktur. Vi kal løse det fraksjonelle ryggsekkproblemet med en grådig strategi. 
+
+For å løse det fraksjonelle problemet, må vi regne ut kiloprisen *v<sub>i</sub>* / *w<sub>i</sub>* for hvert element. Ved å følge den gråde strategien tar vi så mye som mulig av det elementet med høyest kilopris, og deretter så mye som mulig av det nest dyreste elementet, til ryggsekken når sin vektgrense *W*.
+
+**Kjøretiden:** Siden algorimetn må sortere elementene med tanke på kilopris, kjører den grådige algoritmen på *O*(*n* lg *n*) tid.
+
+**Input:** En liste med *v* med prisene *v<sub>1</sub>*, *v<sub>2</sub>*,...,*v<sub>n</sub>*, og en liste *w* med vektene *w<sub>1</sub>*, *w<sub>2</sub>*,...,*w<sub>n</sub>*. Der elemetet *e<sub>i</sub>* har verdien *v<sub>i</sub>* og vekten *w<sub>i</sub>*.
+
+**Output:** Returnerer den største mulige verdien til elementene i ryggsekken.
+
+
+### Huffmann-koder
+
+Huffmann-koder komprimerer data veldig effektivt, og besparelser på 20-90%.
+Vi ser her på "prefix-frie koder". Når vi skal encode for binær kode, skiller vi bare mellom kodeordene som representerer karakterene i fien. For eksempel kan vi skrive *abc* som 0·101·100= 0101100, der · betyr skille.
+
+Når en skal skrive et binært tre som decoder/encoder en tekst, lager man et binærtre der bladene er gitte tegn, og kantene er nummerert med 0 eller 1. Der venstre kant er  0 og høyre kant er 1. Så når man leser fra en krypert kode, så betyr 0: Gå til venstre barn, og 1: Gå til høyre barn. 
+
+> En optimal kode for en fil er alltid representert som en fullt binærtre.
+
+Antall bit for å encode en fil er 
+
+<img src="https://i.imgur.com/26z6Obs.png" alt="drawing" style=" width: 300px "/>
+
+> der *c.freq* er frekvensen til ett tegn og d<sub>*T*</sub>(*c*) er lengden på kodeordet for *c*.
+
+
+
+#### Konstruere Huffmann-koder
+
+Man starter med et sett *C* med *n* tegn, og at hvert tegn c ∈ C har en attributt *c.freq* som betegner dens frekvens. Algoritmen *Huffman* bygger et tree *T* korresponderende til den optimale koden på en *bottom-up* måte.
+
+
+1. Algoritmen legger alle tegnene i en kø
+2. Deretter fjerner den de to nodene/tegnene *x* og *y* med minst frekvens fra køen, og lager en ny node *z* med *x* og *y* som barn, og *z.freq* = *x.freq* + *y.freq*, og legger *z* til køen.
+3. Til slutt er det kun en rot igjen i køen, og dette er roten til Huffmann-treet, som returneres.
+
+```
+HUFFMAN(C)
+1	 n = |C|
+2	 Q = C
+3	 for i = 1 to n - 1
+4	 	 allocate a new node z
+5		 z.left = x = EXTRACT-MIN(Q)
+6		 z.right = y = EXTRACT-MIN (Q)
+7		 z.freq = x.freq + y.freq
+8		 INSERT(Q, z)
+9	 return EXTRACT-MIN(Q)		// returnerer roten i treet
+```
+
+
+<img src="https://i.imgur.com/0CUSUE6.png" alt="drawing" style=" width: 350px; />
+
+**Bevise korrektheten til Huffmans algoritme:** For å vise at den er korrekt må vi den utviser *grådighetsegenskapen* og en *optimal substruktur*. 
+
+* *Bevise grådighetsegenskapen:*  De starter med et tre som representerer en optimal løsning, bytter om på noder slik at treet inneholder det grådige valget og viser at den nye løsningen er like bra
+* *Bevise optimal substruktur:* Se Lemma 16.3 (side 435 i Cormen)
+
+
+
+
 
 <a name="of8"></a>
 ## Forelesning 8 - Traversering av grafer 
 
+
+### Representasjon av grafer
+
+Vi kan velge mellom to standard måter å representere en graf `G = (V, E)`: som ett sett nabolister (* eller som en nabomatrise. Begge måtene kan brukes til rettede og urettede grafer. Siden naboliste representasjonen gir en kompakt måte å representere en **spredt** (*eng. sparse*) graf - der | **E** | **er mye mindre enn** | **V** | <sup>**2**</sup>. I de fleste algoritmene i boken antar vi at input-grafen er representert på en nabo-liste form. Vi kan også bruke en nabomatrise når vi har  en **tett** (*eng. dense*) graf - der | **E** | **er nær** | **V** | <sup>**2**</sup>, eller når vi kjapt trenger å finne ut om det er en kant som binder to gitte noder.
+
+
+**Urettede grafer:**
+
+<img src="https://i.imgur.com/SFmOTj8.png" alt="drawing style=" width: 300px; />
+
+
+
+**Rettede grafer:**
+
+<img src="https://i.imgur.com/Iy4Z0NB.png" alt="drawing style=" width: 300px; />
+
+
+
+**Naboliste:** En liste *Adj* består av | *V* | lister, en for hver node i *V*
+> Krever &theta;(*V* + *E*) lagringsplass.
+
+
+
+**Nabomatrise:** En | *V* | x | *V* | matrise *A* = (*a<sub>ij</sub>*).
+> Krever &theta;(*V* <sup>2</sup>) lagringsplass.
+
+
+
+### Bredde-først søk - BFS
+
+Bredde-først søk er en av de enkleste algoritmene for å søke i en graf. Gitt en graf `G = (V, E)` og en gitt **kilde** (*eng. source*) *s*, kan bredde-først-søk systematsik utforske kantene i G, for å finne hver node som kan nås fra *s*. Den regner ut avstanden (minste antall kanter) fra *s* til hver node node man kan nå. Den produserer også ett *bredde-først tre*, med roten *s* som inneholder alle noder som kan nås.
+
+For hver node *v* som kan nås fra *s*, den enkle stien i bredde-først treet fra *s* til *v* korresponderer til den "korteste veien" fra *s* til *v* i G. Algoritmen fungerer på både rettede og urettede grafer. Algoritmen finnes alle noder med avstand *k* fra *s*, før den finner noen noder med avstand *k* + 1.
+
+
+Algoritmen konstruerer et bredde-først tre, først med bare sin rot *s*. Når den utforsker en hvit node *v* når den scanner nabolisten til en allerede funnet node *u*, er noden *v* og kanten (*u*, *v*)lagt til i treet. Vi sier at *u* er **forgjengeren** eller **forelderen** til *v* i treet. Siden hver node kun kan bli funnet *en* gang, har nodene kun en forelder.
+
+
+
+Implementasjonen av BFS prosedyren under antar at input-grafen `G = (V, E)` er representert i en naboliste. Vi lagrer fargen til hver node *u* &in; *V* i attributten *u.color* og forgjengerer til *u* i attributten *u.&pi;*. Dersom noden mangler noen av disse attributtene vil de være satt til å være NIL. Algoritmen bruker også en FIFO kø Q, for å håndtere settet med gråfargede noder.
+
+* Det at vi bruker en FIFO-kø er det som lar BFS finne de korteste stiene til alle noder, siden vi utforsker grafen "lagvis" utover.
+
+
+```pseudocode
+BFS(G, s)
+1	 	for each vertex u ∈ G.V - {s}		//setter farge, avstand og nabo for hver node - O(V)
+2			u.color = WHITE
+3		 	u.d = ∞
+4		 	u.π = NIL
+5	 	s.color = GRAY
+6	 	s.d = 0
+7	 	s.π = NIL
+8	 	Q = ∅
+9		ENQUEUE(Q,s) 				// O(1)
+10		while Q ≠ ∅
+11			u = DEQUEUE(Q)			// O(1)
+12			for each v ∈ G.Adj[u]	// Summen av lengden til alle nabolistene er ϴ(E), og tid brukt tid på å scanne disse blir - O(E)
+13				if v.color = WHITE
+14					v.color = GRAY
+15					v.d = u.d + 1
+16					v.π = u
+17					ENQUEUE(Q, v)		// O(1)
+18			u.color = BLACK
+```
+
+**Kjøretiden:**
+
+* Operasjonene for *Enqueueing* og *Dequeueing* tar *O(*1*)* tid, og da blir total tid brukt på kø-operasjoner *O(V)*. 
+* Siden prosedyren skanner igjennom nabolisten til hver node kun når noden blir *dequeuet*, går den igjennom hver naboliste på det meste én gang. Siden summen av lengden på alle nabolistene er &theta;(*E*).
+* Initialiseringen på starten er O(*V*).
+* Den totale kjøretiden for BFS er derfor **`O(V + E)`**. 
+
+
+**Kjøring av prosedyren BFS:**
+
+<img src="" alt="drawing" style=" width: 300px; "/>
+
+
+
+
+**Bredde-først trær:**
+
+Prosedyren BFS bygger et bredde-først tre når den søker i grafen. Treet korresponderer til &pi; attributten. For en graf *G* = (*V*, *E*) med en kilde *s*, definerer vi forgjenger subgrafen til *G* som *G*<sub>&pi;</sub> = (*V*<sub>&pi;</sub>, *E*<sub>&pi;</sub>). Vi kaller kantene i E<sub>&pi;</sub> for **tre-kanter**. I dette kapittelet antas det at alle kanter har en enhet vekt, dvs. lik, siden de egentlig ikke har noen vekt.
+
+
+#### Print-Path
+
+Følgende prosedyre printer ut nodene til den korteste veien fra *s* til *v*, der en antar at BFS allerede har konstruert et bredde-først tre.
+
+
+```pseudocode
+PRINT-PATH(G, s, v)
+1	 if v == s
+2		 print s
+3	 elif v.π == NIL
+4		 print "no path from " s " to " v " exists"
+5	else
+6		 PRINT-PATH(G,s,v.π)
+7		 print v
+```
+
+> Denne prosedyren kjører i linær tid i antall noder i veien som printes, siden hvert rekursive kall er for en vei en node kortere.
+
+
+
+
+### Dybde-først søk
+
+Strategien med dybde-først søk er som navnet impliserer - søke dypere i grafen når det er mulig. Algoritmen utforsker kantene ut fra den nyligste oppdagede noden *v*, som fortsatt har ikke-utforskede kanter. Når alle av *v* 's kanter har blitt utforsket, går prosedyren tilbake til noden *v* kom fra for å se etter ikke-utforskede kanter.
+
+Som i bredde-først søk, vil dybde-først søk når den oppdager en node *v* i en naboliste til en allerede oppdaget node *u*, notere dette ved å sette `v.π = u`. I motsetning til bredde-først søk, der forgjengerne former et tre, vil **forgjenger delgrafen** til DFS være litt annerledes. Vi lar *G*<sub>&pi;</sub> = (*V*, *E*<sub>&pi;</sub>), der *E*<sub>&pi;</sub> = {(*v.π*, v) : v &in; V and v.π ≠ NIL}.
+
+Forgjenger subgrafen til DFS danner derfor en **dybde-først skog** med flere **dybde-først trær**. Kantene i E<sub>&pi;</sub> er *tre-kanter*.
+
+* Som i BFS, farger dybde-først søk nodene som den finner underfveis i prosedyren for å markere deres status: Hver node farges initiellt `WHITE` , og blir `GRAY` når de blir oppdaget i søket, og blir farget `BLACK` når de er ferdige, og det er når nabolisten har blitt utforsket fullstendig.
+
+
+I tillegg til å lage en *dybde-først skog*, **tidsstemlpler** DFS også hver node. Hver node *v* har to tidsstempler: 
+
+* Første tidsstempel - *`v.d`* har lagret når *v* først ble funnet og farger *v* `GRAY`.
+* Andre tidsstempel - *`v.f`* har lagret når søket slutter å se på *v* 's naboliste, og farger *v* `BLACK`.
+
+
+Disse tidsstempelene gir viktig informasjon om strukturen til grafen og generelt hjelpende når man skal resonnere over oppførselen til dybde-først søket.
+
+Prosedyren DFS under lagrer når den oppdager noden *u* i attributten *u.d* og når den blir ferdig med noden *u* i *u.f*. Disse tidsstempelene er tall mellom 1 og 2| V |, siden det er to tidsstempeler for hver node (|V| noder). 
+
+
+Input er en graf G som kan være rettet eller urettet, og variabelen time er en global variabel som brukes for *tidsstempling*.
+
+
+```pseudocode
+DFS(G)
+1	 for each vertex u ∈ G.V
+2	 	 u.color = WHITE
+3		 u.π = NIL
+4	 time = 0
+5	 for each vertex u ∈ G.V 
+6		 if u.color == WHITE
+7				 DFS-VISIT(G, u)
+
+
+DFS-VISIT(G, u) 
+1	 time = time + 1			// white vertex u has just been discovered
+2	 u.d = time
+3	 u.color = GRAY
+4	 for each v ∈ G.Adj[u]		// explore (u, v)
+5		 if v.color == WHITE
+6		 	 v.π = u
+7			 DFS-VISIT(G, v)
+8	 u.color = BLACK				// blacken u; it is finished
+9	 time = time + 1
+10	 u.f = time
+```
+
+**Kjøring av algoritmen:**
+
+<img src="https://i.imgur.com/WHfUBfU.png" alt="drawing" style=" width: 300px; "/>
+
+
+**Kjøretid:**
+
+* Løkkene på linje 1-3 og linje 5-7 i DFS tar **&thetha;(*V*)**, ekslusiv tiden det tar å kjøre kallet på *DFS-Visit*. 
+* Prosedyren *DFS-Visit* blir kalt på nøyaktiv én gang per node *v* &in; *V*, siden noden *u* som *DFS-Visit* blir kalt med må være `WHITE`og det første *DFS-Visit* gjør er å farge den `GRAY`. 
+	* Under utføringen av *DFS-Visit(G, v)* kjøres løkken på linje 4-7 |Adj[*v*| ganger. Siden ∑|Adj[*v*| = &thetha;(*E*), blir den totale kostnader for linje 4-7 i *DFS-Visit* **&theta;(*E*)**
+
+* Den total kjøretiden til DFS blir derfor **&theta;(*V* + *E*)**
+
+#### Egenskaper til dybde-først søk
+
+Den mest essentielle egenskapen til DFS er at forgjenger subgrafen *G*<sub>&pi;</sub> former en skog av trær, siden strukturen til dybde-først trærne speiler strukturen til de rekursive kallene på *DFS-Visit*. 
+
+En anne viktig egenskap til DFS er oppdagelse og slutt tiden har **parates struktur**. Dersom vi representerer funnet av noden *u* med en venstre parantes "(*u*" og representerer slutten til noden med høyre parantes "u)", da former historien av "discoveries" og "finishes" et vellformet uttrykk:
+
+
+<img src="https://i.imgur.com/0125TYl.png" alt="drawing" style=" width: 300px; "/>
+
+
+#### Parantesteoremet
+
+I ethvert dybde-først søk av en (rettet eller urettet) graf *G* = (*V*, *E*), hvor for ethvert par noder *u* og *v*, holder akkurat ett av disse tre forholdene:
+
+* Intervallene [*u.d*, *u.f*] og [*v.d*, *v.f*] er helt disjunkte, og hverken *u* eller *v* er en etterkommer den andre i dybde-først skogen.
+* Hele intervallet [*u.d*, *u.f*] er i intervallet [*v.d*, *v.f*], og *u* er en etterkommer av *v* i ett dybde-først-tre.
+* Hele intervallet [*v.d*, *v.f*] er i intervallet [*u.d*, *u.f*], og *v* er en etterkommer av *u* i ett dybde-først-tre. 
+
+
+
+#### Klassifisering av kanter
+
+Vi definerer fire typer kanter i dybde-først skogen *G*<sub>&pi;</sub> produsert av et dybdeførst søk på G:
+
+
+1. **Tree edges** er kanter i dybde-først skogen *G*<sub>&pi;</sub>. Kanten (*u*, *v*) er en *tree edge* dersom *v* først ble funnet ved utforskning av kanten (*u*, *v*).
+2. **Back egdes** er kantene (*u*, *v*) som forbinder en node *u* til en forgjenger *v* i et dybde-først tre. Vi ser på selv-løkker, som kan forekomme i rettede grafer til å være *back egdes*.
+3. **Forward edges** er de *non-tree edges* (*u*, *v*) som forbinder en node *u* til en etterkommer *v* i ett dybde-først tre.
+4. **Cross edges** er alle de andre kantene. De kan gå mellom noder i samme dybde-først tre, så lenge en av nodene ikke er en forgjenger til den andre, eller så kan de gå mellom noder i forskjellige dybde-først trær.
+
+
+<img src="https://i.imgur.com/E2kBAgU.jpg" alt="drawing" style=" width: 300px; "/>
+
+I DFS har vi klassifisert kantene slik:
+
+* `WHITE` har indikert en *tree edge*
+* `GRAY` har indikert en *back egde*
+* `BLACK` har indikert en *forward* eller *cross edge*
+
+####Implementere DFS med en Stack 
+
+Prosedyren BFS, som skrevet om over, kan tilpases til å oppføre seg nesten helt likt som DFS. Dette kan en gjøre ved å bytte ut *FIFO-køen **Q*** med en *LIFO-kø*, eller *stakk* (eng. *stack*). Vi mister da tidsstemplene (*v.d* og *v.f*), mne rekkefølgen noder farges grå og svarte på vil bli den samme. 
+
+Slik DFS er implementert over har den *ingen startnode*, men starter bare fra hver node etter tur, til den har nådd hele grafen. Derfor kan man si at *BFS*s slekter mer på *DFS-Visit*. 
+
+Grunnen til at en LIFO-kø (*stack*) gir oss samme atferd som en rekursiv traversering (altså DFS) er at vi egentlig bare simulerer hvordan rekursjon er implementert:
+
+* Internt bruker maskinen en *kallstakk*, der informasjon om hvert kall legges øverst og hentes frem når rekursive kall er ferdige.
+
+
+```pseudocode
+STACK-DFS(G, s)
+1	 	for each vertex u ∈ G.V - {s}
+2			u.color = WHITE
+3		 	u.d = ∞
+4		 	u.π = NIL
+5	 	s.color = GRAY
+6	 	s.d = 0
+7	 	s.π = NIL
+8	 	S = ∅
+9		PUSH(S, v)
+10		while Q ≠ ∅
+11			u = POP(S)
+12			for each v ∈ G.Adj[u]
+13				if v.color = WHITE
+14					v.color = GRAY
+15					v.d = u.d + 1
+16					v.π = u
+17					PUSH(S, v)
+18			u.color = BLACK
+```
+
+
+
+### Topologisk sortering
+
+Vi kan bruke **dybde-først** søk til å **topologisk sortere** en rettet asyklisk graf eller en *DAG* (*eng. directed acyclic graph*). En *topologisk sortering* av en DAG `G = (V, E)` er en lineær ordning av alle nodene slik at dersom G inneholder en node (*u*, *v*), da kommer *u* før *v* i ordningen. 
+
+Vi kan se på topologisk sortering av en graf som en ordning av nodene langs en horisontal linje slik at alle de *rettede kantene* går fra venstre mot høyre. Man begynner med noden som ikke har noenkanter inn til seg. 
+
+
+
+```pseudocode
+TOPOLOGICAL-SORT(G)
+1	 call DFS(G) to compute finishing times v.f for each vertex v
+2	 as each vertex is finished, insert it onto the front of a linked list
+3	 return the linked list of vertices
+```
+
+Prosedyren vil returnere en lenket liste med topologisk sorterte noder i synkende rekkefølge med hensyn på *v*.*f* *(finish-time)*, som du ser i figuren under:
+
+
+<img src="https://i.imgur.com/qswiwn5.png" alt="drawing" style=" width: 300px; "/>
+
+**Kjøretid:** Vi kan utføre topologisk sortering på **`ϴ(V + E)`** tid, siden dybde-først søk bruker ϴ(*V* + *E*) tid og det tar O(1) tid å innsette hver av de | *V* | nodene foran i den lenkede listen.
+
+
+
+
+
+
 <a name="of9"></a>
 ## Forelesning 9 - Minimale spenntrær 
+ 
+Vite hva spenntrær og minimale spenntrær erForstå Generic-MSTForstå hvorfor lette kanter er trygge kanterForstå MST-KruskalForstå MST-Prim
+
+
+### Disjunkte mengder
+
+En disjunkt-sett datastruktur vedlikeholder en samling S = {*S*<sub>1</sub>, *S*<sub>2</sub>,...,*S*<sub>*k*</sub>} av disjunkte dynamiske sett. Vi identifiserer hvert sett med en representativ, som er et medlem av settet. 
+
+Som i de andre dynamisk-sett implementasjonene vi har sett på, representerer vi hvert element i ett sett med et objekt. La *x* være et objekt, ønsker vi å støtte følgende funksjoner:
+
+* `MAKE-SET(x)` lager et nytt sett med dens eneste medlem, og dens representativ, som *x*. Siden settene er disjunkte krever vi at *x* ikke allerede ikke er i et annet sett.
+
+* `UNION(x y)` forener de dynamiske settene som inneholder *x* og *y*, la oss si *S*<sub>*x*</sub> og *S*<sub>*y*</sub>, inn i ett nytt sett som er unionen av disse to settene. 
+	* Representativen til det resulterende settet kan være et vilkårlig element i *S*<sub>*x*</sub> ∪ *S*<sub>*y*</sub>, selvom mange implementasjoner av *Union* velger en av representantene til **S*<sub>*x*</sub> og *S*<sub>*y*</sub>, som den nye representanten.
+	* Siden vi krever at settene i *S* er disjunkte må vi nå fjerne *S*<sub>*x*</sub> og *S*<sub>*y*</sub> fra samlingen *S*.
+
+* `FINDSET(x)` returnerer en peker til representanten til det (unike) settet som inneholder *x*
+
+
+
+En av de mange bruksområdene til disjunkte-sett datastrukturen er å kunne definere de koblede komponenetene i en urettet graf. Prosedyren *Connected-Components* bruker de disjukte-sett operasjonene til å regne ut de koblede komponentene i grafen. Når *Connected-Components* har prosessert grafen, kan prosedyren *Same-Component* svare på om to noder er i den samme koblede komponenten.
+
+
+```pseudocode
+CONNECTED-COMPONENTS(G)
+1	 for each vertex v ∈ G.V	
+2		 MAKE-SET(v)
+3	 for each edge (u, v) ∈ G.E
+4		 if FIND-SET(u) ≠ FIND-SET(v)
+5			 UNION(u, v)
+```
+
+
+```pseudocode
+SAME-COMPONENT(u, v)
+1	 if FIND-SET(u) == FIND-SET(v)
+2		 return True
+3	 return False
+```
+
+
+###  Disjunkte-sett skoger
+
+En raskere implementasjon av disjunkte sett er at vi representerer settene med rotfestede trær, der hver node inneholder ett medlem og hvert tre representerer ett sett. I en *disjunkt-sett skog* peker hvert element kun til sin forelder. Roten i hvert tre innholder representativen og sin egen forelder.
+
+Vi utfører de tre disjunkt-sett operasjonene følgende. Operasjonen *Make-Set* lager helt enkelt et tre med kun en node. Vi bruker *Find-Set* ved å følge forelder-pekerne elt til vi finner roten av treet. *Union* operasjonen får roten til det ene treet til å peke til roten til det andre.
+
+#### Pseudokode for disjunkte-sett skoger
+
+For å implementere en disjunkt-sett skog med union-av-rang hierarki må vi holde styr på rangene, dvs at hver node *x* får attributten *x.rank*, som er en øvre grense på høyden til *x*.
+
+
+```pseudocode
+MAKE-SET(x)
+1	x.p = x
+2	x.rank = 0
+
+
+UNION(x, y)
+1	LINK(FIND-SET(x), FIND-SET(y))
+
+LINK(x, y)
+1	if x.rank > y.rank
+2		y.p = x
+3	else
+4		x.p = y
+5		if x.rank == y.rank
+6			y.rank = y.rank + 1
+
+FIND-SET(x)
+1	if x ≠ x.p
+2		x.p = FIND-SET(x.p)
+3	return x.p
+```
+
+**Kjøretiden:** Når vi skal regne på samlet kjøretid for disse algoritmene får vi O(*m* lg *n*) der *n* er antall `MAKE-SET` operasjoner, og *m* er total antall `MAKE-SET`, `UNION` og `FIND-SET` operasjoner. Vi antar at de *n* *Make-Set*-operasjonene er de første *n* operasjonene som blir gjort.
+
+
+
+### Minimale spenntrær - MST
+
+Vi lar *G* = (*V*, *E* ) være en urettet graf. Vi ønsker å finne et asyklisk subset *T* ⊆ *E*, som kobler alle nodene sammen og der den totale vekten
+
+	<img src="https://i.imgur.com/BDnOT8B.png" alt="drawing" style=" width: 250 px; "/>
+	
+er minimert. Siden *T* er asyklisk og kobler sammen alle nodene må den forme et tre, som vi kaller ett **spenntre**, da den "spanner" grafen *G*. Vi kaller problemet av å definere treet *T* *det minimale spenntre problemet*.
+
+
+Vi skal se på to algoritmer for å løse MST-problemet: Kruskal's algoritme og Prim's algoritme. Begge algoritmene er [grådige algoritmer](#of7) og på hvert steg må algoritmene ta ett av flere mulige valg. Vi skal også se på en generisk MST metode, som lager et minimalt spenntre ved å legge til en kant av gangen. Deretter skal vi se på *Krusals*, som likner på *Connected-Components* algoritmen. Vi skal også se på *Prims* algoritme, som minner om *Djikstra's* korteste vei algoritme.
+
+
+#### Bygge et minimalt spenntre
+
+Antat at vi har en sammenkoblet, urettet graf *G* = (*V*, *E* ) med en vektfunksjon *w* : *E* → ℝ og vi ønsker å finne et MST for *G*. De to algoritmene vi skal se på bruker den grådige tilnærmingen på problemet. Denne grådige strategien er vist i den følgende generiske metoden, som vekser det minimale spenntreet med en kant av gangen. Den generiske metoden har ett sett med kanter *A*, som vedlikehodlder følgende løkke-invariant: Før hver iterasjon er A et subsett av et minimalt spenntre.
+
+I hvert steg ønsker vi å finne en kant (*u, v* ) som vi kan legge til i *A* uten å bryte denne invarianten, slik at *A* ∪ {(*u, v* )} også er et subset t av et minimalt spenntre. Vi kaller en slik kant for en **trygg kant** (*eng. safe edge*) for *A*, siden vi trygt kan legge den til i *A* og fortsatt vedlikeholde invarianten.
+
+
+```pseudocode
+GENERIC-MST(G, w)
+1	A = ∅
+2	while A does not form a spanning tree
+3		find an edge (u,v) that is safe for A
+4		A = A ∪ {(u,v)}
+5	return A
+```
+
+Vi brukker løkke-invariant slik:
+
+1. **Initialisering:** Etter linje 1, tilfredsstller *A* triviellt løkke-invarianten.
+2. **Vedlikehold:** Løkken i linje 2-4 vedlikeholder invarianten ved å kun legge til trygge kanter.
+3. **Terminering:** Alle kantene som er lagt til i *A* er i ett minimal spenntre, og derfor må settet *A* som blir returnert i linje 5 være et minimalt spenntre. 
+
+
+
+Definerer et **kutt** (*S*, *V* - *S* ) til en urettet graf *G* = (*V, E* ) som en partisjon av *V*. Vi sier at en kant (*u,v*) &in; *E* **krysser** kuttet (*S*, *V* - *S* ) dersom en av dens endepunkter er i *S* og den andre er i *V - S*. Vi sier at et kutt **respekterer** et sett *A* av kanter dersom ingen kanter i A krysser kuttet. En kant er en **lett kant** som krysser et kutt dersom dens vekt er minimumet av enhver kant i kuttet.
+
+
+#### Hvordan identifisere en trygg kant:
+
+La *G* = (*V, E* ) være en sammenkoblet, urettet graf med vekter definert på *E*. La *A* bære et subsett av *E* som er inkludert  et minimalt spenntre for *G*, la (*S, V - S* ) være et kutt i G som respekterer *A*, og la (*u,v* ) være en lett kant som krysser (*S, V - S* ). Da er kanten (*u,v* ) en trygg kant for *A*. **Derfor er lette kanter, trygge kanter.**
+
+
+### Kruskal's algoritme
+
+I *Kruskal* 's er settet *A* en skog der nodene er de som er i en gitt graf. Den trygge kanten lagt til i A er alltid en *minst-vekt kant* i grafen som kobler to to distinkte komponentene.
+
+Kruskal's algoritme finner en trygg kant for å legge til i den voksende skogen, ved å finne alle kantene som sammenkobler to trær i skogen, en kant (*u,v*) med minst vekt.
+
+La *C*<sub>1</sub> og *C*<sub>2</sub> være to trær som er koblet av (*u,v* ). Siden (*u,v* ) må være en lett kant som kobler *C*<sub>1</sub> til et annet tre, impliserer det at (*u,v* ) er en trygg kant for *C*<sub>1</sub>.
+
+Kruskal's algoritme kvalifiseres som en grådig algoritme fordi ved hvert steg legger den til en kan med minst mulig vekt i skogen. Implementeringen av *Kruskal* 's algoritme likner algoritmen for å finne sammenkoblede komponenter fra *traversering av grafer*:
+
+* Den bruker disjunkt-sett datastruktur for å vedlikeholde flere disjunkte sett med elementer. Hvert sett inneholder nodene til et tre i den gjeldene skogen. 
+* Operasjonen *Find-Set(u)* returnerer et representativt element fra settet som inneholder *u*. Derfor kan vi bestemme om to noder *u* og *v* kommer fra det samme treet, ved å skjekke `FIND-SET(u) == FIND-SET(v)`. 
+* For å kombinere trær, bruker *Kruskal* 's algoritmen *Union* prosedyren.
+
+
+```pseudocode
+MST-KRUSKAL(G, w)
+1	 A = ∅
+2	 for each vertex v ∈ G.V
+3		 MAKE-SET(v)
+4	 sort the edges of G.E into nondecreasing order by weight w
+5	 for each edge (u,v) ∈ G.E, taken in nondecreasing order by weigth
+6		 if FIND-SET(u) ≠ FIND-SET(v)
+7			 A = A ∪ {(u,v)}
+8			 UNION(u,v)
+9	 return A
+```
+
+
+<img src="https://i.imgur.com/pphuGsD.png" alt="drawing" style=" width: 200px; "/>
+
+Figuren over viser hvordan *Kruskal's* fungerer:
+
+* Linje 1-3 initialiserer settet *A* til et tomt sett og lager | *V* | trær, hvert tre med en node. 
+* For-løkken på linje 5-8 ser på kanter etter vekt, fra lav til høy. For-løkken skjekker, for hver kant (*u,v* ), om endepunktene *u* og *v* er i samme tre. 
+	* Dersom de er det, kan ikke kanten (*u,v* ) bli lagt til i skogen uten å lage en sykel, og kanten blir derfor forkastet.
+	* Dersom de tilhører forskjellige trær, i dette tilfellet så legges kanten (*u,v*) til *A*, og i linje 8 merges nodene i de to trærne.
+
+	
+#### Kjøretid:
+
+Kjøretiden til Kruskal's algoritmen for en graf *G* = (*V, E* ), avhenger av hvordan vi ha implementert den disjunkte datastrukturen. Dersom vi antar at vi har brukt den *disjunkte-sett-skog* implementasjonen med *union-av-rang* og *sti-kompresjon* hierarki, siden det er den raskeste implementasjonen vi vet om.
+
+<pre>
+<b>Operasjon</b>          <b>Antall</b>          <b>Kjøretid</b>          
+<i>Make-Set</i>           V               O(1)
+<i>Sortering</i>          1               O(E lg E)
+<i>Find-Set</i>           O(E)            O(α(V))
+<i>Union</i>              O(E)            O(α(V))
+</pre>
+
+Det gir at kjøretiden totalt er: **O(*E* lg *V*)**
+
+
+### Prim's algoritme
+
+Prim's algoritme operer ganske så likt som Dijkstra's algoritme for å finne korteste vei i en graf. Prim's algoritme har dene egenskapen at kantene i settet *A* alltid former et enkelt tre.
+
+Treet starter med en vilkårlig rot node *r* og vokser til treet spenner alle nodene i *V*. Hvert steg legger til en lett kant til treet *A*, som kobler *A* til en isolert node - en som ingen andre kanter i *A* går til. Denne regelen gjør at kun trygge kanter legges til i *A*, og derfor når algoritmen terminerer vil kantene i *A* forme et minimalt spenntre. 
+
+Denne strategien kvalifiseres som grådig siden det til treet legges til en kant, som bidrar minst mulig til den totale vekten til treet.
+
+Under kjøringen av algoritmen vil alle nodene som ikke er i treet enda, ligge i en min-prioritets kø *Q* basert på *key* attributten. For hver node *v*, er *v.key* den minste vekten for enhver kant som kobler *v* til en node i treet.
+
+Algoritmen vedligeholder settet *A* fra *Generisk-MST* som A = {(*v, v.&pi;* ) : *v* &in; *V* - { *r* } - *Q* }. Når algoritmen terminerer er min-prioritetskøen *Q* tom; og det minimale spenntreet A for G er da A = {(*v, v.&pi;* ) : *v* &in; *V* - { *r* }}.
+
+
+```pseudocode
+MST-PRIM(G, w, r)
+1	 for each u  G.V
+2		 u.key = ∞
+3		 u.π = NIL
+4	 r.key = 0
+5	 Q = G.V
+6	 while Q ≠ ∅
+7		 u = EXTRACT-MIN(Q)
+8		 for each v ∈ G.Adj[u]
+9			 if v ∈ Q and w(u,v) < v.key
+10				 v.π = u
+11				 v.key = w(u,v)
+```
+
+**Illustrasjon av algortimen:**
+
+<img src="https://i.imgur.com/J86tNxa.png" alt="drawing" style=" width: 300px; "/>
+
+* Linje 1-5 setter *key* til hver node til ∞, unntat roten, samt hver forelder til å være NIL. Den initialiserer også min-prioritetskøen *Q* som inneholder *nodene*.
+
+
+Algoritmen vedlikeholder følgende løkke-invariant, før hver iterasjon av **while**-løkken på linje 6-11:
+
+1. A = {(*v, v.&pi;* ) : *v* &in; *V* - { *r* } - *Q* }
+2. Nodene som allere er plassert i det minimale spenntreet er de i *V* - *Q*.
+3. For alle noder *v* &in; *Q*, dersom *v.&pi;* ≠ NIL, da er *v.key* < NIL og *v.key* er vektet til en lett kant (*v, v.&pi;* ) som forbinder *v* til en node som allerede er i det minimale spenntreet. 
+
+
+#### Kjøretiden
+
+Kjøretiden til *Prim's algoritme* avhenger av hvordan vi har implementert min-prioritetskøen *Q*. Dersom vi implementerer *Q* som en binær min-heap, kan vi bruke *Build-Min-Heap* prosedyren for å gjøre linje 1-5 i O(*V* ) tid. 
+
+Kroppen til **while**-løkken kjøres | *V* | ganger, og siden hver *Extract-Min* operasjon tar O(lg *V* ) tid, blir den totale tiden for alle kall av *Extract-Min* O(*V* lg *V* ).
+
+**For**-løkken på linje 8-11 kjøres O(*E* ) ganger til sammen, og summen av lengden på alle nabolistene blir 2| *E* |.  
+
+Endring av attributt på linje 11 involverer implisitt *Decrease-Key* operasjonen på min-heapen, som en binær min-heap bruker O(lg *V* ) tid på.
+
+Til sammen blir derfor den **totale kjøretiden** for *Prim's algoritme*:
+
+* O(*V* lg *V* + *E* lg *V* ) = **O(*E* lg *V*)**
+
+
+
+> Dersom vi hadde brukt en Fibonacci heap, ville vi kunne forbedret *Prim's algoritme* til å kjøre på **O(*E* + *V* lg *V* ) tid.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <a name="of10"></a>
 ## Forelesning 10 - Korteste vei fra én til alle 
