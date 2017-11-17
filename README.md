@@ -1970,7 +1970,7 @@ Vi skal se på to algoritmer for å løse MST-problemet: Kruskal's algoritme og 
 
 #### Bygge et minimalt spenntre
 
-Antat at vi har en sammenkoblet, urettet graf *G* = (*V*, *E* ) med en vektfunksjon *w* : *E* → ℝ og vi ønsker å finne et MST for *G*. De to algoritmene vi skal se på bruker den grådige tilnærmingen på problemet. Denne grådige strategien er vist i den følgende generiske metoden, som vekser det minimale spenntreet med en kant av gangen. Den generiske metoden har ett sett med kanter *A*, som vedlikehodlder følgende løkke-invariant: Før hver iterasjon er A et subsett av et minimalt spenntre.
+Antat at vi har en sammenhengende, urettet graf *G* = (*V*, *E* ) med en vektfunksjon *w* : *E* → ℝ og vi ønsker å finne et MST for *G*. De to algoritmene vi skal se på bruker den grådige tilnærmingen på problemet. Denne grådige strategien er vist i den følgende generiske metoden, som vekser det minimale spenntreet med en kant av gangen. Den generiske metoden har ett sett med kanter *A*, som vedlikehodlder følgende løkke-invariant: Før hver iterasjon er A et subsett av et minimalt spenntre.
 
 I hvert steg ønsker vi å finne en kant (*u, v* ) som vi kan legge til i *A* uten å bryte denne invarianten, slik at *A* ∪ {(*u, v* )} også er et subset t av et minimalt spenntre. Vi kaller en slik kant for en **trygg kant** (*eng. safe edge*) for *A*, siden vi trygt kan legge den til i *A* og fortsatt vedlikeholde invarianten.
 
@@ -1997,18 +1997,18 @@ Definerer et **kutt** (*S*, *V* - *S* ) til en urettet graf *G* = (*V, E* ) som 
 
 #### Hvordan identifisere en trygg kant:
 
-La *G* = (*V, E* ) være en sammenkoblet, urettet graf med vekter definert på *E*. La *A* bære et subsett av *E* som er inkludert  et minimalt spenntre for *G*, la (*S, V - S* ) være et kutt i G som respekterer *A*, og la (*u,v* ) være en lett kant som krysser (*S, V - S* ). Da er kanten (*u,v* ) en trygg kant for *A*. **Derfor er lette kanter, trygge kanter.**
+La *G* = (*V, E* ) være en sammenhengende, urettet graf med vekter definert på *E*. La *A* bære et subsett av *E* som er inkludert  et minimalt spenntre for *G*, la (*S, V - S* ) være et kutt i G som respekterer *A*, og la (*u,v* ) være en lett kant som krysser (*S, V - S* ). Da er kanten (*u,v* ) en trygg kant for *A*. **Derfor er lette kanter, trygge kanter.**
 
 
 ### Kruskal's algoritme
 
 I *Kruskal* 's er settet *A* en skog der nodene er de som er i en gitt graf. Den trygge kanten lagt til i A er alltid en *minst-vekt kant* i grafen som kobler to to distinkte komponentene.
 
-Kruskal's algoritme finner en trygg kant for å legge til i den voksende skogen, ved å finne alle kantene som sammenkobler to trær i skogen, en kant (*u,v*) med minst vekt.
+Kruskal's algoritme finner en trygg kant for å legge til i den voksende skogen, ved å finne alle kantene som kobler sammen to trær i skogen, en kant (*u,v*) med minst vekt.
 
 La *C*<sub>1</sub> og *C*<sub>2</sub> være to trær som er koblet av (*u,v* ). Siden (*u,v* ) må være en lett kant som kobler *C*<sub>1</sub> til et annet tre, impliserer det at (*u,v* ) er en trygg kant for *C*<sub>1</sub>.
 
-Kruskal's algoritme kvalifiseres som en grådig algoritme fordi ved hvert steg legger den til en kan med minst mulig vekt i skogen. Implementeringen av *Kruskal* 's algoritme likner algoritmen for å finne sammenkoblede komponenter fra *traversering av grafer*:
+Kruskal's algoritme kvalifiseres som en grådig algoritme fordi ved hvert steg legger den til en kan med minst mulig vekt i skogen. Implementeringen av *Kruskal* 's algoritme likner algoritmen for å finne sammenhengende komponenter fra *traversering av grafer*:
 
 * Den bruker disjunkt-sett datastruktur for å vedlikeholde flere disjunkte sett med elementer. Hvert sett inneholder nodene til et tre i den gjeldene skogen. 
 * Operasjonen *Find-Set(u)* returnerer et representativt element fra settet som inneholder *u*. Derfor kan vi bestemme om to noder *u* og *v* kommer fra det samme treet, ved å skjekke `FIND-SET(u) == FIND-SET(v)`. 
@@ -2112,77 +2112,7 @@ Til sammen blir derfor den **totale kjøretiden** for *Prim's algoritme*:
 
 
 
-> Dersom vi hadde brukt en Fibonacci heap, ville vi kunne forbedret *Prim's algoritme* til å kjøre på **O(*E* + *V* lg *V* ) tid.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+> Dersom vi hadde brukt en Fibonacci heap, ville vi kunne forbedret *Prim's algoritme* til å kjøre på **O(*E* + *V* lg *V* )** tid.
 
 
 
@@ -2190,6 +2120,8 @@ Til sammen blir derfor den **totale kjøretiden** for *Prim's algoritme*:
 
 <a name="of10"></a>
 ## Forelesning 10 - Korteste vei fra én til alle 
+
+
 
 <a name="of11"></a>
 ## Forelesning 11 - Korteste vei fra alle til alle 
