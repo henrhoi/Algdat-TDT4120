@@ -2543,7 +2543,7 @@ Vi kan redusere dette problemet til et vanlig maksimal flyt problem. Vi legger d
 <img src="https://i.imgur.com/7HbAcQu.png" alt="drawing" style=" width: 350px; "/>
 
 
-### Ford-Fulkerson
+### Ford-Fulkerson-metoden
 
 Vi skal nå se på Ford-Fulkerson metoden, og kaller det metode og ikke for en algortime da det finnes mange implementasjoner med forskjellige kjøretider. Metoden avhenger av tre viktige ideer:
 
@@ -2599,7 +2599,7 @@ Dermed har vi at gitt et flytnettverk *G* = (*V, E* ) og en flyt *f*, har vi res
 > Siden det for hver kant i G, kan være 1-2 kanter i G<sub>f</sub> har vi at  **| *E<sub>f</sub>* | 	 ≤	 2 | *E* |**
 
 
-En flyt i et restnettverk gir et kart for å legge til flyt i det originale flytnettverket. Dersom *f* er en flyt i *G* og *f'* er en flyt i det korresponderende restnettverket definerer vi *f*  &uarr;  *f'*, økningen av flyt *f* av *f'*, til å være en funksjon fra *V* x *V* til ℝ definert av:
+En flyt i et restnettverk gir et kart for å legge til flyt i det originale flytnettverket. Dersom *f* er en flyt i *G* og *f'* er en flyt i det korresponderende restnettverket definerer vi ***f  &uarr;  f'***, *økningen* av flyt *f* av *f'*, til å være en funksjon fra *V* x *V* til ℝ definert av:
 
  
 <img src="https://i.imgur.com/2XlrLkH.png" alt="drawing" style=" width: 300px; "/>
@@ -2661,51 +2661,20 @@ Dersom *f* er en flyt, da er:
 
 Et minimalt snitt i et nettverk er et snitt der kapasiteten er minst av alle snitt av nettverkene.
 
+**Maksimal flyt** = **minimalt snitt**
+
 
 
 ### Maks-flyt min-snitt-teoremet
 
 Dersom f er en flyt i et flytnettverk *G* = (*V, E* ) med en kilde *s* og sluk *t*, da er de følgende forholdene ekvivalente.
 
-<table bgcolor="#00FF00">
-  <tr>
-    <th>Month</th>
-    <th>Savings</th>
-  </tr>
-  <tr>
-    <td>January</td>
-    <td>$100</td>
-  </tr>
-</table>
+1. *f* er en maksimal flyt i *G*.
+2. Restnettverket *G<sub>f</sub>* har ingen forøkende stier.
+3. | *f* | = *c* (*S, T* ) for et snitt (*S, T* ) av *G*.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<br> </br>
-<br> </br>
-<br> </br>
-						
-### Ford-Fulkerson
-
-* Finn økende stier så lenge det går
-* Deretter er flyten maksimal
-* Generell metode, ikke en algoritme
-* Om vi bruker [BFS](#of8): *"Edmonds-Karp"*
+### Ford Fulkerson
 
 **Normal implementasjon:**
 
@@ -2713,144 +2682,161 @@ Dersom f er en flyt i et flytnettverk *G* = (*V, E* ) med en kilde *s* og sluk *
 * Finn så flaskehalsen i stien
 * Oppdater flyt langs stien med denne verdien
 
-```sudocode
-FORD-FULKERSON-METHOD(G,s,t):
-1	 initialize flow f to 0
-2	 while there is an augmenting path p in G_f
-3		 augmenting flow f along p
-4	 return f
 
-```
-
-En litt mer detaljert beskrivelse av flyt-oppdateringen:
-	
-```sudocode
-FORD-FULKERSON(G,s,t)
-1	 for each edge (u,v) ∈ G.E
-2	 	 (u, v).f = 0
-3	 while there is a path p from s to t in G_f
-4	 	 c_f(p) = min{c_f(u, v) : (u, v) is in p}
-5		 for each edge (u, v) in p
-6		 	 if (u,v) ∈ E
-7		 	 	 (u, v).f = u(u, v).f + c_f(p)
-8		 	 else
-9		 	 	 (v, u).f = u(v, u).f - c_f(p)
-```
-
-**Alternativt:** *"Flett inn"*  [BFS](#of8) 
-
-* Finn flaskehalser underveis!
-* Hold styr på hvor mye flyt vi får frem til hver node
-* Traverser bare noder vi ikke har nådd frem til ennå
-* Denne "implementasjonen" står ikke i boka
+I hver iterasjon av *Ford-Fulkerson-metoden*, finner vi *en eller annen* forøkende sti *p* og bruker *p* til å modifisere flyten *f*. Da erstatter *f* med *f &uarr; f<sub>p</sub>*. Der *f<sub>p</sub>* er flaskehalsen (*c<sub>f</sub> (p)*) til *p*. Dermed får man den nye flytverdien | *f* | + | *f<sub>p</sub>* |. 
 
 
-**Kjøretid:**
+<pre>
+FORD-FULKERSON(G, s, t)
+1	<b>for</b> each edge (u,v) ∈ G.E
+2		(u,v).<i>f</i> = 0
+3	<b>while</b> there exists a path <i>p</i> from <i>s</i> to <i>t</i> in the residual network <i>G<sub>f</sub></i>
+4		<i>c<sub>f</sub></i>(<i>p</i>) = min{<i>c<sub>f</sub></i>(u,v) : (u,v) is in <i>p</i>}
+5		<b>for</b> each edge (u,v) in <i>p</i>
+6			<b>if</b> (u,v) ∈ E
+7				(u,v).<i>f</i> = (u,v).<i>f</i> + <i>c<sub>f</sub></i>(<i>p</i>)
+8			<b>else</b>
+9				(v,u).<i>f</i> = (v,u).<i>f</i> - <i>c<sub>f</sub></i>(<i>p</i>)
+</pre>
 
-* Operasjon: *Finn forøkende sti*
-	* Antall: O(| *f* *|)
-	* Kjøretid på operasjon: *O(E)* 
 
-* **Totalt:** O(*E* | *f* *|)
+* Linje 1-2 initialiserer flyten *f* til 0.
+* Linje 3-9 kjører en **while**-løkke som gjentatte ganger finner en forøkende sti *p* i *G<sub>f</sub>* og øker flyten *f* langs *p* med restkapasiteten *c<sub>f</sub>(p)*. Hver restkant i stien *p* er enten en kant i det orignale nettverket eller en motsatt kant. 
+* Linje 6-9 oppdaterer flyten til hvert tilfelle:
+	* Legge til flut når restkanten er en original kant eller trekke fra dersom ikke.
 
-> **Eksponentielt! Bruk BFS!**
 
+**Kjøretid:** 
+
+* Dersom vi sier at *f* * gir oss den maksimale flyten som vi kan oppnå.
+* Da vil vi på det meste kjøre **while**-løkken for å finne en forøkende sta, | *f* * | ganger, da flyten *f*  må øke med minst en enhet av gangen. 
+* Hver iterasjon av **while**-løllen tar O(*E* ) tid, samme gjør initialiseringen på linje 1-2.
+* Dermed blir den totale kjøretiden på *Ford-Fulkerson-algoritmen* **`O(E |f*|)`**.
+
+
+**Illustrasjon av algoritmen:**
+
+<img src="https://i.imgur.com/ee6Rkmg.png" alt="Drawing" style=" width: 360px;"/>
+
+
+<br> </br>
 
 ### Edmonds-Karp
 
+
+Vi kan forbedre grensen på *Ford-Fulkerson* ved å finne en forøkende sti *p* i linje 3 med **bredde-først søk**. Det vil si at vi velger en forøkende sti som den korteste veien fra *s* til *t*, hvor hver kant har en enhet-vekt. Denne algoritmen kaller vi for **Edmonds-Karp algoritmen**. Algoritmen kjører på O(*VE<sup>2</sup> )tid, som vi skal se på under. 
+
+Korteste-vei algoritmer avhenger typisk av egenskapen om at en korteste vei mellom to noder inneholder andre korteste veier innad. Det gjør også Edmonds Karp.
+
+
 **Mulig økning**(*augmentation*): `v.a`
 
-> Bruker BFS for å finne forøkende sti. _Atskillig_ mer detaljert...
-
-
-!Korteste-vei algoritmer avhenger typisk av egenskapen om at en korteste vei mellom to noder inneholder andre korteste veier innad. Dette gjør også Edmonds Karp!
-
-```sudocode
+<pre>
 EDMONDS-KARP(G,s,t)
-1	  for each edge (u, v) ∈ G.E
-2	  (u, v).f = 0
-3	  repeat > until t.a == 0
-4		 for each vertex u ∈ G.V
-5			 u.a = 0    //Reaching u in G_f
+1	 <b>for</b> each edge (u, v) ∈ G.E
+2		 (u, v).<i>f</i> = 0
+3	 <b>repeat</b> > <b>until</b> t.<i>a</i> == 0
+4		 <b>for</b> each vertex u ∈ G.V
+5			 u.<i>a</i> = 0    //Reaching u in G_f
 6			 u.π = NIL
 7		 s.a = ∞
 8		 Q = ∅ 
 9		 ENQUEUE(Q, s)
-10		 while t.a == 0 and Q ≠ ∅ 
-11			 u = DEQUEUE(Q)
-12			 for all edges (u, v), (v, u) ∈ G.E
-13			 if (u, v) ∈  G.E
-14					 c_f(u, v) = c(u, v) - (u, v).f
-15				 else c_f(u, v) = (v, u).f
-16				 if c_f(u, v) > 0 and v.a == 0
-17					 v.a = min(u.a, c_f(u, v))
+10		 <b>while</b> t.<i>a</i> == 0 and Q ≠ ∅ 
+11		 	 u = DEQUEUE(Q)
+12			 <b>for</b> all edges (u, v), (v, u) ∈ G.E
+13			 	 <b>if</b> (u, v) ∈  G.E
+14					 c<sub>f</sub>(u, v) = c(u, v) - (u, v).<i>f</i>
+15				 <b>else</b> c<sub>f</sub>(u, v) = (v, u).<i>f</i>
+16				 <b>if</b> c<sub>f</sub>(u, v) > 0 and v.<i>a</i> == 0
+17					 v.<i>a</i> = min(u.a, c<sub>f</sub>(u, v))
 18					 v.π = u
 19					 ENQUEUE(Q, v) 
-20		 u, v = t.π, t    // Nå er t.a = c_f(p)
-21		 while u ≠ NIL
-22			 if (u, v) ∈ G.E
-23				 (u, v).f = (u, v).f + t.a
-24			 else
-25				 (v, u).f = (v, u).f - t.a
+20		 u, v = t.π, t    // Nå er t.<i>f</i> = c<sub>f</sub>(p)
+21		 <b>while</b> u ≠ NIL
+22			 <b>if</b> (u, v) ∈ G.E
+23				 (u, v).<i>f</i> = (u, v).<i>f</i> + t.<i>a</i>
+24			 <b>else</b>
+25				 (v, u).<i>f</i> = (v, u).<i>f</i> - t.<i>a</i>
 26			 u, v = u.π, u
-27	 until t.a == 0 
-	
+</pre>
 
-```
+
 **Kjøretid:**
 
 * Operasjon: *Finn forøkende sti*
 	* Antall: O(*VE*) 
 	* Kjøretid på operasjon: O(*E*)
 
-* **Totalt:** O(*VE^2*)
+* **Totalt:** O(*VE<sup>2</sup>* )
 
 > Med bredde-først-søk i restnettverk
 
-**Hvorfor har vi O(VE) iterasjoner?**
+
+
+#### Hvorfor har vi O(VE) iterasjoner?
 
 * Avstander *synker ikke* i residualnettverket
-* En kant (u, v) kan være flaskehals maks annenhver iterasjon
+* En kant (*u, v*) kan være flaskehals maks annenhver iterasjon
 * Vi velger korteste økende stier
-	* Dermed må *v*  først være 1 kan lenger unna enn *u*
-	* Så, idet (u, v) dukker opp igjen, må u være 1 lenger unna enn v
-	* Når (u, v) så er kritisk igjen, har altså avstanden til *u* økt med minst *2*
+	* Dermed må *v* først være 1 kant lenger unna enn *u*
+	* Så, idet (*u, v*) dukker opp igjen, må *u* være 1 lenger unna enn *v*
+	* Når (*u, v* ) så er kritisk igjen, har altså avstanden til *u* økt med minst *2*
 
 * Dermed kan vi maks ha *O(VE)* iterasjoner
 
 
-### Minimalt snitt 
+### Maksimum bipartitt matching
 
-**Snitt i flytnettverk:** Partisjon (*S*, *T*) av *V*. `s ∈ S and t ∈ T`
+Gitt en urettet graf *G* = (*V, E* ), er en **matching** et subsett av kanter *M* &sube; *E* slik at for hver node *v* &in; *V*, har er på det meste i én kant i *M*. Det vil si at ingen kantene i *M* deler noder.
 
-* *Nettoflyt:*
-
-<img src="https://i.imgur.com/WhZBpU2.png" alt="Drawing" style=" width: 200px;"/>
-
-* *Kapasitet:*
-
-<img src="https://i.imgur.com/MnCfFug.png" alt="Drawing" style=" width: 200px;"/>
+Vi sier at en node *v* &in; *V* er **matchet** av matchingen *M* dersom en node i *M* har *v* i seg, hvis ikke er *v* **umatchet**. En **maksimum matching** er en matching med maksimum kardinalitet, det vil si flest mulig kanter, dvs. der | *M* | er maksimal.
 
 
+#### Forklaring av problemet:
+
+Vi kan se på problemet som at vi har *n* antall nyredonorer, også har vi *m* pasienter som venter på en nyre. Det vi skal finne ut, er det maksimale antall med matcher, det vil si maksimale antall personer som kan få en nyre. 
+
+Vi lar da nodene i *R* representere donorene, og *L* representere pasientene, og kantene mellom dem representerer om nyrene er kompatibel med pasienten.
 
 
-**Lemma 26.5:** `f(S, T) = | f |`
+
+#### Bipartite grafer
+
+En graf der nodesettet kan partisjoneres til *V* = *L* &cup; *R*, hvor *L* og *R* er disjunkte, og alle kanter i *E* går mellom *L* og *R*.
 
 
-### Matching
+#### Finne en maksimum bipartitt matching
+ 
+Vi kan bruke Ford-Fulkerson-metoden for å finne en maksimu matching på en urettet bipartitt graf *G* = (*V, E* ) i tid polynomisk med | *V* | og | *E* |. Trikset er å konstruere et flytnettverk der flyt korresponderer med matcher, som vist i figuren under.
+ 
+Vi definerer det korresponderende flytnettverket *G'* = (*V', E'* ) for den bipartitte grafen som følgende:
+
+* Vi lar kilden *s* og sluket *t* være nye noder, ikke i *V*, og vi lar *V'* = *V* &cup; { *s*, *t* }.
+* De rettede kantene i *G'* er kantene i *E*, rettet fra *L* til *R*, sammen med | *V* | nye kanter fra kilden til *L* og *R* til *t*.
 
 
-<pre bgcolor="red">
-Hello
-
-</pre>
-
-&rarrw;
+<img src="https://i.imgur.com/o6MfBTD.png" alt="drawing" style=" width: 360px; "/>
 
 
-<img src="https://i.imgur.com/WhZBpU2.png" alt="Drawing" style=" width: 280px;"/>
+Maksimal matching i en bipartitt graf *G* korresponderer til en maksimal flyt i det korresponderende flytnettverket *G'*, og at vi dermed kan finne maksimum matching ved å kjøre en maksimal flyt-algoritme på *G'*. 
+
+Problemet er at maksimal flyt-algoritmen kan returnere desimaler, selvom flyt-verdien | *f* | må være et heltall. Følgende teorem viser at vi kan bruke Ford-Fulkerson for å løse dette problemet.
 
 
+
+
+### Heltallsteoremet
+
+Dersom kapasitetsfunksjonen *c* kun tar på seg heltallsverdier, da vil maksimumflyten *f* produsert av *Ford-Fulkerson-metoden* ha den egenskapen at | *f* | er en heltall. 
+
+Generelt, vil flyten mellom to noder *f(u,v)* være et heltall for alle noder *u* og *v*.
+
+
+
+
+<br> </br>
+<br> </br>
 
 ## Forelesning 13 - NP-kompletthet <a name="of13"></a>
 
