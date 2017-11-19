@@ -701,10 +701,10 @@ def parent(i):
 	return ⌊i/2⌋
 	
 def left(i):
-	return 2i
+	return 2*i
 	
 def right(i):
-	return 2i + 1
+	return 2*i + 1
 ```
 
 Det finnes to typer binære heaps.
@@ -2840,7 +2840,10 @@ EDMONDS-KARP(G,s,t)
 ### Matching
 
 
+<pre bgcolor="#00FFFF">
+Hello
 
+</pre>
 
 &rarrw;
 
