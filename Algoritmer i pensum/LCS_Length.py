@@ -50,8 +50,8 @@ def main():
     c, b = LCS_Length(X, Y)
 
     # Liste med piler
-    #for line in b:
-    #    print(line)
+    for line in b:
+        print(line)
 
     #Liste av lengder på LCS
     #for line in c:

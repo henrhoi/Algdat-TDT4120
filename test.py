@@ -1,16 +1,19 @@
-m = 9
-n = 9
-c = [[None for _ in range(m+1)] for _ in range(n+1)]
-
-for i in range(1,m+1):
-    c[i][0] = 0
-
-for j in range(n+1):
-    c[0][j] = 0
-
-for lisst in c:
-    print(lisst)
+x = [51,52,53,54,55]
+y = [50.55,48.91,46.94,46.24,46.78]
 
 
-a = ["A",'B','C','D']
-print(a[:3])
+b0 = 101.997
+b1 = -1.021
+
+SSE = 0
+
+for i in range(len(x)):
+    SSE += (y[i] - b0 - b1*x[i])**2
+
+
+print(SSE)
+
+
+SST = 12.973
+
+print(1 - (SSE/SST))

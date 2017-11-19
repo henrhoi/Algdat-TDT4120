@@ -1878,8 +1878,6 @@ Prosedyren vil returnere en lenket liste med topologisk sorterte noder i synkend
 <a name="of9"></a>
 ## Forelesning 9 - Minimale spenntrær 
  
-Vite hva spenntrær og minimale spenntrær erForstå Generic-MSTForstå hvorfor lette kanter er trygge kanterForstå MST-KruskalForstå MST-Prim
-
 
 ### Disjunkte mengder
 
@@ -2122,68 +2120,585 @@ Til sammen blir derfor den **totale kjøretiden** for *Prim's algoritme*:
 ## Forelesning 10 - Korteste vei fra én til alle 
 
 
+I et **korteste vei problem** blir vi gitt en vektet, rettet graf *G = (V, E)*, med en vektfunskjon *w* : *E* → ℝ som mapper vektene til et sett kanter. Vekten ***w(p)*** av veien *p* = ⟨ *v*<sub>0</sub>, *v*<sub>1</sub>,...,*v*<sub>*k*</sub> ⟩ er summen av vektene til kantene på veien: *w*(*p*) = ∑*w* (*v<sub>i-1</sub>*, *v<sub>i</sub>* ).
+
+Vi definerer den korteste-vei vekten δ(*u*,*v* ) fra *u* til *v* med:
+
+   <img src="https://i.imgur.com/uwAUGlN.png" alt="drawing" style=" width: 300px; "/>
+
+
+En *korteste vei* fra noden *u* til noden *v* er definert som enhver vei *p* med vekt *w*(*p*) = δ(*u*,*v* ). *Korteste enkle vei* er **ekvivalent** med *lengste enkle vei* da man bare kan velge de lengste veiene istedet for korteste, så vil man få *lengste enkle vei*. 
+
+
+#### Varianter:
+
+I denne forelesningen er fokuset på **single-source shortest-paths problem**: Gitt en graf *G = (V, E)*, ønsker vi å finne en korteste vei fra en gitt **kilde** (*eng. source*) node *s* &in; *V* for hver node *v* &in; *V*. Algoritmen for single-source problemet kan løse mange andre problemer, som f.eks. disse variantene:
+
+**Single-destination shortest-paths problem:** Finn en korteste vei til en gitt *destinasjon* node *t* fra hver node *v*. Ved å reversere retingen til hver kant i grafen, kan vi redusere dette problemet til et *singe-source problem*
+
+
+**Single-pair shortest-path problem:** Finn en korteste vvei fra *u* til *v* for gitte noder *u* og *v*. Dersom vi løser *single-source problemet* med kilde-node *u*, løser vi dette problemet også. Alle kjente algoritmer for dette problemet har samme *worst-case* kjøretid som den beste single-source algoritmen.
+
+
+**All-paris shortest-paths problem:** *(Alle til alle)* Finn en korteste vei fra *u* til *v* for hvert eneste par av noder *u* og *v*. Vi kan løse dette problemet ved å kjøre en *single-source* algoritme en gang fra hver node, men vi kan i mange tilfeller løse den raskere.
+
+
+
+
+#### Optimal substruktur til en korteste vei
+
+Korteste-vei algoritmer avhenger typisk av egenskapen om at en korteste vei mellom to noder inneholder andre korteste veier innad. **Merk** at optimal substruktur er en av **nøkkelindikatorene** på at dynamisk programmering og den grådige metoden muligens tar sted. *Djikstra's algoritme*, som vi snart kommer til, er en grådig algoritme
+
+
+**Delveier av korteste-veier er korteste veier:** 
+
+Gitt en vektet, rettet graf *G = (V, E)* med vektfunksjon *w* : *E* → ℝ, la *p* = ⟨ *v*<sub>0</sub>, *v*<sub>1</sub>,...,*v*<sub>*k*</sub> ⟩ være en korteste vei fra node *v*<sub>0</sub> til node *v*<sub>*k*</sub> og, for envher *i* og *j* slik at 0 ≤ *i* ≤ *j* ≤ *k*, la *p*<sub>*ij*</sub> = ⟨ *v*<sub>*i*</sub>, *v*<sub>*i* + 1</sub>,...,*v*<sub>*j*</sub> ⟩ være en delvei av *p* fra node *v*<sub>*i*</sub> til node *v<sub>j</sub>*. Da er *p*<sub>*ij*</sub> en korteste vei fra *v<sub>i</sub>* til *v<sub>j</sub>*.
+
+
+
+#### Negative kanter
+
+Noen instanser til single-source shortest-path problemet kan inkludere negative kanter. Dersom grafen *G = (V, E)* ikke inneholder noen negative sykler som kan nås fra kilden *s*, da for alle noder *v* &in; *V*, forblir den korteste-vei vekten δ(*s*,*v* ) veldefinert, selvom den har negativ verdi. 
+
+Dersom grafen *G* inneholder en negativ sykel, som kan nås fra *s*, er ikke lenger den korteste veien δ(*u*,*v* ) definert. Ingen vei fra *s* til en node i sykelen kan være korteste vei, da vil ingen sti bli *kortest*.
+
+Dersom det er en negativ vektet sykel på en vei fra *s* til *v*, definerer vi δ(*s*,*v* ) = -∞. Vi kan derfor ikke gå igjennom en negativ sykel i en korteste-vei. 
+
+
+
+#### Sykler
+
+Kan en korteste vei inneholde en sykel? Som vi har sett kan den ikke innholde en negativ sykel. Heller kan den ikke inneholde en positiv sykel, da dersom man hadde fjernet sykelen ville man fått en **enda kortere vei** med samme kilde *s* og destinasjon *t*. Dersom vi har en sykel med vekt 0, vil det fortsatt finnes en korteste-vei uten denne sykelen. Derfor sier vi at når vi finner korteste vei, de har ingen sykler, de er **enkle** veier.
+
+Siden enhver asyklisk graf *G = (V, E)* har maks | *V* | distinkte noder, har den også på det meste | *V* | - 1 kanter. Derfor kan vi kun se på korteste veier med maksimalt | *V* | - 1 kanter.
+
+
+#### Representere korteste veier
+
+Vi representerer korteste veier noe likt som vi representerte bredde-først trær. Gitt en graf *G = (V, E)* har vi for hver node *v* &in; *V* en forgjenger *v.&pi;* som enten er en annen node eller NIL. Korteste-vei algoritmene i dette kapittelet *(Kap. 25)* setter &pi; attributten slik at kjeden av frogjengere fra en node *v* løper tilbake langs en korteste vei fra *s* til *v*. Gitt en node *v*, der *v.&pi;* ≠ NIL, vil prosedyren *Print-Path(G,s,v)*, fra forelesning 8, skrive ut korteste vei fra node *s* til *v*.
+
+Som i BFS, er vi interessert i en forgjenger delgraf *G<sub>&pi;</sub> = (V<sub>&pi;</sub>, E<sub>&pi;</sub>)*. Igjen skal vi definere et sett *V<sub>&pi;</sub>* til å være et sett med nder i G med ikke-NIL forgjengere, pluss kilden *s*:
+
+
+*V<sub>&pi;</sub>* = { *v* &in; *V* : *v.&pi;* ≠ NIL } ∪ { *s* }
+
+
+og et sett med rettede kanter *E<sub>&pi;</sub>* være et sett basert på *&pi;* verdiene for nodene i *V<sub>&pi;</sub>: 
+
+*E<sub>&pi;</sub>* = { ( *v, v.&pi;* ) &in; *E* : *v* &in; *V<sub>&pi;</sub>* - { *s* } }.
+
+Et korteste-vei tre er som et bredde-først tre, men den inneholder korteste veier fra kilden *s* definert på kant-vekter, isteden for antall kanter.
+
+Et korteste-vei tre med rot *s* er en rettet subgraf *G' = ( V', E' )*, hvor *V'* &sube; *V* og *E'* &sube; *E* slik at:
+
+1. *V'* er settet med alle noder nåbare fra *s* i *G*
+2. *G'* former et rotfestet tre med rot *s*, og
+3. for alle noder *v* &in; *V'*, er den unike veien fra *s* til *v* i *G'* den korteste veien fra *s* til *v* i *G*.
+
+
+
+### Slakking
+
+Algoritmene vi skal se på bruker teknikken **slakking** *(eng. relaxation)*. For hver node *v* &in; *V*, vedlikeholde vi attributten *v.d*, som er en øvre grense på vekten til den korteste veien fra en kilde *s* til *v*. Vi kaller *v.d* **korteste vei estimatet**. Vi initialiserer korteste vei estimatet og forgjengerne med følgende **&theta;(V)** prosedyre:
+
+```pseudocode
+INITIALIZE-SINGLE-SOURCE(G, s)
+1	for each vertex v ∈ G.V
+2		v.d = ∞
+3		v.π = NIL
+4	s.d = 0
+```
+ 
+Etter initialisering har vi v.π = NIL for alle noder *v* &in; *V*, og s.d = 0 og v.d = ∞ for alle *v* &in; *V* - { *s* }
+
+
+Prosessen av å slakke en kant (*u,v* ) består av  teste om vi kan forbedre den korteste veien til *v* som vi har, og dersom det går oppdatere *v.d* og *v.π*. Følgende kode utfører et slakke-steg på en kant (*u,v* ) i **O(1)** tid:
+
+```pseudocode
+1	if v.d > u.d + w(u, v)
+2		v.d = u.d + w(u, v)
+3		v.π = u
+```
+
+
+<img src="https://i.imgur.com/gENQjng.png" alt="drawing" style=" width: 250px; "/> 
+
+
+
+Algoritmene kaller først *Initialize-Singe-Source* og slakker kantene gjentatte ganger:
+
+* *Djikstra's algoritme* og *DAG-Shortest-Path* slakker hver kant nøyaktiv én gang.
+* *Bellman-Ford* algoritmen slakker hver kant | *V* | - 1 ganger.
+
+
+### Ulike egenskaper ved korteste veier og slakking
+
+For å vise at algoritmene for korteste vei er korrekte, skal vi vise til flere egenskaper til korteste veier og slakking. Egenskapene antar at grafen *G* er initialisert med et kall på *Initialize-Single-Soure(G,s)*, og at den eneste måten korteste vei estimatet og forgjenger subgragen kan endre seg er av en sekvens slakke-steg.
+
+
+* **Sti-slakkings-egenskapen:** Om *p* = ⟨ *v*<sub>0</sub>, *v*<sub>1</sub>,...,*v*<sub>*k*</sub> ⟩  er en *kortest* vei fra *s* = *v*<sub>0</sub> til *v<sub>k</sub>*, og vi slakker kantene til *p* i rekkefølge, så vil *v* få riktig avstandsestimat. Det gjelder uavhengig av om andre slakkinger forekommer, selv om de kommer innimellom. 
+
+* **Trekantuliketen:** *(eng. Triangle inequality)* For enhver kant (*u,v* ) &in; *E*, har vi at &delta;(*s,v* ) ≤ &delta;(*s, u* ) + *w*(*u,v* ).
+
+* **Øvre-grense egenskapen:** Vi har alltid at *v.d* ≤ &delta(*s,v* ) for alle noder *v* &in; *V*, og når *v.s* får verdien &delta;(*s,v* ), endres den aldri.
+
+* **Ingen-vei egenskapen:** Dersom det ikke er noen vei fra *s* til *v*, da vil vi ha at *v.d* = &delta;(*s,v* ) = ∞.
+
+* **Konvergens egenskapen:** Dersom *s* &rarrw; *u* &rarr; *v* er en korteste vei i *G* for noen *u*, *v* &in; *V*, og dersom *u.d* = &delta;(*s,u* ) før enhver slakking av kanten (*u,v* ), da vil *v.d* = &delta;(*s,v*) for alltid etterpå.
+
+* **Forgjenger-subgraf egenskapen:** Så fort *v.d* = &delta;(*s,v* ) for alle *v* &in; *V*, er forgjenger delgrafen en korteste-vei tre med rot *s*.
+
+
+
+### Bellman-Ford
+
+*Bellman-Ford* algoritmen løser single-source korteste vei problemet på generelt basis der kantvektene **kan være negative**. Gitt en vektet, rettet graf *G* = (*V, E* ) med kilde *s* og vektfunksjon *w* : *E* → ℝ, returnerer *Bellman-Ford* algoritmen en boolean verdi som indikerer om det finnes en negativ sykel som kan nås fra *s*. Dersom det er finnes en slik negativ sykel, betyr det at det ikke finnes noen løsning. Dersom det ikke er en negativ sykel, produserer algoritmen en korteste vei og dens vekter. 
+
+
+Algoritmen slakker kanter, ved å miniere *v.d* på kantene til en korteste vei fra *s* til hver node *v* &in; *V*, til den finner den faktiske korteste-vei vekten &delta;(*s,v* ). Algoritmen retureren True, hvis og bare hvis grafen ikke inneholder noen negative sykler. 
+
+```pseudocode
+BELLMAN-FORD(G, w, s)
+1	 INITIALIZE-SINGLE-SOURCE(G, s)
+2	 for i = 1 to |G.V| - 1
+3		 for each edge (u,v) ∈ G.E 
+4			 RELAX(u,v,w)
+5	 for each edge (u,v) ∈ G.E 
+6		 if v.d > u.d + w(u,v)
+7			 return False
+8	 return True
+```
+
+* Algoritmen slakker hver kant **| V | - 1** ganger.
+
+
+**Kjøretid:** Bellman-Ford algoritmen kjører på **O(*VE* )** tid
+
+> Siden initialiseringen tar &theta;(V) tid, og hver alle | *E* | kantene slakkes | *V* | - 1 ganger, og for-løkken på linje 5-7 tar O(*E* ) tid, blir den totale kjøretiden derfor som sagt:  **O(*VE* )**.
+
+<img src="https://i.imgur.com/v7cOqwK.png" alt="drawing" style=" width: 250px; "/>
+
+
+### DAG-Shortest-Path
+
+Ved å slakke kantene til en vektet DAG *G* = (*V, E* ) ifølge en topologisk sortering av nodene, kan vi regne ut den korteste veien fra en enkel kilde i **&theta;(*V + E* )** tid. Korteste vei er godt definert i en DAG, siden det verken finnes **negative kanter eller sykler**. 
+
+Algoritmen starter med å topologisk sortere DAG-en til en lineær ordning på nodene. Dersom DAG-en inneholder en vei fra node *u* til node *v*, da kommer *u* før *v* i den topologiske sorteringen. Vi skal bare gå over nodene en gang i den topologiske sorterte rekkefølgen. Når vi prosesserer hver node, slakker vi hver kant som forlater noden. Slakker utkantene til nodene fra venstre mot høyre.
+
+
+```pseudocode
+DAG-SHORTEST-PATH(G, w, s)
+1	topological sort the vertices of G
+2	INITIALIZE-SINGE-SOURCE(G,s)
+3	for each vertex u taken i topological sorted order
+4		for each vertex v ∈ G.Adj[u]
+5			RELAX(u,v,w)
+```
+* Algoritmen slakker hver node nøyaktig èn gang.
+
+
+**Kjøretiden:** Kjøretiden til algoritmen er ganske enkel å analysere. Den topologiske sorteringen i linje 1 tar &theta;(*V + E* ) tid. Kallet til *Initialize-Single-Source* på linje 2 tar &theta;(*V *) tid. *For*-løkken på linjene 4-5 slakker hver kant nøyaktig en gang, og hver iterasjon av for-løkken tar O(1) tid. Derfor blir den totale kjøretiden derfor **&theta;(*V + E* )**
+
+
+<img src="https://i.imgur.com/BqkI0Kp.png" alt="drawing" style=" width: 300px; "/>
+
+
+#### Sammenhengen mellom DAG shortest path og dynamisk programmering
+
+Korteste-vei problemet har optimal delstruktur. Delproblemene er avstanden fra kildenoden til innnaboer, velg den som gir best resultat.
+
+
+
+### Dijkstra's algoritme
+
+*Dijkstra's algoritme* løser single-source korteste vei problemet på en vektet, rettet graf *G* = (*V, E* ) der alle kantene har positiv vekt. Det betyr at Dijkstra's algoritme **ikke** kan brukes på grafer med **negative kanter**. Derfor antar vi videre at *w(u,v)* ≥ 0 for hver kant *(u,v)* &in; *E*. Som vi skal se er kjøretiden til Dijkstra's lavere enn *Bellman-Ford*. 
+
+
+
+Dijkstra's algoritme har et sett *S* med noder som den korteste-vei-vekten fra kilden *s* er blitt bestemt. Algoritmen velger gjentatte ganger den noden *u* &in; *V - S* med minst korteste-vei-estimat, legger til *u* i *S*, og slakker alle kanter **ut** fra *u*.
+
+I følgende implementasjon, bruker vi en min-prioritetskø *Q* av noder, basert på deres *d* (*distance*) verdi.  
+
+
+```pseudocode
+DIJKSTRA(G, w, s)
+1	INITIALIZE-SINGLE-SOURCE(G,s)
+2	S = ø
+3	Q = G.V
+4	while Q ≠ ø
+5		u = EXTRACT-MIN(Q)
+6		S = S ∪ {u}
+7		for each vertex v ∈ G.Adj[u]
+8			RELAX(u,v,w)
+```
+> Slakker hver node én gang.
+
+
+* Dijkstra slakker alle utkantene til den noden *v* med minst *v.d*.
+
+**Løkkeinvariant:** *Q* = *V - S*, har også at *v.d* = &delta;(*s,v* )
+
+
+
+
+#### Kjøretid:
+
+<pre>
+<b>Operasjon</b>          <b>Antall</b>          <b>Kjøretid</b>          
+<i>Initialisering</i>     1               Θ(V)
+<i>Build-Heap</i>         1               Θ(V)
+<i>Extract-Min</i>        V               O(lg V)
+<i>Decrease-Key</i>       E               O(lg V)
+</pre>
+ 
+Som gir den totale kjøretiden på **`O(E lg V + V lg V)`**
+
+> Dersom vi hadde benyttet oss av en Fibonacci heap, vil *Extract-Min være O(1) og den totale kjøretiden blir da `O(V lg V + E)`
+
+
 
 <a name="of11"></a>
 ## Forelesning 11 - Korteste vei fra alle til alle 
 
+Nå skal vi se på problemet om å finne en korteste vei fra alle par av noder i en graf *(korteste vei fra alle til alle)*. Som i korteste vei fra en til alle problemet blir vi gitt en vektet, rettet graf *G* = (*V, E* ), og en vektfunksjon *w*. Vi ønsker å finne korteste vei mellom alle par *u,v* &in; *V*.
+
+Vi kan løse alle korteste vei fra alle til alle problemer ved å kjøre en single-source korteste vei algoritme | *V* | ganger, en gang for hver node som kilden. 
+
+* Dersom alle kantvektene er positive, kan vi bruke Dijkstra's algoritme:
+	* Med linær-liste som min-prioritetskø blir kjøretiden: O(*V<sup> 3</sup>* )
+	* Med binær heap som min-prioritetskø blir kjøretiden: O(*VE lg V* )
+	* Med Fibonacci heap som min-prioritetskø blir kjøretiden: O(*V*<sup> 2</sup> lg *V* + *VE* )
+
+	
+* Dersom grafen har negative kanter kan vi bruke den tregere algoritmen, Bellman-Ford:
+	* Den resulterende kjøretiden blir O(*V*<sup> 2</sup> *E* )
+	* På en tett graf der E ≈ V<sup> 2</sup> vil kjøretiden bli på hele O(*V*<sup> 4</sup>)
+
+
+På dette problemet ser vi på nabomatriser, i stedet for nabolister som vi tidligere har jobbet med. Vi antar at nodene er nummerert 1,2,...,| *V* |, slik at input er en *n* x *n* matrise W som representerer kantvektene til en rettet graf *G* med *n* noder.
+
+
+* Vi tillater negative kanter, men vi antar at input-grafen ikke har noen negative sykler. 
+
+For å løse kortestevei fra alle til alle problemet på en nabomatrise, må vi ikke bare regne ut korteste vei vektene men også en forgjenger matrise &Pi; = (&pi;<sub>*ij*</sub>), hvor &pi;<sub>*ij*</sub> = NIL dersom *i* = *j*, eller dersom det ikke er en vei fra *i* til *j*, ellers er &pi;<sub>*ij*</sub> forgjengeren til *j* på en koreste vei fra *i*.
+
+
+For å printe ut den korteste veien fra en node *i* til *j*, kan vi brue følgende prosedyre:
+
+<pre>
+PRINT-ALL-PAIRS-SHORTEST-PATH(Π, i, j)
+1	if i == j
+2		print i
+3	elif Π(i,j) == NIL
+4		print "no path from " i " to " j "exists" 
+5	else PRINT-ALL-PAIRS-PATH(Π, i, π<sub>ij</sup>)
+6		print j
+</pre>
+
+
+
+### Floyd-Warshall
+
+Nå skal vi se på en dynamisk programmerings algoritme for korteste vei fra alle til alle problemetet på en rettet graf *G*. *Floyd-Warshall* kjører på &theta;(*V*<sup> 3</sup> ) tid. 
+
+#### Strukturen til den korteste veien:
+
+Algoritmen ser på mellomliggende norder av en korteste vei, hvor mellomliggende *p* = ⟨ *v*<sub>1</sub>, *v*<sub>2</sub>,...,*v*<sub>*l*</sub> ⟩ er enhver node i *p* unntatt *v*<sub>1</sub> og *v*<sub>*l*</sub>.
+
+Algoritmen går på å se etter en mellomliggende node, som gjør at veien mellom to noder blir mindre. 
+
+
+
+
+Vi skrive Floyd-Warhall algoritmen rekursiv algoritme bottom up, og vi definerer *d*<sub>*ij*</sub><sup>(*k* )</sup> rekursivt som:
+
+<img src="https://i.imgur.com/g9oDaMz.png" alt="drawing" style=" width: 250px; "/>
+
+
+, og matrisen *D*<sup>(*n* )</sup> = (*d*<sub>*ij*</sub><sup>(*n* )</sup>) gir det siste svaret *d*<sub>*ij*</sub><sup>(*n* )</sup> = &delta;(*i, j* ) for alle *i, j* &in; *V*.
+
+
+<pre>
+FLOYD-WARSHALL(W)
+1	n = W.rows
+2	D<sup>(0)</sup> = W
+3	for k = 1 to n
+4		let D<sup>(k)</sup> = (d<sub>ij</sub><sup>(k)</sup>) be a new n x n matrix
+5		for i = 1 to n
+6			for j = 1 to n
+7				d<sub>ij</sub><sup>(k)</sup> = min(d<sub>ij</sub><sup>(k - 1)</sup>, d<sub>ik</sub><sup>(k - 1)</sup> + d<sub>kj</sub><sup>(k - 1)</sup> )
+8	return D<sup>(n)</sup>
+</pre>
+
+
+
+
+**Kjøretid:** Kjøretiden er bestemt av de tre nestede *for*-løkkene på linje 3-7. Siden hver utførerelse av linje 7 tar O(1) tid, kjører algoritmen på Θ(*n*<sup> 3</sup>) = Θ(*V*<sup> 3</sup>).
+
+
+* Det er | *V* | noder vi skal gå igjennom, og for hver node kan man variere startnoden med | *V* - 1 | muligheter, og sluttnoden | *V* - 2 | muligheter.  
+
+* Dijkstra bruker også O(*V*<sup> 3</sup> ) på alle-til-alle, men operasjonene per ledd i Floyd-Warshall er så mye mindre at denne vil lønne seg.
+	* Dersom det er relativt få kanter i forhold til noder, vil derimot Dijkstra med en heap. 
+
+**Illustrasjon av Floyd-Warshall:**
+
+<img src="https://i.imgur.com/hXgJOoT.png" alt="drawing" style=" width: 350px; "/>
+
+
+
+### Transitive Closure
+
+Gitt en rettet graf *G* = (*V, E*) med et sett noder *V* = {1,2,..,*n* } vill vi kanskje finne ut om *G* inneholder en vei fra *i* til *j* for alle par *i, j* &in; *V*. Derfor definerer vi **transitiv closure** til *G* som grafen <i>*G*<sup> &#10040;</sup></i> = (*V*, <i>*E*<sup> &#10040;</sup></i>), hvor <i>*E*<sup> &#10040;</sup></i> = {(*i, j* ) : there is a path from *i* to *j* in *G* }
+
+Vi kan kjøre denne type algoritme på &theta;(*n*<sup> 3</sup>), og kan endre alle kantvektene til 1 og bruke *Floyd-Warshall*. , eller bruke operasjoner &or;, &and; for å regne ut om det finnes en vei.
+
+
+<pre>
+TRANSITIVE CLOSURE
+1	 n = |G.V|
+2	 let T<sup> (0)</sup> = (t<sub>ij</sub><sup> (0)</sup>) be a new n x n matrix
+3	 for i = 1 to n
+4		 for j = 1 to n
+5			 if i == j or (i, j) ∈ G.E
+6				 t<sub>ij</sub><sup> (0)</sup> = 1
+7			 else
+8				 t<sub>ij</sub><sup> (0)</sup> = 0
+9	 for k = 1 to n
+10		 let T<sup> (k)> = (t<sub>ij</sub><sup> (k)</sup>) be a new n x n matrix
+11		 for i = 1 to n 
+12			 for j = 1 to n 
+13				 t<sub>ij</sub><sup> (k)</sup> = t<sub>ij</sub><sup> (k - 1)</sup> ∨ ( t<sub>ik</sub><sup> (k - 1)</sup> ∧ t<sub>kj</sub><sup> (k - 1)</sup>)
+14	 return T<sup> (n)</sup>
+</pre>
+
+
+
+
+
+
+
+
 <a name="of12"></a>
 ## Forelesning 12 - Maksimal flyt 
 
-**Flytnettverk:** Rettet graf `G = (V,E)`
+Vi kan se på en rettet graf som et "flytnettverk" og bruke det til å svare på spørsmål om materiell flyt. Se for deg en materie (f.eks. sjokolade) som flyter igjennom et system, fra en kilde *s*, hvor materien blir produsert, til et sluk *t*, hvor det konsumeres. Vi kan se på hver kant i flytnettverket som et rør med en viss kapasitet, og vi ønsker å oppnå maksimal flyt til sluket.
 
-* Kapasiteter c(*u*,*v*) ≥ 0
-* Kilde og sluk *s*,*t* ∈ *V*
-* *v* ∈ *V*   ⟹  *s* → *v* → *t*
-* Ingen løkker (*self-loops)
-	* Merk: Vi *kan* ha sykler!
-* Tillater ikke antiparallelle kanter
-	* (*u*,*v*) ∈ *E* ⟹ (*v*,*u*) ∉ *E*
-* Kanter som ikke finnes har ingen kapasitet
-	* (*u*,*v*) ∉ *E* ⟹ c(*u*,*v*) = 0
+I maksimal flyt problemet ønsker vi å finne ut den største mengden vi kan frakte fra kilden til sluket uten å bryte noen av kapasitetene i flytnettverket.
 
 
-**Flyt**: En funksjon: `f : V x V ⟶ ℝ`
+#### Flytnettverk
 
-* `0 ≤ f(u, v) ≤ c(u, v)`
-* `u ≠ s, t ⟹ ∑ f(v, u) = ∑ f(u, v) `
-	* *Flyt* inn = *flyt ut*
+* Et flytnettverk `G = (V, E)` er en rettet graf.
+* Hver kant har en **kapasitet** *c(u,v)* ≥ 0.
+* Vi krever også at dersom det finnes en kant *(u,v)*, finnes det ikke noen kant *(v,u)* i den motsatte retningen. 
+* Dersom *(u,v)* &notin; *E*, da definerer vi *c(u,v)* = 0.
+* Grafen er sammenhengende og har ikke selv-løkker
+* Vi har en **kilde** *s* og et **sluk** *t* &in; *V*. 
+* Vi antar at hver node ligger på en vei fra kilden til sluket.
+	* Dvs. at for hver node *v* &in; *V*, inneholder flytnettverket en vei *s* &rarrw; *v* &rarrw; *t*.
 
 	
-**Flytverdi:**  `|f| = ∑ f(s, v) - ∑ f(v, s)`
+#### Flyt
+
+En flyt i et flytnettverk *G* er en funksjon *f* : *V* x *V* &rarr;  ℝ, som har følgende egenskaper:
+
+* **Kapasitetsbegrensning:** For alle *u,v* &in; *V*, krever vi at 0 ≤ *f(u,v)* ≤ *c(u,v)*
+* **Flytbeholdning:** For alle *u* &in; *V* - *{ s,t }*, krever vi at `∑ f(u,v) = ∑ f(v,u)`.
+	* Flyt inn = Flyt ut 
 
 
-**Input:** Et flytnettverk *G*.
+Vi kaller mengden *f(u,v)* for flyten fra node *u* til *v*. 
 
-**Output:** En flyt *f* for *G* med maks | *f* |.
-
-> *Antiparalelle kanter:* Splitt den ene med en node
-
-> *Flere kilder og sluk:* Legg til super-kilde og super-sluk
+**Flytverdien** er definert ved `|f| = ∑ f(s,v) - ∑ f(v,s)`
+, som den totale flyten ut av kilden, minus flyten inn i kilden. 
 
 
-**Restnettverk:**
 
-* Engelsk: *Residual netword*
-* Fremoverkant ved ledig kapasitet
-* Bakoverkant ved flyt
+#### Antiparallelle kanter
 
-**Forøkende sti:**
+La oss anta at man allerede i flytnetterverket har en kant *(v<sub>1</sub>,v<sub>2</sub>)* &in; *E*, også får man et tilbud om en til kant *(v<sub>2</sub>, v<sub>1</sub>)*. Da strider dette imot det vi antok over, det at dersom *(u,v)* &in; *E*, så *(v,u)* &notin; *E*. 
 
-* Engelsk: *Augmenting path*
-* En sti fra kilde *s* og sluk *t* i restnettverket
+Vi kaller to kanter *( v<sub>1</sub>, v<sub>2</sub> )* og *( v<sub>2</sub>, v<sub>1</sub> )* **antiparallelle kanter**. Dette løser vi ved å:
+
+1. Velge en av de to antiparalelle kantene, f.eks. *( v<sub>1</sub>, v<sub>2</sub> )*.
+2. Splitter den, ved å legge til en ny node *v'*
+3. Erstatte *( v<sub>1</sub>, v<sub>2</sub> )* med et par av kanter *( v<sub>1</sub>, v' )* og *( v', v<sub>2</sub> )*.
+4. Begge kantene med kapasitet som den originale kanten.
+
+**Illustrasjon:**
+
+<img src="https://i.imgur.com/WNFUfTc.png" alt="drawing" style=" width: 300px; "/>
+
+
+
+#### Nettverk med flere kilder og sluk
+
+Et maksimal flyt problem kan har flere kilder og sluk, istedet for en av hver. Dersom man har et sett med *kilder* { *s*<sub>1</sub>, *s*<sub>2</sub>,..., *s*<sub>*m*</sub> } og et sett *sluker* { *t*<sub>1</sub>, *t*<sub>2</sub>,..., *t*<sub>*n*</sub> }.
+
+Vi kan redusere dette problemet til et vanlig maksimal flyt problem. Vi legger da til en **superkilde** *s* og legger til en rettet kant (*s, s<sub>i</sup>* ) med kapasitet *c(s, s<sub>i</sup> )* = ∞ for hver *i* = 1,2,..,*m*. Vi legger også til et **supersluk** *t* og legger til en rettet kant (*t<sub>i</sub>, t* ) med kapasitet *c(t<sub>i</sub>, t )* = ∞ for hver i = 1,2,..,*n*
+
+**Illustrasjon:**
+
+<img src="https://i.imgur.com/7HbAcQu.png" alt="drawing" style=" width: 350px; "/>
+
+
+### Ford-Fulkerson
+
+Vi skal nå se på Ford-Fulkerson metoden, og kaller det metode og ikke for en algortime da det finnes mange implementasjoner med forskjellige kjøretider. Metoden avhenger av tre viktige ideer:
+
+
+* *Restnettverk*
+* *Forøkende stier*
+* *Kutt*
+
+
+Ford-Fulkerson metoden øker flytverdien iterativt. Vi starter med *f(u, v)* = 0 for alle *u, v* &in; *V*, gitt en initiell flyt av verdi 0. Ved hver iterasjon øker vi flytverdien i *G* ved å finne en *forøkende sti* i et *restnettverk* *G<sub> f</sub>*. Når vi vet kantene til en forøkende sti, kan vi lett øke flyten slik at vi øker flytverdien.
+
+
+Vi øker flyten helt til restnettverket ikke har flere forøkende stier. Maksimal-flyt minimalt snitt teoremet vil vise at ved terminering, har denne metoden fungert:
+
+
+<pre>
+FORD-FULKERSON-METHOD(G, s, t)
+1	initialize flow <i>f</i> to 0
+2	while there exists an augmenting path <i>p</i> in the residual network G<sub>f</sub>
+3		augment flow <i>f</i> along <i>p</i> 
+4	return <i>f</i> 
+</pre>
+
+
+#### Restnettverk
+
+Intuitivt gitt et flytnettverk *G* og en flyt *f*, består restnettverket *G<sub>f</sub>* av kanter med kapasiteter som representerer hvor mye vi kan endre flyten på kantene i G.
+
+En kant i flytnettverken kan ta imot enda større flyt, lik kantens kapasitet minus flyten i anten. Dersom denne verdien er positiv kan vi putte kanten i *G<sub>f</sub>* med en restkapasitet på *c<sub>f</sub> (u, v )* = *c(u, v )* - *f ( u,v )*. De eneste kantene i *G* som er i *G<sub>f</sub>* er de som kan ta imot med flyt.
+
+> De kantene som *(u, v )* som har like stor flyt som kapasitet har restkapasitet *c<sub>f</sub> (u, v )*  = 0, er ikke i *G<sub>f</sub>*.
+
+
+Restnettverket innholder kanskje kanter som ikke er i *G*. For å representere en mulig minskning av positiv flyt *f (u, v )* på en kant i *G*, putter vi inn en kant *(v, u )* i restnettverket med restkapasitet *c<sub>f</sub* - det betyr at man kan sende flyt tilbake i kanten, dvs å **oppheve** (*eng. cancel* ) flyten i kanten *(u, v )*. 
+
+* Disse reverserte kantene i restnettverket lar algoritmen sende tilbake flyt som den allere har sent langs kanten. Det er ekvivalent med å senke flyten på kanten. 
+
+* Å sende flyt langs en kant, der det allerede går flyt, i et restnettverk er også kjent som **oppheving**. Det er dette bakoverkantene i restnettverket representerer.
+
+
+Vi definerer restkapasiteten *c<sub>f</sub> (u, v )* med:
+
+<img src="https://i.imgur.com/pegaiFp.png" alt="drawing" style=" width: 300px; "/>
+
+* Dersom vi har en kant *( u,v )* med *c(u,v )* = 16 og *f( u,v )* = 11, kan vi øke *f(u,v )* med *c<sub>f</sub>(u,v )* = 5. Men algoritmen kan også sende tilbake 11 enheter av flyten fra *v* til *u* og dermed *c<sub>f</sub>(v,u )* = 11.
+
+
+Dermed har vi at gitt et flytnettverk *G* = (*V, E* ) og en flyt *f*, har vi restnettverket til G av *f* til å være *G<sub>f</sub>* = (*V, E<sub>f</sub>* ), hvor 
+
+*E<sub>f</sub>* = { (*u,v* ) &in; *V* x *V* : *c<sub>f</sub>(u,v )* > 0 }.
+
+
+> Siden det for hver kant i G, kan være 1-2 kanter i G<sub>f</sub> har vi at  **| *E<sub>f</sub>* | 	 ≤	 2 | *E* |**
+
+
+En flyt i et restnettverk gir et kart for å legge til flyt i det originale flytnettverket. Dersom *f* er en flyt i *G* og *f'* er en flyt i det korresponderende restnettverket definerer vi *f*  &uarr;  *f'*, økningen av flyt *f* av *f'*, til å være en funksjon fra *V* x *V* til ℝ definert av:
+
+ 
+<img src="https://i.imgur.com/2XlrLkH.png" alt="drawing" style=" width: 300px; "/>
+
+
+**Illustrasjon av restnettverk ut fra et flytnettverk:**
+
+<img src="https://i.imgur.com/gi1iWq4.png" alt="drawing" style=" width: 430px; "/>
+
+
+<br> </br>
+
+#### Forøkende stier
+
+Gitt et flytnettverk *G* = (*V, E* ), og en flyt *f*, en en enkel sti fra *s* til *t* i et restnettverk *G<sub> f </sub>* en **forøkende sti** (*eng. augmenting path* ). 
+
 * Langs fremoverkanter: *Flyten kan økes*
 * Langs bakoverkanter: *Flyten kan omdirigeres*
-	* Altså: En sti der den totale flyten kan økes
+	* Altså: En sti der den totale flyten kan økes med opptil *c<sub>f</sub>* (*u, v* ) uten å bryte med noen av kapasitetene i *G*. 
 
-**Flytoppheving:**
+	
+Vi har at vi kan øke flyten på en kant i en forøkende sti *p* med restkapasiteten til *p*, gitt ved,
 
-* Vi kan "sende" flyt baklengs langs kanter der det allerede går flyt
-* Vi opphever da flyten, så den kan omdirigeres til et annet sted.
-* Det er dette bakoverkantene i restnettverket representerer.
+*c<sub>f</sub> (p)* =  min { *c<sub>f</sub> (u, v )*  :  *(u, v )* is on *p* }.
 
- 						c(u, v) - f(u, v)	   , if (u,v) ∈ E
-		c_f(u, v) = 	f(v, u) 				   , if (v,u) ∈ E
-						0						   , ellers
+
+
+### Snitt i flytnettverk
+
+Ett **snitt** (*S, T* ) av et flytnettverk *G* = (*V, E* ) er en partisjon av *V* inn i *S* og *T* = *V - S* slik at *s* &in; *S* og *t* &in; *T*.
+
+Dersom *f* er en flyt, da er:
+
+* Nettoflyten *f* (*S, T* ) langs snittet (*S, T* ) definert ved:
+
+<img src="https://i.imgur.com/WhZBpU2.png" alt="Drawing" style=" width: 280px;"/>
+
+> Som er summen av flyten fra noder i *S* til *T* minus flyten fra noder i *T* til *S*. 
+
+* Kapasiteten til snittet (*S, T* ) er definert ved:
+
+<img src="https://i.imgur.com/MnCfFug.png" alt="Drawing" style=" width: 280px;"/>
+
+> Som er summen av kapasiteten i kantene mellom *S* og *T*, der man bare ser på kantene som går fra noder i *S* til *T*.
+
+
+**Her er et snitt (*S, T* ):**
+
+<img src="https://i.imgur.com/vdtb4zi.png" alt="drawing" style=" width: 400px; "/>
+
+* Nettoflyten lags kuttet blir: **f(*S, T* )** = *f ( v<sub>1</sub>, v<sub>3</sub> )*  +  *f ( v<sub>2</sub>, v<sub>4</sub> )*  -  *f ( v<sub>3</sub>, v<sub>2</sub> )*  =  12 + 11 - 4 = **19**
+
+* Kapasiteten blir da:  **c(*S, T* )** = *c ( v<sub>1</sub>, v<sub>3</sub> )* +  *c ( v<sub>2</sub>, v<sub>4</sub> )* = 12 + 14 = **26**
+
+
+
+
+#### Minimalt snitt
+
+Et minimalt snitt i et nettverk er et snitt der kapasiteten er minst av alle snitt av nettverkene.
+
+
+
+### Maks-flyt min-snitt-teoremet
+
+Dersom f er en flyt i et flytnettverk *G* = (*V, E* ) med en kilde *s* og sluk *t*, da er de følgende forholdene ekvivalente.
+
+<table bgcolor="#00FF00">
+  <tr>
+    <th>Month</th>
+    <th>Savings</th>
+  </tr>
+  <tr>
+    <td>January</td>
+    <td>$100</td>
+  </tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br> </br>
+<br> </br>
+<br> </br>
 						
 ### Ford-Fulkerson
 
@@ -2246,6 +2761,9 @@ FORD-FULKERSON(G,s,t)
 **Mulig økning**(*augmentation*): `v.a`
 
 > Bruker BFS for å finne forøkende sti. _Atskillig_ mer detaljert...
+
+
+!Korteste-vei algoritmer avhenger typisk av egenskapen om at en korteste vei mellom to noder inneholder andre korteste veier innad. Dette gjør også Edmonds Karp!
 
 ```sudocode
 EDMONDS-KARP(G,s,t)
@@ -2324,8 +2842,10 @@ EDMONDS-KARP(G,s,t)
 
 
 
+&rarrw;
 
 
+<img src="https://i.imgur.com/WhZBpU2.png" alt="Drawing" style=" width: 280px;"/>
 
 
 
@@ -2333,12 +2853,5 @@ EDMONDS-KARP(G,s,t)
 
 
 ## Forelesning 14 - NP-komplette problemer <a name="of14"></a>
-
-
-
-
-
-
-
 
 Skrevet av Henrik Høiness
