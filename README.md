@@ -2840,7 +2840,7 @@ EDMONDS-KARP(G,s,t)
 ### Matching
 
 
-<pre bgcolor="#00FFFF">
+<pre bgcolor="red">
 Hello
 
 </pre>
