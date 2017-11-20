@@ -1433,7 +1433,7 @@ Akkurat som i f.eks. `Floyd-Warshall` *(Forelesning 11)* baserer dekomponeringen
 
 Situasjonen er illustrert i figuren under, der hver rute representerer en delløsning (en celle i løsningstabellen, f.eks) og pilene er avhengigheter, som vanlig. Vi kan sette opp en rekursiv løsning slik:
 
-<img src="https://i.imgur.com/CZ3uIa9.png" alt="Drawing" style=" width: 350px;>
+<img src="https://i.imgur.com/CZ3uIa9.png" alt="Drawing" style=" width: 350px;"/>
 
 
 ```pseudocode
@@ -1591,7 +1591,7 @@ HUFFMAN(C)
 ```
 
 
-<img src="https://i.imgur.com/0CUSUE6.png" alt="drawing" style=" width: 350px; />
+<img src="https://i.imgur.com/0CUSUE6.png" alt="drawing" style=" width: 350px; "/>
 
 **Bevise korrektheten til Huffmans algoritme:** For å vise at den er korrekt må vi den utviser *grådighetsegenskapen* og en *optimal substruktur*. 
 
@@ -1613,13 +1613,13 @@ Vi kan velge mellom to standard måter å representere en graf `G = (V, E)`: som
 
 **Urettede grafer:**
 
-<img src="https://i.imgur.com/SFmOTj8.png" alt="drawing style=" width: 300px; />
+<img src="https://i.imgur.com/SFmOTj8.png" alt="drawing style=" width: 300px; "/>
 
 
 
 **Rettede grafer:**
 
-<img src="https://i.imgur.com/Iy4Z0NB.png" alt="drawing style=" width: 300px; />
+<img src="https://i.imgur.com/Iy4Z0NB.png" alt="drawing style=" width: 300px; "/>
 
 
 
@@ -1681,7 +1681,7 @@ BFS(G, s)
 
 **Kjøring av prosedyren BFS:**
 
-<img src="" alt="drawing" style=" width: 300px; "/>
+<img src="https://i.imgur.com/72i7ApK.png" alt="drawing" style=" width: 300px; "/>
 
 
 
@@ -1958,7 +1958,7 @@ FIND-SET(x)
 
 Vi lar *G* = (*V*, *E* ) være en urettet graf. Vi ønsker å finne et asyklisk subset *T* ⊆ *E*, som kobler alle nodene sammen og der den totale vekten
 
-	<img src="https://i.imgur.com/BDnOT8B.png" alt="drawing" style=" width: 250 px; "/>
+  <img src="https://i.imgur.com/BDnOT8B.png" alt="drawing" style=" width: 250 px; "/>
 	
 er minimert. Siden *T* er asyklisk og kobler sammen alle nodene må den forme et tre, som vi kaller ett **spenntre**, da den "spanner" grafen *G*. Vi kaller problemet av å definere treet *T* *det minimale spenntre problemet*.
 
@@ -2054,7 +2054,7 @@ Det gir at kjøretiden totalt er: **O(*E* lg *V*)**
 
 ### Prim's algoritme
 
-Prim's algoritme operer ganske så likt som Dijkstra's algoritme for å finne korteste vei i en graf. Prim's algoritme har dene egenskapen at kantene i settet *A* alltid former et enkelt tre.
+Prim's algoritme opererer ganske så likt som Dijkstra's algoritme for å finne korteste vei i en graf. Prim's algoritme har den egenskapen at kantene i settet *A* alltid former et enkelt tre.
 
 Treet starter med en vilkårlig rot node *r* og vokser til treet spenner alle nodene i *V*. Hvert steg legger til en lett kant til treet *A*, som kobler *A* til en isolert node - en som ingen andre kanter i *A* går til. Denne regelen gjør at kun trygge kanter legges til i *A*, og derfor når algoritmen terminerer vil kantene i *A* forme et minimalt spenntre. 
 
@@ -2290,11 +2290,11 @@ Algoritmen starter med å topologisk sortere DAG-en til en lineær ordning på n
 DAG-SHORTEST-PATH(G, w, s)
 1	topological sort the vertices of G
 2	INITIALIZE-SINGE-SOURCE(G,s)
-3	for each vertex u taken i topological sorted order
+3	for each vertex u taken in topological sorted order
 4		for each vertex v ∈ G.Adj[u]
 5			RELAX(u,v,w)
 ```
-* Algoritmen slakker hver node nøyaktig èn gang.
+* Algoritmen slakker hver kant nøyaktig èn gang.
 
 
 **Kjøretiden:** Kjøretiden til algoritmen er ganske enkel å analysere. Den topologiske sorteringen i linje 1 tar &theta;(*V + E* ) tid. Kallet til *Initialize-Single-Source* på linje 2 tar &theta;(*V *) tid. *For*-løkken på linjene 4-5 slakker hver kant nøyaktig en gang, og hver iterasjon av for-løkken tar O(1) tid. Derfor blir den totale kjøretiden derfor **&theta;(*V + E* )**
@@ -2323,7 +2323,7 @@ I følgende implementasjon, bruker vi en min-prioritetskø *Q* av noder, basert 
 ```pseudocode
 DIJKSTRA(G, w, s)
 1	INITIALIZE-SINGLE-SOURCE(G,s)
-2	S = ø
+2	S = ø33
 3	Q = G.V
 4	while Q ≠ ø
 5		u = EXTRACT-MIN(Q)
@@ -2839,6 +2839,164 @@ Generelt, vil flyten mellom to noder *f(u,v)* være et heltall for alle noder *u
 <br> </br>
 
 ## Forelesning 13 - NP-kompletthet <a name="of13"></a>
+
+Nesten alle algoritmene vi har sett på hittil har vært **polynomisk-tid algoritmer**: med input på størrelse *n*, og som har worst-case kjøretid på O(*n*<sup>*k*</sup> ). Slik er det nemlig ikke med alle problemer. Vi ser gjerne på problemersom kan løses i polynomisk-tid algoritmer som lette, og problemer som krever *superpolynomisk-tid* som vanskelige.
+
+
+Vi skal nå se på en klasse problemer kalt de *NP-komplette* problemer. Ingen polynomisk-tid algoritme er funnet for å løse NP-komplette problemer, ingen har heller klart å bevise at det heller ikke finnes noen. Dette er det såkalte **N ≠ NP** spørsmålet, som er et av de store spørsmålene i datateknikk. 
+
+Flere NP-komplette problemer ligner gjerne på overflaten på problemer som vi vet vi kan løse i polynomisk tid. I hvert av de følgende parene av problemer, er det ene løsbart i polynomisk tid, og det andre er NP-komplett:
+
+* **Shortest vs. longest simple path:** Vi kan finne single-source shortest path i en rettet graf *G* = (*V, E* ) i O(*VE* ) tid. For å finne koreste enkle vei ellom to noder er vanskelig. Men det å bestemme om en graf inneholder en enkel vei med minst et gitt antall kanter er NP-komplett.
+
+* **Euler sti vs. Hamilton sykel**: En *Euler sti* til en sammenhengende rettet graf *G*, er en sykel som traverserer gjennom hver kant i G minst en gang, men vi kan besøke en node mer enn en gang. En *Hamilton sykel* til en rettet graf *G* er en enkel sykel som inneholder hver node i *V*. Å avgjøre om en rette graf innholder en hamilton sykel er NP-komplett. 
+
+
+
+#### NP-kompletthet og klassene P og NP
+
+
+<img src="https://i.imgur.com/XRBrov1.png" alt="drawing" style=" width:300px; "/> 
+
+Gjennom det siste av pensum skal vi referere til tre klasser av problemer: **P**, **NP** og **NPC** (NP-komplett).
+
+* Klassen **P** inneholder problemene som kan løses i polynomisk tid, altså i O(*n<sup>k</sup>* ) for en konstant *k*, og inputstørrelse *n*
+
+* Klassen **NP** består av problemer som kan *verifiseres* i polynomisk tid. Hva mener vi med at den kan verifiseres? Dersom vi hadde blitt gitt et **vitne** på en løsning, da kan vi bekrefte at *vitne* er korrekt i polynomisk tid. Klassen **co-NP** består av problemer som kan falsifiseres i polynomisk tid.
+	* For eksempel i Hamilton sykel problemet, gitt en rettet graf *G*, ville  *vitnet* vært en sekvens  ⟨*v<sub>1</sub>*, *v<sub>2</sub>*,...,*v<sub><sub>|V|</sub></sub>* ⟩ av |*V* | noder. Vi kan da lett skjekke i polynomisk tid at (*v<sub>i</sub>*, *v<sub>i + 1</sub>*) &in; *E* for i = 1,2,.., |*V* | - 1, og at (*v<sub><sub>|V|</sub></sub>* , *v<sub>1</sub>*) &in; *E* også.
+
+	
+Ethvert problem i P er også i NP, siden dersom et problem er i P kan vi løse det i polynomisk tid, selv uten å bli gitt et vitne. Derfor tror vi for nå at **P** &sube; **NP**.
+
+* Klassen **NPC** består av problemer som referer til som NP-komplette - det vil si at de er i NP og at er så "vanskelige" som ethvert problem i NP. 
+	* Dersom *et* eneste NP-komplett problem kan bli løst i polynomisk tid, har *alle* problemer i NP polynomisk-tid algoritme.
+
+
+#### Hvordan vise at et problem er NP-komplett:
+
+Når vi skal vise at et problem er NP-komplett, gjør vi en uttalelse om hvor vanskelig det er (eller i det minste hvor vanskelig vi tenker det er), istedet for å si hvor lett det er. Vi prøver ikke å vise eksistensen av en effektiv algoritme, men istedet vise at det er lite sannsynelig at en slik effektiv algoritme eksisterer.
+
+Vi er **avhengig** av tre nøkkelkomponenter for å vise at et problem er NP-komplett:
+
+#### Beslutnings problemer vs. optimaliserings problemer:
+	
+Mange interessante problemer er *optimaliseringsproblemer*, hvor hver mulige løsning har en tilknyttet verdi, og vi ønsker å finne en mulig løsning med den beste verdien. For eksempel korteste-vei problemet, der vi ønsker å finne en optimal løsning - den korteste veien. 
+	
+NP-kompletthet gjelder ikke direkte for optimaliseringsproblemer, men beslutningsproblemer, der svaret kun er "*ja*" eller "*nei*" (eller mer formelt "1" eller "0").
+	
+	
+Selv om NP-komplette problemer er begrenset til et rike beslutningsproblemer, kan vi dra nytte av det praktiske *forholdet* mellom optimaliseringsproblemer og beslutningsproblemer. Vi kan vanligvis *caste* et gitt optimaliseringsproblem som et relatert beslutningsproblem ved å legge inn en bundet verdi for å bli optimalisert. For eksempel er et avgjørelsesproblem relatert til *Kortest-vei is Sti*: Gitt en rettet graf *G*, noder *u* og, og et heltall *k*, eksisterer en sti fra *u* til bestående av maksimalt *k* kanter?
+	
+Vi kunne her løse *Sti* ved å løse *Korteste-vei*, og så sammenligne antall kanter i korteste vei med verdien til beslutningsproblemet *k*.
+Beslutningsproblemet er *lettere*, eller ikke vanskeligere, enn optimaliseringsproblemet.
+	
+	
+Angitt på en måte som er mer relevant for NP-fullstendighet, hvis vi kan bevise at et *beslutningsproblem* er vanskelig, gir vi også bevis for at det relaterte *optimaliseringsproblemet* er vanskelig. 
+	
+#### Reduksjoner:
+	
+Det at vi over viser at et problem ikke er vanskeligere eller lettere enn andre, gjelder selv når begge problemene er beslutningsproblemer. Vi tar fordel av denne ideen i nesten hvert eneste bevis av NP-kompletthet.  
+
+La oss se på et beslutningsproblem *A*, som vi ønsker å løse i polynomisk tid. Vi kaller inputen til en problem for instansen. La det være slik at vi allerede vetr hvordan vi kan løse et annet beslutningsproblem *B* i polynomisk tid. Til sist, la det være slik at vi har en prosedyre som *transformerer* enhver instans &alpha; av *A* til en instans &beta; i *B*, med følgende egenskaper:
+
+* Transformasjonen tar polynomisk tid.
+* Svarene er det samme. Det vil si at svaret for &alpha; er *"ja"* hvis og bare hvis svaret for &beta; også er *"ja"*.
+
+
+Vi kaller en slik prosedyre i polynomisk tid en **reduksjonsalgoritme** og det gir oss en måte å løse problem *A* i polynomisk tid:
+
+<img src="https://i.imgur.com/Nn2ncnn.png" alt=drawing" style=" width:300px; "/>
+
+1. Git en instans &alpha; av problem *A*, buruker vi en polynomisk reduksjonsalgoritme som transformerer den til en instans &beta; av problem *B*.
+2. Kjør beslutningsalgoritmen for B, i polynomisk tid, på instansen &beta;.
+3. Bruk svaret for &beta; som svar for &alpha;
+
+
+> Vi transformerer input fra ett problem til et annet.
+
+
+<img src="https://i.imgur.com/mrlbioi.png" alt=drawing" style=" width:300px; "/>
+
+Vi kan utifra dette trekke to logiske konklusjoner og et par betraktninger:
+
+1. Hvis vi kan løse *B*, så kan vi løse *A*
+2. Hvis vi *ikke* kan løse *A*, så kan vi *ikke* løse *B*
+3. Hvis vi *ikke* kan løse *B*, så sier det *ingenting* om *A*
+4. Hvis vi *kan* løse *A*, sier det *ingenting* om *A*
+
+
+
+La oss tenke oss at vi allerede er kjent med et problem *X*, og så støter på et nytt og ukjent problem *Y*, så har vi to scenarier der vi kan gjøre noe fornuften. Vi må gi *Y* rollen som *A* eller *B*:
+
+* Hvis vi vil vise at *Y* *ikke er vanskeligere enn X*, så kan vi la *Y* innta rollen som *A*, og prøve å finne en reduksjon fra *Y* til *X*. Dette gjør vi ofte når vi prøver å bruke eksisterende algoritmer for et problem *X* til å løse et nytt problem *Y* &rarr; Vi reduserer *Y* til *X*, og løser så *X*.
+
+* Men av og til mistenker vi at et problem vi støter på er vanskelig. Kanskje vi kjenner til et problem *X*, som vi *vet* er vanskelig, og vi vil vise at *Y* er *minst like vanskelig*. Da må vi i stedet la *Y* innta rollen som *B*, og redusere fra det vanskelige problemet. Vi skriver *A* ≤ *B* for å uttrykke at problemet *A* kan *løses ved hjelp av* *B*. 
+	* Det betyr at *A* ikke er vanskeligere *B*, siden vi skal redusere til *B*.
+
+
+#### Abstrakte problemer
+
+Vi definerer et **abstrakt problem** *Q* til å være en binær relasjon på et sett *I* av probleminstanser, og et sett *S* av problemløsninger.
+
+Vi kan se på en abstrakt beslutningsproblem som en funksjon som mapper et sett av instanser *I* til et løsningssett {0,1}.
+
+Dersom settet *I* skulle blitt kodet til binære strenger hadde vi kalt det et *konkret problem*, som vi skal se mer på under.
+
+
+### Koding av en instans
+
+En **koding** (*eng. encoding* ) av et sett *S* av abstrakte objekter er en mapping *e* fra *S* til et sett med binære strenger. 
+
+For at et dataprogram skal klare å løse et abstrakt problem, må vi representere probleminstansene på en måte som programmet skjønner. For eksempel er vi kjente med de naturlige tallene ℕ = {0,1,2,3,...} som strengene {0,1,10,11,100,...}. Ved å bruke denne kodingen *e* (17) = 10001. 
+
+Vi kaller et problem der settet *S* med instanser er et set av binære strenger for et **konkret problem**. Vi sier at en algoritme som *løser* et konkret problem i O(*T(n)* ) tid, dersom den gitt en probleminstans *i* med lengde *n* = | *i* | produserer en løsning i O(*T(n)* ) tid.
+
+* Et konkret problem er **polynomisk-tid løsbar** dersom det finnes en algoritme som kan løse den på O(*n<sup>k</sup>* ) tid, for en konstant *k*.
+* Vi definerer den *komplekse klassen P* som et sett av konkrete beslutningsproblemer som er polynomisk-tid løsbar.
+
+
+Vi kan bruke *koding* for å mappe abstrakte problemer til konkrete problemer: 
+
+* Gitt et abstrakt beslutningsproblem *Q*, vil mapping av et sett instanser *I* til {0,1}, en koding *e* : *I* &rarr; {0,1}* kan lage et relatert konkret beslutningsproblem, so vi kaller *e*(*Q* ).
+
+> Vi noterer {0,1}* for settet av alle strenger bestående av symboler fra settet {0,1}.
+
+
+For et sett av instanser *I* sier vi at to enkodinger *e<sub>1</sub>* og *e<sub>2</sub>* er **polynomiske relaterte** dersom det finnes to polynomisk-tid funksjoner *ƒ<sub>12</sub>* og *ƒ<sub>21</sub>* slik at for hver *i* &in; *I*, har vi at *ƒ<sub>12 </sub>*(*e<sub>1 </sub>*(*i* )) = *e<sub>2 </sub>*(*i* ), og *ƒ<sub>21 </sub>*(*e<sub>2 </sub>*(*i* )) = *e<sub>1 </sub>*(*i* ). 
+
+
+
+### Representasjon av beslutningsproblemer som formelle språk
+
+*Alfabet* **∑** er et avgrenset sett av symboler. *Språket* **L** over ∑ er et sett av strenger dannet av symboler fra ∑. Et beslutningsproblem *Q* er settet ∑* (språket av alle strenger over ∑), der ∑ = {0,1}.
+
+Siden *Q* er kjennetegnet av de probleminstansene  som produsere 1 ("*ja *"), kan vi se på *Q* som språket *L* over ∑ = {0,1}, der
+
+<img src="https://i.imgur.com/SO0omEb.png" alt="drawing" style=" width: 500px; "/>
+
+
+* Betegner den tomme strengen med &epsilon;, og det tommespråket med &empty;.
+* Definerer komplementet til *L* med *L<sup>&complement;</sup>* = ∑* - *L*
+* Vi definerer sammensetningen av to språk *L<sub>1</sub>L<sub>2</sub>* av to språk  *L<sub>1</sub>* og *L<sub>2</sub>* til språket *L* = { *x<sub>1</sub>x<sub>2</sub>* : *x<sub>1</sub>* &in; *L<sub>1</sub>* and *x<sub>2</sub>* &in; *L<sub>2</sub>*
+
+
+
+Språkrammeverket gir oss muligheten til å konsistent utrykke relasjonen mellom beslutningsproblemer og algoritmer som løser de. En algoritme A **aksepterer** en streng *s* i {0,1}* dersom gitt input *x* gir A(*x *) = 1. Språlet som er **akseptert** av en algoritme *A* er settet av strenger:
+
+<img src="https://i.imgur.com/EUydZRu.png" alt="drawing" style=" width: 500px; "/>
+
+* En algoritme **avviser** en streng dersom A(*x* ) = 0.
+* Et språk er **bestemt** av en algoritme *A* dersom hver binærstreng i *L* er akseptert av *A* og hver binærstreng ikke i *L* er avvist av *A*.
+* Et språk *L* er **akseptert i polynomisk tid** av en algoritme *A* hvis det er akseptert av *A*, og hvis det finnes en konstant *k* slik at for alle strenger med lengde *n* i *L*, aksepterer A input *x* på O(*n<sup>k</sup>* ) tid.
+* Et språk *L* er **bestemt i polynomisk tid** av en algoritme *A*, hvis det eksisterer en *k* slik at for alle strenger *x* i {0,1}* av lengde *n*, algoritmen bestemmer at *x* er i *L* på O(*n<sup>k</sup>* ) tid:
+
+<img src="https://i.imgur.com/Q0piUWp.png" alt="drawing" style=" width: 500px; "/>
+
+
+
+
+
+
 
 
 ## Forelesning 14 - NP-komplette problemer <a name="of14"></a>
