@@ -2856,7 +2856,7 @@ Flere NP-komplette problemer ligner gjerne på overflaten på problemer som vi v
 #### NP-kompletthet og klassene P og NP
 
 
-<img src="https://i.imgur.com/XRBrov1.png" alt="drawing" style=" width:300px; "/> 
+<img src="https://i.imgur.com/XRBrov1.png" alt="drawing" style=" width:300px ; "/> 
 
 Gjennom det siste av pensum skal vi referere til tre klasser av problemer: **P**, **NP** og **NPC** (NP-komplett).
 
@@ -2905,7 +2905,7 @@ La oss se på et beslutningsproblem *A*, som vi ønsker å løse i polynomisk ti
 
 Vi kaller en slik prosedyre i polynomisk tid en **reduksjonsalgoritme** og det gir oss en måte å løse problem *A* i polynomisk tid:
 
-<img src="https://i.imgur.com/Nn2ncnn.png" alt=drawing" style=" width:300px; "/>
+<img src="https://i.imgur.com/Nn2ncnn.png" alt="drawing" style=" width:300px; "/>
 
 1. Git en instans &alpha; av problem *A*, buruker vi en polynomisk reduksjonsalgoritme som transformerer den til en instans &beta; av problem *B*.
 2. Kjør beslutningsalgoritmen for B, i polynomisk tid, på instansen &beta;.
@@ -2915,7 +2915,7 @@ Vi kaller en slik prosedyre i polynomisk tid en **reduksjonsalgoritme** og det g
 > Vi transformerer input fra ett problem til et annet.
 
 
-<img src="https://i.imgur.com/mrlbioi.png" alt=drawing" style=" width:300px; "/>
+<img src="https://i.imgur.com/mrlbioi.png" alt="drawing" style=" width:300px ; "/>
 
 Vi kan utifra dette trekke to logiske konklusjoner og et par betraktninger:
 
@@ -2972,7 +2972,7 @@ For et sett av instanser *I* sier vi at to enkodinger *e<sub>1</sub>* og *e<sub>
 
 Siden *Q* er kjennetegnet av de probleminstansene  som produsere 1 ("*ja *"), kan vi se på *Q* som språket *L* over ∑ = {0,1}, der
 
-<img src="https://i.imgur.com/SO0omEb.png" alt="drawing" style=" width: 500px; "/>
+<img src="https://i.imgur.com/SO0omEb.png" alt="drawing" style=" width: 500px;  "/>
 
 
 * Betegner den tomme strengen med &epsilon;, og det tommespråket med &empty;.
@@ -2990,7 +2990,7 @@ Språkrammeverket gir oss muligheten til å konsistent utrykke relasjonen mellom
 * Et språk *L* er **akseptert i polynomisk tid** av en algoritme *A* hvis det er akseptert av *A*, og hvis det finnes en konstant *k* slik at for alle strenger med lengde *n* i *L*, aksepterer A input *x* på O(*n<sup>k</sup>* ) tid.
 * Et språk *L* er **bestemt i polynomisk tid** av en algoritme *A*, hvis det eksisterer en *k* slik at for alle strenger *x* i {0,1}* av lengde *n*, algoritmen bestemmer at *x* er i *L* på O(*n<sup>k</sup>* ) tid:
 
-<img src="https://i.imgur.com/Q0piUWp.png" alt="drawing" style=" width: 500px; "/>
+<img src="https://i.imgur.com/Q0piUWp.png" alt="drawing" style=" width: 500px;  "/>
 
 
 
