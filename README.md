@@ -200,6 +200,7 @@ class LinkedList:
 	*  Oppslag: *O(n)*
 	*  Slette element: *Oppslagstid* + *O(1)* = *O(n)*
 
+> Ved dobbel lenke liste blir det lett med innsetting, trenger kun å endre *.prev* og *.next* til de nye naboene. Dette gjøres i O(1)
 	
 
 
@@ -247,9 +248,22 @@ class Stack:
 
  
 ### Hash-tabeller
- 
-**Mangler**!!!!!!
 
+En fornuftig måte å adressere og komprimere.
+ 
+<img src="https://i.imgur.com/atNw7K0.png" alt="drawing" style=" width: 300px:" />
+
+
+Bruker hash-funksjoner og nøkler slik at et element *e* med nøkkel *k* blir lagret på plass h( *k* ).
+
+* Vi kan løse kollisjon-problemet ved chaining med lenkede lister.
+* Idéen med hash-tabeller er å lage *h* slik at den virker ”random” for å forhindre kollisjon eller i det minste minske antallet
+* Ved hash-tabell med lenket liste har vi metodene:
+	* Chained-Hash-Insert (T, x)
+	<p>`1	insert x at the head of list T[h(x.key)`</p>	* Chained-Hash-Search (T, k) 	<p>`1	      search for an element with key k in list T[h(k)]`</p>	* Chained-Hash-Delete (T, x)	<p>`1	delete x from list T[h(x.key)]`</p>* WC for insertion er O(1)
+* WC for søk er O(n), ønsker å ha O(1), så kan være dårlig hashemetode som forårsaker dårlig søketid.* Vi kan slette et element med O(1) dersom hash-tabellen bruker *doble* lenkede lister.
+
+* *Hva karakteriserer en god hashefunksjon:* Den unngår kollisjoner, og like sannsynlig for hver mulige nøkkel å bli plassert et sted.
 
 <a name="of3"></a>
 ## Forelesning 3 - Splitt og hersk 
@@ -790,7 +804,7 @@ Vi kan regne ut en øvre grense for kjøretiden til *Build-Max-Heap* som følgen
 * Hvert kall på *Max-Heapify* koster `O(lg n)`, og *Build-Max-Heap* gjør `O(n)` slike kall.
 * Derfor blir **kjøretiden** `O(n lg n)`, Det er en øvre grense, men ikke asymptotisk tett.
 
-* Vi kan sette en grense på **kjøretiden** til *Build-Max-Heap* som `O(n)` da vi ser på høyden til nodene kaller *Max-Heapify* på
+* Vi kan sette en grense på **kjøretiden** til *Build-Max-Heap* som `O(n)` da vi ser på høyden til nodene kaller *Max-Heapify* på ikke gir O(lg n) på alle kallene. 
 
 
 
@@ -813,6 +827,8 @@ HEAPSORT(A)
 
 
 <img src="https://i.imgur.com/95uXdIT.png" alt="Drawing" style=" width: 200px;"/>
+
+> Bruker mindre lagringsplass enn Merge-Sort
 
 <br> </br>
 
@@ -2976,7 +2992,7 @@ Siden *Q* er kjennetegnet av de probleminstansene  som produsere 1 ("*ja *"), ka
 
 
 * Betegner den tomme strengen med &epsilon;, og det tommespråket med &empty;.
-* Definerer komplementet til *L* med *L<sup>&complement;</sup>* = ∑* - *L*
+* Definerer komplementet til *L* med *L&#773; = ∑* - *L*
 * Vi definerer sammensetningen av to språk *L<sub>1</sub>L<sub>2</sub>* av to språk  *L<sub>1</sub>* og *L<sub>2</sub>* til språket *L* = { *x<sub>1</sub>x<sub>2</sub>* : *x<sub>1</sub>* &in; *L<sub>1</sub>* and *x<sub>2</sub>* &in; *L<sub>2</sub>*
 
 
@@ -2994,9 +3010,65 @@ Språkrammeverket gir oss muligheten til å konsistent utrykke relasjonen mellom
 
 
 
+#### Verifikasjonsalgoritme
+
+En **verifikasjonsalgoritme** skjekker om en løsning stemmer (*ja/nei* ). Bruker et **vitne/sertifikat** for å skjekke problemet, for eksempel en Hamilton-sykel.
+
+**Vitne** (*eng. certificate* ): Gjelder for gitt input &rarr; Skal kunne gi *"Ja"* svar hvis svaret er *"Nei"*. Hvis svaret er *"Nei"*, skal det ikke eksistere Finnes ikke vitne hvis svaret er *Nei*. 
+
+
+#### Kompleksitetsklassen NP
+
+Klassen av språk som kan *verifiseres* av en polynomisk-tid algoritme. Et språk hører til i NP hvis og bare hvis det eksisterer en to-input polynomisk algoritme *A* og en konstant *c* slik at:
+
+<img src="https://i.imgur.com/TVrgXMt.png" alt="drawing" style=" width:300px; " />
+
+Vi sier at *A* verifiserer språket *L* i polynomisk tid.
+
+**Co-NP** er settet av språk slik at L&#773; &in; NP. Vi har at P &sube; NP &cap; co-NP.
 
 
 
+#### Redusibilitets-relasjonen ≤<sub>p</sub>
+
+Et språk *L<sub>1</sub>* er **polynomisk-tid reduserbar** til språk *L<sub>2</sub>*, betegnes med *L<sub>1</sub>* ≤<sub>p</sub> *L<sub>2</sub>*, hvis det eksisterer en polynomisk-tid kalkulerbar funksjon *ƒ* : {0,1}* &rarr; {0,1}* slik at vi for &forall; x &in; {0,1}* har at *x* &in; *L<sub>1</sub>* hvis og bare hvis *ƒ(x)* &in; *L<sub>2</sub>*.
+
+Vi kaller funksjonen *ƒ* for **reduksjonsfunksjon**, og en polynomisk-tid algoritme *F* somm kalkurerer *ƒ* for **reduksjonsalgoritme**. Reduksjonsfunksjonen sørger for en polynomisk-tid mapping slik at hvis *x* &in; *L<sub>1</sub>*, så er *ƒ(x)* &in; *L<sub>2</sub>*.
+
+
+*Eksempel:* Løser et lineært uttrykk *ax* + *b* = 0 med formelen for et andregradsuttrykk. Da har vi redusert det lineære uttrykket til en form hvor vi kan løse det enkelt. 
+
+<img src="https://i.imgur.com/ebQ3gkZ.png" alt="drawing" style=" width:300px; " />
+
+
+### NP-kompletthet og NP-hardhet
+
+Polynomisk-tid-reduksjon hjelper oss å vise at et problem er minst like hardt som et annet. Det vil si hvis *L<sub>1</sub>* ≤<sub>p</sub> *L<sub>2</sub>*, så er *L<sub>1</sub>* ikke mer enn en polynomisk faktor hardere enn *L<sub>2</sub>*. Vi bruker dette til å definere NP-komplette problemer.
+
+
+
+Et språk *L* &sube; {0,1}* er **NP-komplett** hvis
+
+1. *L* &in; NP, og
+2. *L'* ≤<sub>p</sub> *L* for every *L'* &in; NP.
+
+Dersom et språk *L* tilfredsstiller krav **2**, men **ikke** 1, sier vi at *L* er **NP-hardt**.
+
+
+
+### Den konvensjonele hypotesen om forholdet mellom P, NP og NPC
+
+Dersom **et** NP-komplett problem er polynomisk-tid løsbar, da er P = NP. Ekvivalent, dersom **et** problem i NP ikke er polynomisk-tid løsbar, da er **ingen** NP-komplette problem polynomisk tid løselige. 
+
+<img src="https://i.imgur.com/myK9JJd.png" alt="drawing" style=" width:300px; " />
+
+
+### Hvorfor DP-løsningen til boken av 0-1 knapsack ikke er polynomisk
+
+Den dynamisk programmerte algoritmen for 0-1 knapsack problemet har en kjøretid på O(*nW* ), hvor *n* er antall elementer og *W* er den maksimale vekten som knapsack-en kan holde. Dette er **ikke** en polynomisk-tid algoritme for noen fornuftig representasjon av input. I en fornuftig representasjon er alle numeriske verdier (vektene og verdiene, etc.) gitt i binærtall. For å representere verdien *W*, trenger vi ***lg W*** bits. Dermed blir kjøretiden O(*nW* ) eksponentiel i størrelsen til input.
+
+
+<br></br>
 
 
 ## Forelesning 14 - NP-komplette problemer <a name="of14"></a>
