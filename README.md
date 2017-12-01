@@ -22,7 +22,7 @@ Repository for teori og øvinger til Algoritmer og datastrukturer - TDT 4120.
 14. [Forelesning 13 - *NP-komplette problemer*](#of14)
 
 
-* Trykk [her](http://www.markdowntopdf.com/) om du ønsker å laste ned markdown-dokumentet som PDF (last ned dokumentet fra GitHub først)
+* Trykk [her](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Kompendium.pdf) om du ønsker å laste ned markdown-dokumentet som PDF (last ned dokumentet fra GitHub)
 
 * [Her](https://github.com/henrhoi/Algdat-TDT4120/tree/master/Algoritmer%20i%20pensum) ligger de fleste av algoritmene som er pensum skrevet i *Python*
 
@@ -1174,7 +1174,7 @@ Vi bruker gjerne dynamisk programmering ved *optimaliseringsproblemer*. Slike pr
 Når vi skriver en dynamisk programmerings algoritme følger vi følgende steg:
 
 1. Karaktiser strukturen på den en optimal løsning
-2. Rekursivt definer verdien til en optimal løsning
+2. Definer rekursivt verdien til en optimal løsning
 3. Regn ut verdien til en optimal løsning, typisk på en *bottom-up* måte
 4. Finn en optimal løsning fra utregnet informasjon.
 
@@ -1438,13 +1438,13 @@ Kjøretiden til en algoritme i *dynamisk programmering* avhenger av et produkt a
 
 ### 0-1 Knapsack
 
-Det såkalte *ryggsekkproblemet* kommer i flere varianter. Den *fraksjonelle varianten er letter å løse: Man tar bare med seg så mye som mulig av den dyreste gjenstanden, og fortsetter nedover på lista, sortert etter kilopris. I 0-1-varianten, derimot, blir ting litt vanskeligere - her må man ta med en hel gjenstand eller la den ligge.
+Det såkalte *ryggsekkproblemet* kommer i flere varianter. Den *fraksjonelle* varianten er letter å løse: Man tar bare med seg så mye som mulig av den dyreste gjenstanden, og fortsetter nedover på lista, sortert etter kilopris. I 0-1-varianten, derimot, blir ting litt vanskeligere - her må man ta med en hel gjenstand eller la den ligge.
 
 Løsningen er beskrevet på side 426 i boken, og er beskrevet veldig skissepreget.
 
-Akkurat som i f.eks. `Floyd-Warshall` *(Forelesning 11)* baserer dekomponeringen seg på et *ja-nei-spørsmål*, i dette tilfelle «Skal vi ta med gjenstand*i* ?». For hver av de to mulighetene sitter vi igjen med et delproblem som vi løser rekursivt. Som vanlig tenker vi oss at dette er siste trinn og antar at vi har gjentstander 1,...,*i* tilgjengelige. Da har vi to muligheter:
+Akkurat som i f.eks. `Floyd-Warshall` *(Forelesning 11)* baserer dekomponeringen seg på et *ja-nei-spørsmål*, i dette tilfelle «Skal vi ta med gjenstand  *i* ?». For hver av de to mulighetene sitter vi igjen med et delproblem som vi løser rekursivt. Som vanlig tenker vi oss at dette er siste trinn og antar at vi har gjentstander 1,...,*i* tilgjengelige. Da har vi to muligheter:
 
-1. **Ja**, vi tar med gjenstand *i* Vi løser så problemet for gjenstander 1,...,*i-1* men der kapasiteten er redusert med *w<sub>i</sub>*. Vi legger så til *v<sub>i</sub>* til slutt.
+1. **Ja**, vi tar med gjenstand *i*. Vi løser så problemet for gjenstander 1,...,*i-1* men der kapasiteten er redusert med *w<sub>i</sub>*. Vi legger så til *v<sub>i</sub>* til slutt.
 2. **Nei**, vi tar ikke med gjenstand *i*. VI løser så problemet for gjenstander 1,..,*i-1*, men kan fortsatt bruke hele kapasiteten. Til gjengjeld får vi ikke legge til *v<sub>i</sub>* til slutt.
 
 Situasjonen er illustrert i figuren under, der hver rute representerer en delløsning (en celle i løsningstabellen, f.eks) og pilene er avhengigheter, som vanlig. Vi kan sette opp en rekursiv løsning slik:
@@ -1517,13 +1517,13 @@ Vi kan også konvertere den rekursive prosedyren til en iterativ en. Prosedyren 
 ```pseudocode
 GREEDY-ACTIVITY-SELECTOR(s, f)
 1	 n = s.length
-2	 c = [A[1]]
+2	 res = [A[1]]
 3	 k = 1
 4	 for m = 2 to n
 5	 	 if s[m] ≥ f[k]
 6	 	 	 res += A[m]
 7	 		 k = m
-8	 return c
+8	 return res
 ```
 
 **Kjøretid:** Begge algoritmen planlegger *n* aktiviteter på &theta;(*n*) tid.
@@ -1606,6 +1606,8 @@ HUFFMAN(C)
 9	 return EXTRACT-MIN(Q)		// returnerer roten i treet
 ```
 
+**Kjøretid:** `O(n lg n)` med binær-heap
+
 
 <img src="https://i.imgur.com/0CUSUE6.png" alt="drawing" style=" width: 350px; "/>
 
@@ -1629,13 +1631,13 @@ Vi kan velge mellom to standard måter å representere en graf `G = (V, E)`: som
 
 **Urettede grafer:**
 
-<img src="https://i.imgur.com/SFmOTj8.png" alt="drawing style=" width: 300px; "/>
+<img src="https://i.imgur.com/SFmOTj8.png" alt="drawing" style=" width: 300px; "/>
 
 
 
 **Rettede grafer:**
 
-<img src="https://i.imgur.com/Iy4Z0NB.png" alt="drawing style=" width: 300px; "/>
+<img src="https://i.imgur.com/Iy4Z0NB.png" alt="drawing" style=" width: 300px; "/>
 
 
 
@@ -2016,6 +2018,8 @@ La *G* = (*V, E* ) være en sammenhengende, urettet graf med vekter definert på
 
 ### Kruskal's algoritme
 
+**Helt enkelt:** Velg til enhver tid den billigste kanten i treet som kobler sammen nye noder (ikke skaper sykel.
+
 I *Kruskal* 's er settet *A* en skog der nodene er de som er i en gitt graf. Den trygge kanten lagt til i A er alltid en *minst-vekt kant* i grafen som kobler to to distinkte komponentene.
 
 Kruskal's algoritme finner en trygg kant for å legge til i den voksende skogen, ved å finne alle kantene som kobler sammen to trær i skogen, en kant (*u,v*) med minst vekt.
@@ -2069,6 +2073,8 @@ Det gir at kjøretiden totalt er: **O(*E* lg *V*)**
 
 
 ### Prim's algoritme
+
+**Helt enkelt:** Begynn i tilfeldig node. Velg den billigste kanten ut fra den noden som kobler inn en ny node.
 
 Prim's algoritme opererer ganske så likt som Dijkstra's algoritme for å finne korteste vei i en graf. Prim's algoritme har den egenskapen at kantene i settet *A* alltid former et enkelt tre.
 
